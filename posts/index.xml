@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Will van Ketwich</title>
-    <link>https://wilvk.github.io/</link>
-    <description>Recent content on Will van Ketwich</description>
+    <title>Posts on Will van Ketwich</title>
+    <link>https://wilvk.github.io/posts/</link>
+    <description>Recent content in Posts on Will van Ketwich</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <lastBuildDate>Fri, 15 Jun 2018 21:49:30 +1000</lastBuildDate>
     
-	<atom:link href="https://wilvk.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://wilvk.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>About me</title>
-      <link>https://wilvk.github.io/about/</link>
-      <pubDate>Fri, 15 Jun 2018 21:49:30 +1000</pubDate>
-      
-      <guid>https://wilvk.github.io/about/</guid>
-      <description>TODO: fill out</description>
-    </item>
     
     <item>
       <title>First Post</title>
