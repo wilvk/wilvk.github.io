@@ -1,61 +1,149 @@
 <!DOCTYPE html>
 <html lang="en-US">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
-		<meta name="author" content="Willem van Ketwich">
-		<meta name="description" content="I&#39;m just a guy who does stuff. Mostly with computers.">
-		<meta name="generator" content="Hugo 0.42.1" />
-		<title>Creating a Fibonacci Generator in Assembly &middot; Willem van Ketwich</title>
-		<link rel="shortcut icon" href="https://wilvk.github.io/images/favicon.ico">
-		<link rel="stylesheet" href="https://wilvk.github.io/css/style.css">
-		<link rel="stylesheet" href="https://wilvk.github.io/css/highlight.css">
 
-		
-		<link rel="stylesheet" href="https://wilvk.github.io/css/monosocialiconsfont.css">
-		
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="author" content="Willem van Ketwich">
+<meta name="description" content="Contents  Intro  Following along at home A beginning Some starting knowledge Overview of the implementation  Beginning the implementation  Building binary files from assembly files The structure of a gas assembly file Instructions and opcodes The application entry-point and labels Compiling our code Reading from the process arguments and converting to a numeric value Debugging with GDB  Getting the length of our argument on the command line  Making things easier to understand using function calls  Converting a string to a number  Some new functions Zeroing registers Register sizes and layout Processing the string  The actual Fibonacci algorithm  Creating the stack space for our array The Fibonacci logic in assembly Setting up our variables Array memory allocation Variable initialisation Indexed memory Running the loop to completion Calculating the sequence  Printing our result  Doing things the hard way  Conclusion  From here to there - improving the code   Intro Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland.">
 
-		
-
-		
-	</head>
-
-    <body>
-       <nav class="main-nav">
-	
-	
-		<a href='https://wilvk.github.io/'> <span class="arrow">←</span>Home</a>
-	
-	<a href='https://wilvk.github.io/posts'>Archive</a>
-	<a href='https://wilvk.github.io/tags'>Tags</a>
-	<a href='https://wilvk.github.io/about'>About</a>
-
-	
-
-	
-</nav>
+<meta property="og:title" content="Creating a Fibonacci Generator in Assembly" />
+<meta property="og:description" content="Contents  Intro  Following along at home A beginning Some starting knowledge Overview of the implementation  Beginning the implementation  Building binary files from assembly files The structure of a gas assembly file Instructions and opcodes The application entry-point and labels Compiling our code Reading from the process arguments and converting to a numeric value Debugging with GDB  Getting the length of our argument on the command line  Making things easier to understand using function calls  Converting a string to a number  Some new functions Zeroing registers Register sizes and layout Processing the string  The actual Fibonacci algorithm  Creating the stack space for our array The Fibonacci logic in assembly Setting up our variables Array memory allocation Variable initialisation Indexed memory Running the loop to completion Calculating the sequence  Printing our result  Doing things the hard way  Conclusion  From here to there - improving the code   Intro Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wilvk.github.io/posts/creating-a-fibonacci-generator-in-assembly/" />
 
 
-        <section id="wrapper" class="post">
-            <article>
-                <header>
-                    <h1>
-                        Creating a Fibonacci Generator in Assembly
-                    </h1>
-                    <h2 class="headline">
-                    Aug 30, 2018 21:12
-                    · 10210 words
-                    · 48 minute read
-                      <span class="tags">
-                      
-                      </span>
-                    </h2>
-                </header>
-                
-                <section id="post-body">
+
+<meta property="article:published_time" content="2018-08-30T21:12:38&#43;10:00"/>
+
+<meta property="article:modified_time" content="2018-08-30T21:12:38&#43;10:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<title>
+
+
+     Creating a Fibonacci Generator in Assembly 
+
+</title>
+<link rel="canonical" href="https://wilvk.github.io/posts/creating-a-fibonacci-generator-in-assembly/">
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
+
+
+
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/pygments.css">
+    <link rel="stylesheet" href="/css/main.css">
+    
+
+
+
+
+<link rel="shortcut icon"
+
+    href="/img/favicon.ico"
+
+>
+
+
+
+
+
+
+
+
+</head>
+
+
+<body lang="">
+
+<section class="header">
+    <div class="container">
+        <div class="content">
+            
+            <a href="/"><div class="name">Willem van Ketwich</div></a>
+            
+            <nav>
+                <ul>
                     
+                        <li class="nav-blog"><a href="https://wilvk.github.io/posts/"><span>blog</span></a></li>
+                    
+                        <li class="nav-about"><a href="https://wilvk.github.io/about/"><span>about</span></a></li>
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+        
+
+        
+
+        
+
+	
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        </div>
+    </div>
+</section>
+
+<section class="main">
+    <div class="container">
+        <div class="content">
+            <div class="page-heading">
+
+    Creating a Fibonacci Generator in Assembly
+
+</div>
+
+            <div class="markdown">
+                
 
 <h1 id="contents">Contents</h1>
 
@@ -1276,33 +1364,22 @@ root@608eb3f49ac5:/gas-asm-fib# ./fib7 1
 
 <p>Until next time, happy coding!</p>
 
-                </section>
-            </article>
+            </div>
+        </div>
+    </div>
+</section>
 
-            
 
-            
-
-            
-
-            <footer id="footer">
-    
-    <p class="small">
-    
-       © Copyright 2018 <i class="fa fa-heart" aria-hidden="true"></i> Willem van Ketwich
-    
-    </p>
-    <p class="small">
-        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
-    </p>
-</footer>
-
-        </section>
-
-        <script src="https://wilvk.github.io/js/jquery-3.3.1.min.js"></script>
-<script src="https://wilvk.github.io/js/main.js"></script>
-<script src="https://wilvk.github.io/js/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-122351489-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 
 
@@ -1310,5 +1387,6 @@ root@608eb3f49ac5:/gas-asm-fib# ./fib7 1
 
 
 
-    </body>
+</body>
 </html>
+
