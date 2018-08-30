@@ -1,180 +1,105 @@
 <!DOCTYPE html>
 <html lang="en-us">
-    <head>
-         
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Posts</title>
-        
-        <style>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<meta name="author" content="Willem van Ketwich">
+		<meta name="description" content="I&#39;m just a guy who does stuff. Mostly with computers.">
+		<meta name="generator" content="Hugo 0.42.1" />
+		<title>Posts &middot; Willem van Ketwich</title>
+		<link rel="shortcut icon" href="https://wilvk.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://wilvk.github.io/css/style.css">
+		<link rel="stylesheet" href="https://wilvk.github.io/css/highlight.css">
 
-    html body {
-        font-family: 'Raleway', sans-serif;
-        background-color: white;
-    }
+		
+		<link rel="stylesheet" href="https://wilvk.github.io/css/monosocialiconsfont.css">
+		
 
-    :root {
-        --accent: red;
-        --border-width:  5px ;
-    }
+		
 
-</style>
+		
+	</head>
 
+	<body>
+	<nav class="main-nav">
+	
+	
+		<a href='https://wilvk.github.io/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='https://wilvk.github.io/posts'>Archive</a>
+	<a href='https://wilvk.github.io/tags'>Tags</a>
+	<a href='https://wilvk.github.io/about'>About</a>
 
-<link rel="stylesheet" href="https://wilvk.github.io/css/main.css">
+	
 
+	
+</nav>
 
-
-
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-
-
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
-
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
- 
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/scala.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/swift.min.js"></script> 
-
-    <script>hljs.initHighlightingOnLoad();</script>
-
-
-
-
-
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-
-<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.42.1" />
-        
-        <link href="https://wilvk.github.io/posts/index.xml" rel="alternate" type="application/rss+xml" title="Minimal" />
-        <link href="https://wilvk.github.io/posts/index.xml" rel="feed" type="application/rss+xml" title="Minimal" />
-        
-
-        
-    </head>
-
-    
-    
-    <script type="text/javascript" async
-      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
-    
-
-    <body>
-         
-        <nav class="navbar navbar-default navbar-fixed-top">
-
-            <div class="container">
-
-                <div class="navbar-header">
-
-                    <a class="navbar-brand visible-xs" href="#">Posts</a>
-
-                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                </div>
-
-                <div class="collapse navbar-collapse">
-
-                    
-                        <ul class="nav navbar-nav">
-                            
-                                <li><a href="/">Home</a></li>
-                            
-                                <li><a href="/post/">Posts</a></li>
-                            
-                                <li><a href="/project/">Projects</a></li>
-                            
-                        </ul>
-                    
-
-                    
-                        <ul class="nav navbar-nav navbar-right">
-                            
-                                <li class="navbar-icon"><a href="mailto:willvk@gmail.com"><i class="fa fa-envelope-o"></i></a></li>
-                            
-                                <li class="navbar-icon"><a href="https://github.com/wilvk/"><i class="fa fa-github"></i></a></li>
-                            
-                                <li class="navbar-icon"><a href="https://twitter.com/wilvk/"><i class="fa fa-twitter"></i></a></li>
-                            
-                                <li class="navbar-icon"><a href="https://www.linkedin.com/in/willvk/"><i class="fa fa-linkedin"></i></a></li>
-                            
-                                <li class="navbar-icon"><a href="https://www.stackoverflow.com/users/512965/willem-van-ketwich"><i class="fa fa-stack-overflow"></i></a></li>
-                            
-                        </ul>
-                    
-
-                </div>
-
-            </div>
-
-        </nav>
-
-
-<main>
-
-    <h2>Posts</h2>
-
-     <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/posts/creating-a-fibonacci-generator-in-assembly/">Creating a Fibonacci Generator in Assembly</a></h4>
-    <h5>August 30, 2018</h5>
-    
-
+	<div class="profile">
+    <section id="wrapper">
+        <header id="header">
+            <a href='https://wilvk.github.io/about'>
+                <img id="avatar" class="2x" src="https://wilvk.github.io/images/avatar.png"/>
+            </a>
+            <h1>Willem van Ketwich</h1>
+            
+        </header>
+    </section>
 </div>
-  <div class="item">
 
+
+	<section id="wrapper" class="home">
+		
+		<div class="archive">
+			<h3>2018</h3>
+			<ul>
+					
+					<div class="post-item">
+						<div class="post-time">Aug 30</div>
+						<a href="https://wilvk.github.io/posts/creating-a-fibonacci-generator-in-assembly/" class="post-link">
+							Creating a Fibonacci Generator in Assembly
+						</a>
+					</div>
+					
+					<div class="post-item">
+						<div class="post-time">Jun 15</div>
+						<a href="https://wilvk.github.io/posts/first-post/" class="post-link">
+							First Post
+						</a>
+					</div>
+					
+			</ul>
+		</div>
+		
+		<footer id="footer">
     
+    <p class="small">
     
+       © Copyright 2018 <i class="fa fa-heart" aria-hidden="true"></i> Willem van Ketwich
     
+    </p>
+    <p class="small">
+        Powered by <a href="http://www.gohugo.io/">Hugo</a> Theme By <a href="https://github.com/nodejh/hugo-theme-cactus-plus">nodejh</a>
+    </p>
+</footer>
 
-    
-    
+	</section>
 
-    <h4><a href="/posts/first-post/">First Post</a></h4>
-    <h5>June 15, 2018</h5>
-    
+	<div class="dd">
+	</div>
 
-</div>
- 
-
-</main>
+	<script src="https://wilvk.github.io/js/jquery-3.3.1.min.js"></script>
+<script src="https://wilvk.github.io/js/main.js"></script>
+<script src="https://wilvk.github.io/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 
 
-        <footer>
 
-            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
 
-        </footer>
-       
-    </body>
 
+
+	</body>
 </html>
-
