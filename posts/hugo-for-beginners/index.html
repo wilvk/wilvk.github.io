@@ -88,9 +88,27 @@
 
 <p>The defacto static page generator is considered to be Jekyll, which is a versatile, and extensible framework. However, being a fan of Golang I decided to go with Hugo.</p>
 
-<p>The way Github Pages works is to use a repo with the name <code>&lt;username/org&gt;.github.io</code>. In effect this means that a repo at the address <code>https://github.com/&lt;username/org&gt;/&lt;username/org&gt;.github.io</code> is created.</p>
+<p>The way Github Pages works is to use a repo with the format:</p>
 
-<p>For example, my username is <code>wilvk</code> and so my Github Pages repository is <code>wilvk/wilvk.github.io</code> with the repository address <code>https://github.com/wilvk/wilvk.github.io</code> . The corresponding static pages are delivered from the address wilvk.github.io . If you have your own domain name, this can be integrated into Github Pages by going to settings in the repository.</p>
+<p><code>&lt;username/org&gt;.github.io</code></p>
+
+<p>In effect this means that a repo at something like the the following address is created:</p>
+
+<p><code>https://github.com/&lt;username/org&gt;/&lt;username/org&gt;.github.io</code></p>
+
+<p>For example, my username is <code>wilvk</code> and so my Github Pages repository is:</p>
+
+<p><code>wilvk/wilvk.github.io</code></p>
+
+<p>with the repository address:</p>
+
+<p><code>https://github.com/wilvk/wilvk.github.io</code></p>
+
+<p>The corresponding static pages are delivered from the address:</p>
+
+<p>[<code>https://wilvk.github.io]</code>(<a href="https://wilvk.github.io">https://wilvk.github.io</a>)</p>
+
+<p>If you have your own domain name, this can be integrated into Github Pages by going to settings in the repository.</p>
 
 <h1 id="an-overview">An overview</h1>
 
@@ -103,9 +121,8 @@
 <h1 id="an-automated-process">An automated process</h1>
 
 <p>I place the following script in the base of the blog-hugo repository and run it to push the changes to the site:</p>
-
-<pre><code>#!/bin/bash
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>
 set -x
 
 rm -rf ./public
@@ -113,12 +130,10 @@ git clone https://github.com/wilvk/wilvk.github.io public
 hugo
 cd ./public
 git add .
-git commit -m &quot;build release&quot;
+git commit -m <span style="color:#e6db74">&#34;build release&#34;</span>
 git push --set-upstream origin master
 cd ..
-rm -rf ./public
-</code></pre>
-
+rm -rf ./public</code></pre></div>
 <p>The <code>set -x</code> allows me to see any errors that may occur during the build process. Using different themes or various settings can cause Hugo to fail the build process and not push new changes to the static website repository <code>wilvk.github.io</code>. Showing the full output enables inspection of this process for any errors. Hugo can also be run with verbose output with <code>hugo --verbose</code> for even more detail if required.</p>
 
 <p>The static site is built to the path ./public<code>and so the first thing the script does is delete the</code>./public<code>path.
