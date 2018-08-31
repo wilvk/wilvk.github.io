@@ -75,7 +75,7 @@
 
         
 
-        <li>4 min read</li>
+        <li>5 min read</li>
     </ul>
 </aside>
     
@@ -106,9 +106,9 @@
 
 <p>The corresponding static pages are delivered from the address:</p>
 
-<p>[<code>https://wilvk.github.io]</code>(<a href="https://wilvk.github.io">https://wilvk.github.io</a>)</p>
+<p><a href="https://wilvk.github.io">https://wilvk.github.io</a></p>
 
-<p>If you have your own domain name, this can be integrated into Github Pages by going to settings in the repository.</p>
+<p>If you have your own domain name, this can be integrated into Github Pages by going to the Settings section of the repository.</p>
 
 <h1 id="an-overview">An overview</h1>
 
@@ -134,24 +134,29 @@ git commit -m <span style="color:#e6db74">&#34;build release&#34;</span>
 git push --set-upstream origin master
 cd ..
 rm -rf ./public</code></pre></div>
-<p>The <code>set -x</code> allows me to see any errors that may occur during the build process. Using different themes or various settings can cause Hugo to fail the build process and not push new changes to the static website repository <code>wilvk.github.io</code>. Showing the full output enables inspection of this process for any errors. Hugo can also be run with verbose output with <code>hugo --verbose</code> for even more detail if required.</p>
+<p>The <code>set -x</code> allows me to see any errors that may occur during the build process. Using different themes or various settings can cause Hugo to fail the build process and not push new changes to the static website repository <code>wilvk.github.io</code>. Showing the full output enables inspection of this process for any errors.</p>
 
-<p>The static site is built to the path ./public<code>and so the first thing the script does is delete the</code>./public<code>path.
-Then the</code>wilvk.github.io<code>repository is cloned into the base of the</code>blog-hugo<code>repository.
-Running</code>hugo<code>builds all the static files to the</code>./public<code>path.
-The new static website is then 'pushed' bacck up to the repository</code>wilvk.github.io`.</p>
+<p>Hugo can also be run with verbose output with <code>hugo --verbose</code>, or even <code>hugo --debug</code> for greater levels of detail in the build process if required.</p>
+
+<p>The static site is built to the path ./public<code>and so the first thing the script does is delete the</code>./public` path.</p>
+
+<p>Then the <code>wilvk.github.io</code> repository is cloned into the base of the <code>blog-hugo</code> repository.</p>
+
+<p>Running <code>hugo</code> builds all the static files to the <code>./public</code> path.</p>
+
+<p>The new static website is then &lsquo;pushed&rsquo; bacck up to the repository <code>wilvk.github.io</code>.</p>
 
 <p>This way there is delineage between the build process and the resultant artefact, the static website.</p>
 
 <h1 id="configuring-config-toml">Configuring config.toml</h1>
 
-<p>Hugo has built-in support for <a href="https://analytics.google.com/analytics/web/#/">Google Analytics</a> so you can see pageviews, users currently viewing your site and more.</p>
+<p>Hugo has built-in support for <a href="https://analytics.google.com/analytics/web/#/">Google Analytics</a> so you can see pageviews over time, users currently viewing your site and other relevant details of your site.</p>
 
-<p>It also has support for <a href="https://disqus.com/">Disqus</a> so that users can comment on your blogs which is pretty cool too.</p>
+<p>Hugo also has support for <a href="https://disqus.com/">Disqus</a> so that users can comment on your blogs and you don&rsquo;t have to store the comments in an application - allowing your website to remain stateless.</p>
 
-<p>Google Analytics is free from Google and Disqus is also a free service. With IDs from both these services, you can turn your Github Pages into a full blog.</p>
+<p>Google Analytics is free from Google and Disqus is also a free service. With IDs from both these services, you can turn your Github Pages into a proper blog.</p>
 
-<p>The following is how I have set my blog up:</p>
+<p>The following is how I have set up my <code>config.toml</code> file:</p>
 
 <pre><code>baseurl = &quot;https://blog.seso.io&quot;
 title = &quot;Will's Blog&quot;
@@ -197,14 +202,14 @@ languageCode = &quot;en-US&quot;
 
 <p>I&rsquo;ll just point out a few things about the config file above.</p>
 
-<p>Your Google Analytics Id will go in the variable <code>googleAnalytics</code>.
-Your Disqus shortname will go in the variable <code>disqusShortname</code>.</p>
+<p>Your Google Analytics ID will go in the variable <code>googleAnalytics</code>.
+Your Disqus shortname ID will go in the variable <code>disqusShortname</code>.</p>
 
 <p>I am also using a custom domain name and so this is set in the variable <code>baseurl</code>. The variable <code>cannonifyurls</code> needs to be set to true to enable correct redirects to your custom domain name.</p>
 
 <h1 id="skinning-theming-your-site">Skinning/theming your site</h1>
 
-<p>If you are just starting out with Hugo (or even if you&rsquo;re not), you may want to change (or even create) a theme for your site.</p>
+<p>If you are just starting out with Hugo (or even if you&rsquo;re not), you may want to change the theme for your site.</p>
 
 <p>To do this, the usual procedure is to:</p>
 
@@ -215,11 +220,9 @@ Your Disqus shortname will go in the variable <code>disqusShortname</code>.</p>
 
 <p>Some themes require specific config settings in the <code>config.toml</code> file. They will usually tell you in their <code>README</code> on the specifics of this.</p>
 
-<h1 id="static-resources">Static resources</h1>
-
 <h1 id="onwards-and-upwards">Onwards and upwards</h1>
 
-<p>Anyway, these are just a few things I have found while setting up a Hugo blog. For more info, <a href="https://gohugo.io/getting-started/usage/">Hugo docs</a> are quite useful.</p>
+<p>These are just a few things I have found while setting up a Hugo blog. For more info, I have found the <a href="https://gohugo.io/getting-started/usage/">Hugo docs</a> are quite useful.</p>
 
 <p>Happy blogging!</p>
 
