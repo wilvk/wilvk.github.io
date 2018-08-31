@@ -144,7 +144,7 @@ rm -rf ./public</code></pre></div>
 
 <p>Running <code>hugo</code> builds all the static files to the <code>./public</code> path.</p>
 
-<p>The new static website is then &lsquo;pushed&rsquo; bacck up to the repository <code>wilvk.github.io</code>.</p>
+<p>The new static website is then &lsquo;pushed&rsquo; back up to the repository <code>wilvk.github.io</code> and the <code>./public</code> path deleted so that is is not accidentally committed to the <code>blog-hugo</code> repository. It may be useful sometimes to comment this line out if investigating why a build didn&rsquo;t complete but most of the time it is useful to have it delete the path.</p>
 
 <p>This way there is delineage between the build process and the resultant artefact, the static website.</p>
 
