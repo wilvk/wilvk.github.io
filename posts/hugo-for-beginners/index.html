@@ -1,0 +1,294 @@
+<!doctype html>
+
+<html lang="en-US">
+
+<head>
+  <title>Will&#39;s Blog</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Willem van Ketwich" />
+  <meta name="generator" content="Hugo 0.48" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>Just a dude that does stuff.. mostly with computers.</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>blog</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/about/">
+                <i class="fa-li fa  fa-lg"></i><span>about</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Hugo for Beginners</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2018-08-31T19:04:23&#43;10:00">Aug 31, 2018</time>
+        </li>
+        
+        
+
+        
+
+        <li>4 min read</li>
+    </ul>
+</aside>
+    
+
+    
+
+<p>I wanted to put together some notes on how to set up a Github Pages blog using the Hugo static pages publishing application as when I went through this process myself, I found it less than intuitive.</p>
+
+<p>Github Pages is a great way to spin up a personal blog, product page or any other type of site that doesn&rsquo;t require stateful application logic to be involved.</p>
+
+<p>The defacto static page generator is considered to be Jekyll, which is a versatile, and extensible framework. However, being a fan of Golang I decided to go with Hugo.</p>
+
+<p>The way Github Pages works is to use a repo with the name <code>&lt;username/org&gt;.github.io</code>. In effect this means that a repo at the address <code>https://github.com/&lt;username/org&gt;/&lt;username/org&gt;.github.io</code> is created.</p>
+
+<p>For example, my username is <code>wilvk</code> and so my Github Pages repository is <code>wilvk/wilvk.github.io</code> with the repository address <code>https://github.com/wilvk/wilvk.github.io</code> . The corresponding static pages are delivered from the address wilvk.github.io . If you have your own domain name, this can be integrated into Github Pages by going to settings in the repository.</p>
+
+<h1 id="an-overview">An overview</h1>
+
+<p>The way I set up my blog was to have one repository for the static pages to be delivered by Github Pages, and another for generating the static pages using Hugo. I have a script for generating the site and pushing the changes to the Github Pages site so I don&rsquo;t have to do this manually every time.</p>
+
+<p><diagram></p>
+
+<p>We can see from the diagram that the build is done on blog-hugo repository, clones the wilvk.github.io repository, builds the full site and pushes the changes back to the wilvk.github.io repository.</p>
+
+<h1 id="an-automated-process">An automated process</h1>
+
+<p>I place the following script in the base of the blog-hugo repository and run it to push the changes to the site:</p>
+
+<pre><code>#!/bin/bash
+
+set -x
+
+rm -rf ./public
+git clone https://github.com/wilvk/wilvk.github.io public
+hugo
+cd ./public
+git add .
+git commit -m &quot;build release&quot;
+git push --set-upstream origin master
+cd ..
+rm -rf ./public
+</code></pre>
+
+<p>The <code>set -x</code> allows me to see any errors that may occur during the build process. Using different themes or various settings can cause Hugo to fail the build process and not push new changes to the static website repository <code>wilvk.github.io</code>. Showing the full output enables inspection of this process for any errors. Hugo can also be run with verbose output with <code>hugo --verbose</code> for even more detail if required.</p>
+
+<p>The static site is built to the path ./public<code>and so the first thing the script does is delete the</code>./public<code>path.
+Then the</code>wilvk.github.io<code>repository is cloned into the base of the</code>blog-hugo<code>repository.
+Running</code>hugo<code>builds all the static files to the</code>./public<code>path.
+The new static website is then 'pushed' bacck up to the repository</code>wilvk.github.io`.</p>
+
+<p>This way there is delineage between the build process and the resultant artefact, the static website.</p>
+
+<h1 id="configuring-config-toml">Configuring config.toml</h1>
+
+<p>Hugo has built-in support for <a href="https://analytics.google.com/analytics/web/#/">Google Analytics</a> so you can see pageviews, users currently viewing your site and more.</p>
+
+<p>It also has support for <a href="https://disqus.com/">Disqus</a> so that users can comment on your blogs which is pretty cool too.</p>
+
+<p>Google Analytics is free from Google and Disqus is also a free service. With IDs from both these services, you can turn your Github Pages into a full blog.</p>
+
+<p>The following is how I have set my blog up:</p>
+
+<pre><code>baseurl = &quot;https://blog.seso.io&quot;
+title = &quot;Will's Blog&quot;
+copyright = &quot;Copyright &amp;copy; 2018 - Willem van Ketwich&quot;
+canonifyurls = true
+theme = &quot;kiera&quot;
+
+## kiera theme settings
+paginate = 3
+summaryLength = 30
+enableEmoji = true
+pygmentsCodeFences = true
+
+## Hugo Built-in Features
+disqusShortname = &quot;wilvk-github-io&quot;
+googleAnalytics = &quot;UA-122351489-2&quot;
+enableRobotsTXT = true
+
+builddrafts = false
+languageCode = &quot;en-US&quot;
+
+[author]
+    name = &quot;Willem van Ketwich&quot;
+    github = &quot;wilvk&quot;
+    linkedin = &quot;willvk&quot;
+    twitter = &quot;wilvk&quot;
+
+[params]
+    tagline = &quot;Just a dude that does stuff.. mostly with computers.&quot;
+
+## Main Menu
+[[menu.main]]
+    name = &quot;blog&quot;
+    weight = 10
+    identifier = &quot;blog&quot;
+    url = &quot;/posts/&quot;
+[[menu.main]]
+    name = &quot;about&quot;
+    identifier = &quot;about&quot;
+    weight = 20
+    url = &quot;/about/&quot;
+</code></pre>
+
+<p>I&rsquo;ll just point out a few things about the config file above.</p>
+
+<p>Your Google Analytics Id will go in the variable <code>googleAnalytics</code>.
+Your Disqus shortname will go in the variable <code>disqusShortname</code>.</p>
+
+<p>I am also using a custom domain name and so this is set in the variable <code>baseurl</code>. The variable <code>cannonifyurls</code> needs to be set to true to enable correct redirects to your custom domain name.</p>
+
+<h1 id="skinning-theming-your-site">Skinning/theming your site</h1>
+
+<p>If you are just starting out with Hugo (or even if you&rsquo;re not), you may want to change (or even create) a theme for your site.</p>
+
+<p>To do this, the usual procedure is to:</p>
+
+<ul>
+<li>Clone the theme into the <code>./themes</code> path.</li>
+<li>Edit the <code>config.toml</code> file and set the theme to the name of the directory cloned into the <code>./themes</code> path.</li>
+</ul>
+
+<p>Some themes require specific config settings in the <code>config.toml</code> file. They will usually tell you in their <code>README</code> on the specifics of this.</p>
+
+<h1 id="static-resources">Static resources</h1>
+
+<h1 id="onwards-and-upwards">Onwards and upwards</h1>
+
+<p>Anyway, these are just a few things I have found while setting up a Hugo blog. For more info, <a href="https://gohugo.io/getting-started/usage/">Hugo docs</a> are quite useful.</p>
+
+<p>Happy blogging!</p>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://blog.seso.io/posts/creating-a-fibonacci-generator-in-assembly/"><i class="fa fa-chevron-circle-left"></i> Creating a Fibonacci Generator in Assembly</a>
+        </li>
+        
+        
+    </ul>
+</section>
+    
+        <section class="comments-block">
+      <button id="show-comments" style="display: none;"><i class="fa fa-comments-o"></i> Add/View Comments</button>
+</section>
+
+<section id="disqus_thread"></section>
+
+<script>
+      (function () {
+            
+            
+            if (window.location.hostname == "localhost")
+                  return;
+
+            var disqus_loaded = false;
+            var disqus_shortname = 'wilvk-github-io';
+            var disqus_button = document.getElementById("show-comments");
+
+            disqus_button.style.display = "";
+            disqus_button.addEventListener("click", disqus, false);
+
+            function disqus() {
+
+                  if (!disqus_loaded) {
+                        disqus_loaded = true;
+
+                        var e = document.createElement("script");
+                        e.type = "text/javascript";
+                        e.async = true;
+                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
+                        (document.getElementsByTagName("head")[0] ||
+                              document.getElementsByTagName("body")[0])
+                        .appendChild(e);
+
+                        
+                        document.getElementById("show-comments").style.display = "none";
+                  }
+            }
+
+            
+            var hash = window.location.hash.substr(1);
+            if (hash.length > 8) {
+                  if (hash.substring(0, 8) == "comment-") {
+                        disqus();
+                  }
+            }
+
+            
+            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
+                  disqus();
+            }
+      })();
+</script>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2018 - Willem van Ketwich | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://blog.seso.io/js/scripts.js"></script>
+</body>
+
+</html>
