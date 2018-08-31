@@ -1140,7 +1140,7 @@ fibonacci:
 <li>into the memory location with the value of:
 
 <ul>
-<li>the address pointed to by <code>esp</code> + ( the value of <code>ecx</code> * 4 )</li>
+<li>the address pointed to by <code>esp</code> + ( <code>ecx</code> * 4 )</li>
 </ul></li>
 </ul>
 
@@ -1150,7 +1150,7 @@ fibonacci:
 
 <p>Next we increment our counter <code>ecx</code> so that it contains 1. The second <code>mov</code> then places the value 1 into the next position up in memory in our stack, 4 bytes up from the previous <code>mov</code> instruction. Our <code>ecx</code> counter is then incremented again.</p>
 
-<p>This is closely reflects our C code with the lines:</p>
+<p>This is closely reflected by our C code with the lines:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  f[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
   f[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;</code></pre></div>
 <p>It is important that the first two values are pre-populated as the loop makes the assumption that the last two values of the Fibonacci sequence already exist.</p>
