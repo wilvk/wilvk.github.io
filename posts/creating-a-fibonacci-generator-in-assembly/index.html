@@ -1,182 +1,86 @@
+<!doctype html>
 
-<!DOCTYPE html>
-<html lang="en-US">
+<html lang="en">
 
 <head>
-
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <meta property="og:title" content=" Creating a Fibonacci Generator in Assembly &middot;  Willem van Ketwich" />
-    <meta property="og:site_name" content="Willem van Ketwich" />
-    <meta property="og:url" content="https://blog.seso.io/posts/creating-a-fibonacci-generator-in-assembly/" />
-
-    
-    <meta property="og:type" content="article" />
-    <meta property="og:article:published_time" content="2018-08-30T21:12:38&#43;10:00" />
-    
-
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@" />
-    <meta name="twitter:creator" content="@" />
-    <meta name="twitter:title" content="Creating a Fibonacci Generator in Assembly" />
-    
-    <meta name="twitter:description" content="Contents  Intro  Following along at home A beginning Some starting knowledge Overview of the implementation  Beginning the implementation  Building binary files from assembly files The structure of a gas assembly file Instructions and opcodes The application entry-point and labels Compiling our code Reading from the process arguments and converting to a numeric value Debugging with GDB  Getting the length of our argument on the command line  Making things easier to understand using function calls  Converting a string to a number  Some new functions Zeroing registers Register sizes and layout Processing the string  The actual Fibonacci algorithm  Creating the stack space for our array The Fibonacci logic in assembly Setting up our variables Array memory allocation Variable initialisation Indexed memory Running the loop to completion Calculating the sequence  Printing our result  Doing things the hard way  Conclusion  From here to there - improving the code   Intro Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland." />
-    <meta name="twitter:url" content="https://blog.seso.io/posts/creating-a-fibonacci-generator-in-assembly/" />
-    
-
-    <title> Creating a Fibonacci Generator in Assembly &middot;  Willem van Ketwich</title>
-
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link rel="preload" href="https://blog.seso.io//js/main.js" as="script" />
-    <link rel="preload" href="https://blog.seso.io//css/main.css" as="style" />
-    
-    
-
-
-    
-    <meta name="description" content="I&#39;m just a guy who does stuff. Mostly with computers." />
-    
-
-    
-    <meta name="p:domain_verify" content=""/>
-    
-
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="MobileOptimized" content="320" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    
-    
-
-    
-    <link href="https://blog.seso.io/index.xml" rel="alternate" type="application/rss+xml" title="Willem van Ketwich" />
-    
-
-    
-    <link rel="canonical" href="https://blog.seso.io/posts/creating-a-fibonacci-generator-in-assembly/" />
-
-    
-    <script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://blog.seso.io/posts/creating-a-fibonacci-generator-in-assembly/"
-        },
-        "headline": "Creating a Fibonacci Generator in Assembly",
-        "description": "",
-        "author": {
-            "@type": "Person",
-            "name": "Willem van Ketwich",
-            "url": "http://profiles.google.com/?rel=author",
-            "image": {
-              "@type": "ImageObject",
-              "url": "https:",
-              "height": 80,
-              "width": 80
-            }
-        },
-        "publisher": {
-          "@type": "Organization",
-          "@id": "https://blog.seso.io/",
-          "name": "Willem van Ketwich",
-          "url": "https://blog.seso.io/",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https:",
-            "height": 80,
-            "width": 80
-          }
-        },
-        
-        "image": {
-          "@type": "ImageObject",
-          "url": "",
-          "height": 80,
-          "width": 80
-        },
-        "datePublished": "2018-08-30",
-        "dateModified": "2018-08-30",
-        "wordCount": 10200,
-        
-    }
-    </script>
-    
-
-    
-    <script type="text/javascript">
-        
-        
-    </script>
-    
-
-    <script type="text/javascript">
-        var config = {
-            baseUrl: "https:\/\/blog.seso.io\/"
-        };
-    </script>
-
-    <style>
-html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,figure,footer,header,main,nav,section{display:block}h1{font-size:2em;margin:.67em 0}figure{margin:1em 40px}a{background-color:transparent;-webkit-text-decoration-skip:objects}img{border-style:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}@font-face{font-family:'Merriweather Sans';font-style:normal;font-weight:300;src:local("Merriweather Sans Light"),local(MerriweatherSans-Light),url(//fonts.gstatic.com/s/merriweathersans/v5/6LmGj5dOJopQKEkt88GowY_zIojJi0m4a5Z6tRh6itY.woff) format("woff")}@font-face{font-family:'Merriweather Sans';font-style:normal;font-weight:400;src:local("Merriweather Sans Regular"),local(MerriweatherSans-Regular),url(//fonts.gstatic.com/s/merriweathersans/v5/AKu1CjQ4qnV8MUltkAX3sL2aU247V0zTzydO4RoO9Ok.woff) format("woff")}@font-face{font-family:'Merriweather Sans';font-style:normal;font-weight:700;src:local("Merriweather Sans Bold"),local(MerriweatherSans-Bold),url(//fonts.gstatic.com/s/merriweathersans/v5/6LmGj5dOJopQKEkt88GowQfd-b-I5PxxcmB4_-MNcqw.woff) format("woff")}@font-face{font-family:'Merriweather Sans';font-style:normal;font-weight:800;src:local("Merriweather Sans ExtraBold"),local(MerriweatherSans-ExtraBold),url(//fonts.gstatic.com/s/merriweathersans/v5/6LmGj5dOJopQKEkt88GowWT7sFQ1Iz1BbpcuCPlgc9Q.woff) format("woff")}@font-face{font-family:'Merriweather Sans';font-style:italic;font-weight:300;src:local("Merriweather Sans Light Italic"),local(MerriweatherSans-LightItalic),url(//fonts.gstatic.com/s/merriweathersans/v5/nAqt4hiqwq3tzCecpgPmVX9UU5BmOJGkLxUCVv5VXdc.woff) format("woff")}@font-face{font-family:'Merriweather Sans';font-style:italic;font-weight:400;src:local("Merriweather Sans Italic"),local(MerriweatherSans-Italic),url(//fonts.gstatic.com/s/merriweathersans/v5/3Mz4hOHzs2npRMG3B1ascf0KIgDhPIHb_R-SWdtqte8.woff) format("woff")}@font-face{font-family:'Merriweather Sans';font-style:italic;font-weight:700;src:local("Merriweather Sans Bold Italic"),local(MerriweatherSans-BoldItalic),url(//fonts.gstatic.com/s/merriweathersans/v5/nAqt4hiqwq3tzCecpgPmVYM8pfYvjMoOxygpzLVILAs.woff) format("woff")}@font-face {font-family: 'Aldrich';font-style: normal;font-weight: 400;src: local('Aldrich Regular'), local('Aldrich-Regular'), url('//fonts.gstatic.com/s/aldrich/v8/j-NnyokbAnhXANS2iZ6Jew.woff2') format('woff2');unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;font-style:normal}[class^="icon-"]:before{font-family:"icons";font-style:normal;font-weight:400;speak:none;display:inline-block;text-decoration:inherit;width:1em;margin-right:.2em;text-align:center;font-variant:normal;text-transform:none;line-height:1em;margin-left:.2em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.icon-arrow-right:before{content:'\e807'}.icon-rss:before{content:'\e808'}body{font:300 1em / 1.5em 'Merriweather Sans',sans-serif;color:#595B66}a{color:inherit;text-decoration:none;font-weight:400}h1,h2{text-rendering:optimizeLegibility;color:#1F2026}h2 a{font-weight:inherit}h1{font-size:2em;line-height:1em;margin:2em 0 -.5em}h2{font-size:1.75em;line-height:1.143em;margin:2.286em 0 -.571em}p{margin:2em auto}i{font-weight:400;font-style:italic;color:#363740}img{display:block;max-width:100%;height:auto;margin:2.5em auto}body{background:#fff}.inner{max-width:48em;margin:0 auto;padding:0 1em}#wrapper{position:relative;box-sizing:border-box;width:100%;min-height:100vh;padding-bottom:6em;background:#F2F3F5}#push{transform:translate3d(0,0,0);transform-style:preserve-3d;opacity:1}#nav{position:relative;background:#fff;z-index:70;transform:translate3d(0,0,0);transform-style:preserve-3d;opacity:1}#nav:after{clear:both;content:'';display:table}#nav .nav-logo{float:left;height:2em;padding:1em;max-width:50%}#nav .nav-logo img{width:auto;max-width:none;height:2em;margin:0;border-radius:5px}#nav .nav-menu{float:right}#nav .nav-menu:after{clear:both;content:'';display:table}#nav .nav-menu a{display:block;width:1em;height:1em;line-height:1em;padding:1.5em;text-align:center;float:left}#nav .nav-menu a i:before{margin:auto}.overlay{display:none;position:fixed;left:0;top:0;width:100%;height:100%;z-index:80;display:none}.overlay:before{content:'';position:absolute;left:0;top:0;width:100%;height:100%;background:#1F2026;opacity:0;transform-style:preserve-3d}#header{position:relative;padding:4em 0}#header .inner{position:relative;z-index:2}#header .header-title{display:block;text-align:center}#header .header-name{font-family: Aldrich, sans-serif;font-weight:700;letter-spacing:-1px;display:block;line-height:1em;font-size:2em;text-decoration:none;color:#1F2026;padding:0;margin:0}#header.has-cover .header-name{color:#fff}#header .header-description{display:block;margin:1em auto 0;color:#9D9FA6;position:relative;font-weight:300}#header .header-description:after{content:'';position:absolute;height:1px;width:100px;margin-left:-50px;left:50%;top:-.5em;background:#D4D5D9}#header.has-cover .header-description{color:#fff}#header.has-cover .header-description:after{background:#fff}#header .header-cover{position:absolute;width:100%;height:100%;top:0;left:0;margin-top:-4em;padding:4em 0;background:no-repeat fixed center 100% / cover;z-index:1}#header .header-cover:before{content:'';position:absolute;width:100%;height:100%;left:0;top:0;background:rgba(0,0,0,0.2)}#header .header-cover:after{content:'';position:absolute;width:100%;left:0;bottom:0;border-bottom:4px solid #19A0D7}#footer{position:absolute;width:100%;left:0;bottom:0;font-size:.75em;line-height:1.334em;background:#1F2026;color:#737580;z-index:20;transform:translate3d(0,0,0);transform-style:preserve-3d;opacity:1}#footer a{color:#9D9FA6;font-weight:400}#footer .credits{text-align:center;font-size:.75em;line-height:1.334em;padding:2.667em;overflow:auto}#footer .credits span{display:block}#footer .credits .credits-theme{float:left}#footer .credits .credits-software{float:right}.post{position:relative;z-index:20}.post .post-image{display:block;margin:0;padding:0}.post .post-image img{display:block;width:100%;height:auto;margin:0;padding:0}.post .post-meta{display:block;font-size:.75em;line-height:1.334em;font-weight:400;margin-bottom:1.334em}.post .post-title{position:relative;color:#000;font-size:2em;line-height:1.375em;font-weight:800;text-indent:-1px;margin:.25em 0 .75em}.post .post-title:before{content:'';position:absolute;left:0;bottom:-.334em;width:1em;margin-bottom:-2px;border-bottom:4px solid #19A0D7}.post .post-title a{text-decoration:none;color:inherit;font-weight:inherit}#post-index{position:relative;max-width:1200px;margin:0 auto 4em;padding:.5em;z-index:10}@keyframes fade{0%{transform:translate3d(0,3em,0);opacity:0}100%{transform:translate3d(0,0,0);opacity:1}}.post-list{position:relative}.post-list .post{float:left;width:33.3%;transform:translate3d(0,3em,0);transform-style:preserve-3d;opacity:0;animation:fade ease-out .5s forwards;animation-delay:1.4s}@media only screen and (max-width: 50em){.post-list .post{width:49.9%}}@media only screen and (max-width: 30em){.post-list .post{width:100%;float:none}}.post-list .post:nth-child(1){animation-delay:.1s}.post-list .post:nth-child(2){animation-delay:.2s}.post-list .post:nth-child(3){animation-delay:.3s}.post-list .post:nth-child(4){animation-delay:.4s}.post-list .post:nth-child(5){animation-delay:.5s}.post-list .post:nth-child(6){animation-delay:.6s}.post-list .post:nth-child(7){animation-delay:.7s}.post-list .post:nth-child(8){animation-delay:.8s}.post-list .post:nth-child(9){animation-delay:.9s}.post-list .post .inner{padding:2em;margin:.5em;max-width:none;background:#fff;box-sizing:border-box;transform:scale(1);transform-style:preserve-3d}@media only screen and (max-width: 50em){.post-list .post .inner{padding:1em}}.post-list .post .post-link{position:absolute;left:0;top:0;width:100%;height:100%;z-index:10}.post-list .post .post-image{position:relative;margin:-2em -2em 0;overflow:hidden;background:#19A0D7}@media only screen and (max-width: 50em){.post-list .post .post-image{margin:-1em -1em 0}}.post-list .post .post-image img{transform:scale(1);transform-style:preserve-3d;opacity:1}.post-list .post .post-image:after{content:'';position:absolute;left:-5%;bottom:-2.5em;width:110%;height:4em;background:#fff;border-top:4px solid #19A0D7;box-shadow:0 0 2em rgba(0,0,0,0.2);transform:rotate(5deg)}.post-list .post .post-title{font-size:1.5em;line-height:1.167em}.post-list .post .post-excerpt{margin:0}.post-list .post .post-more{display:block;margin-top:1.5em}.post-list .post .post-more a{display:inline-block;font-size:.875em;line-height:1.143em;font-weight:400;color:#363740}.post-list .post .post-more a i{color:#0e77a0}.pagination{min-height:3em;margin:4em auto 2em;padding:0;position:relative}.pagination .pagination-item{position:relative;display:block;height:3em;line-height:3em;padding:0 1em;text-align:center;text-decoration:none;font-weight:700;color:#363740;border:1px solid #19A0D7;border-radius:4em;z-index:60}.pagination .pagination-item i{position:relative}@media only screen and (max-width: 30em){.pagination .pagination-item{width:4em;height:4em;line-height:4em;margin-top:-.5em;padding:0!important}.pagination .pagination-item i{font-size:1.5em}.pagination .pagination-item>span{display:none}}.pagination .pagination-prev{float:right}.pagination .pagination-prev i{right:-.05em}.pagination .pagination-info{display:block;left:0;top:0;height:3em;line-height:3em;position:absolute;text-align:center;width:100%;z-index:50;color:#9D9FA6}#loader-wrapper{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000}#loader{display:block;position:relative;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;border:3px solid transparent;border-top-color:#19A0D7;animation:spin 2s linear infinite}#loader:before{content:"";position:absolute;top:5px;left:5px;right:5px;bottom:5px;border-radius:50%;border:3px solid transparent;border-top-color:#0e77a0;animation:spin 3s linear infinite}#loader:after{content:"";position:absolute;top:15px;left:15px;right:15px;bottom:15px;border-radius:50%;border:3px solid transparent;border-top-color:#D4D5D9;animation:spin 1.5s linear infinite}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-</style>
-
-
+  <title>Will&#39;s Blog</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Willem van Ketwich" />
+  <meta name="generator" content="Hugo 0.48" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
 </head>
-<body class="home-template">
-<div id="loader-wrapper">
-    <div id="loader"></div>
-</div>
-<section id="wrapper" style="display: none;">
-    <div id="ajax-container">
-        <nav id="nav" class="nav">
-            <div class="nav-logo">
-                <a href="https://blog.seso.io/">
-                    
-                    Willem van Ketwich
-                    
-                </a>
-            </div>
-            <div id="main-menu" class="nav-menu">
-                
-                
-                <a id="search-button" onclick="$('#search-form').toggle();" title="Search"><i class="fa fa-search"></i></a>
-                <form id="search-form" method="get" role="search" action="https://google.com/search">
-                    <input type="hidden" name="as_sitesearch" value="https://blog.seso.io/">
-                    <input type="text" name="q" maxlength="255" placeholder="Search..." class="form-control">
-                    <input type="submit" value="Search">
-                </form>
-                
-                
-                
-                
-                <a id="main-menu-button" class="menu" data-action="menu" data-target="menu"
-                   title="Menu"><i class="fa fa-navicon"></i></a>
-                
-            </div>
-        </nav>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>A Hugo theme for creative and technical writing</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>blog</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/about/">
+                <i class="fa-li fa  fa-lg"></i><span>about</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
 
 
-<main class="content" role="main">
-    <article class="post">
-        <div class="inner">
 
-            <div id="push">
 
-                <header class="post-header">
-                
-                    <span class="post-meta">
-                        <span class="post-date">30 Aug 2018</span> <span class="reading-time">| <span class="estimated-reading-time">48 min.</span> (<span class="word-count">10200</span> words)</span></span>
-                    </span>
-                <div class="clear"></div>
-                
-                <h1 class="post-title">Creating a Fibonacci Generator in Assembly</h1>
-              </header>
+<article>
 
-              <section class="post-content">
-                
-                  
+    <h1>Creating a Fibonacci Generator in Assembly</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2018-08-30T21:12:38&#43;10:00">Aug 30, 2018</time>
+        </li>
+        
+        
+
+        
+
+        <li>48 min read</li>
+    </ul>
+</aside>
+    
+
+    
 
 <h1 id="contents">Contents</h1>
 
@@ -269,38 +173,35 @@ html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-t
 <p>The basis of the algorithm to use was decided to be a space-optimised method using a dynamic programming approach. This effectively means using an array on the stack to hold our values while giving <strong>O(n)</strong> time and space complexity.</p>
 
 <p>The code used as a basis is shown below:</p>
-
-<pre><code class="language-c">//Fibonacci Series using Dynamic Programming
-#include&lt;stdio.h&gt;
- 
-int fib(int n)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">//Fibonacci Series using Dynamic Programming
+</span><span style="color:#75715e"></span><span style="color:#75715e">#include</span><span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span> 
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">fib</span>(<span style="color:#66d9ef">int</span> n)
 {
-  /* Declare an array to store Fibonacci numbers. */
-  int f[n+2];   // 1 extra to handle case, n = 0
-  int i;
+  <span style="color:#75715e">/* Declare an array to store Fibonacci numbers. */</span>
+  <span style="color:#66d9ef">int</span> f[n<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>];   <span style="color:#75715e">// 1 extra to handle case, n = 0
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">int</span> i;
  
-  /* 0th and 1st number of the series are 0 and 1*/
-  f[0] = 0;
-  f[1] = 1;
+  <span style="color:#75715e">/* 0th and 1st number of the series are 0 and 1*/</span>
+  f[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+  f[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
  
-  for (i = 2; i &lt;= n; i++)
+  <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; i <span style="color:#f92672">&lt;=</span> n; i<span style="color:#f92672">++</span>)
   {
-    /* Add the previous 2 numbers in the series and store it */
-    f[i] = f[i-1] + f[i-2];
+    <span style="color:#75715e">/* Add the previous 2 numbers in the series and store it */</span>
+    f[i] <span style="color:#f92672">=</span> f[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> f[i<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>];
   }
  
-  return f[n];
+  <span style="color:#66d9ef">return</span> f[n];
 }
  
-int main ()
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span> ()
 {
-  int n = 9;
-  printf(&quot;%d&quot;, fib(n));
+  <span style="color:#66d9ef">int</span> n <span style="color:#f92672">=</span> <span style="color:#ae81ff">9</span>;
+  printf(<span style="color:#e6db74">&#34;%d&#34;</span>, fib(n));
   getchar();
-  return 0;
-}
-</code></pre>
-
+  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}</code></pre></div>
 <h2 id="overview-of-the-implementation">Overview of the implementation</h2>
 
 <p>The implementation involved the following functionality:</p>
@@ -339,18 +240,15 @@ int main ()
 <p>We will start with the following assembly code. This gives us a basis for filling out our application:</p>
 
 <p><em>fib1.s</em></p>
-
-<pre><code class="language-asm"># framework
-.section .text
-.globl _start
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#75715e"># framework
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">.section</span> <span style="color:#66d9ef">.text</span>
+<span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
   _start:
-    nop
-    # the rest of our program goes here
-    movl $1, %eax
-    movl $0, %ebx
-    int $0x80
-</code></pre>
-
+    <span style="color:#a6e22e">nop</span>
+    <span style="color:#75715e"># the rest of our program goes here
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$1</span>, %eax
+    <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$0</span>, %ebx
+    <span style="color:#a6e22e">int</span> <span style="color:#66d9ef">$0x80</span></code></pre></div>
 <h2 id="the-structure-of-a-gas-assembly-file">The structure of a gas assembly file</h2>
 
 <p>The code above introduces some of the syntax of a GAS assembly file (<code>.s</code>). The first thing to note is that comments begin with a hash (<code>#</code>) and can be at the start of a line or after an instruction/opcode.</p>
@@ -577,24 +475,21 @@ ld -m elf_i386 -o $app_name $app_name.o
 <p>We&rsquo;ll use the following code (as per <code>fib2.s</code>) and load it into GDB with the command line argument &lsquo;test&rsquo;, such that once we&rsquo;ve made <code>fib2</code>, we can run <code>gdb --args ./fib2 test</code>. Gdb will load the binary with the argument specified and wait at it&rsquo;s <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">REPL</a> prompt for further instructions.</p>
 
 <p><em>fib2.s</em></p>
-
-<pre><code class="language-asm"># stack args example
-.section .text
-.globl _start
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#75715e"># stack args example
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">.section</span> <span style="color:#66d9ef">.text</span>
+<span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
   _start:
-    nop
-    movl %esp, %ebp     # take a copy of the stack pointer esp into ebp
-    addl $8, %ebp       # address of first arg in stack
-    movl (%ebp), %ecx   # move the address of the first arg into ecx
-    movl $4, %edx       # set the length of our string to 4
-    movl $4, %eax       # indicate to int 0x80 that we are doing a write
-    movl $0, %ebx       # indicate to int 0x80 that we are writing to file descriptor 0
-    int $0x80           # call int 0x80 for write
-    movl $1, %eax       # exit gracefully
-    movl $0, %ebx       # with return code 0
-    int $0x80           # call int 0x80 for exit
-</code></pre>
-
+    <span style="color:#a6e22e">nop</span>
+    <span style="color:#a6e22e">movl</span> %esp, %ebp     <span style="color:#75715e"># take a copy of the stack pointer esp into ebp
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addl</span> <span style="color:#66d9ef">$8</span>, %ebp       <span style="color:#75715e"># address of first arg in stack
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> (%ebp), %ecx   <span style="color:#75715e"># move the address of the first arg into ecx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$4</span>, %edx       <span style="color:#75715e"># set the length of our string to 4
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$4</span>, %eax       <span style="color:#75715e"># indicate to int 0x80 that we are doing a write
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># indicate to int 0x80 that we are writing to file descriptor 0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#75715e"># call int 0x80 for write
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$1</span>, %eax       <span style="color:#75715e"># exit gracefully
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># with return code 0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">int</span> <span style="color:#ae81ff">0x80</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">exit</span></code></pre></div>
 <p>Gdb is a very powerful debugger and has many options that I&rsquo;m still getting across, but for these examples we will use a small subset of it&rsquo;s functionality to:</p>
 
 <ul>
@@ -728,12 +623,9 @@ test[Inferior 1 (process 24) exited normally]
 <p>Up to this point, we should have an app that can read and print the first four characters of the first argument passed on the commandline when our application is called.</p>
 
 <p>Using our <code>docker-shell</code> environment, the following should work:</p>
-
-<pre><code class="language-bash">root@9a172ec363ca:/gas-asm-fib# ./make-app fib2
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@9a172ec363ca:/gas-asm-fib# ./make-app fib2
 root@9a172ec363ca:/gas-asm-fib# ./fib2 test
-testroot@9a172ec363ca:/gas-asm-fib#
-</code></pre>
-
+testroot@9a172ec363ca:/gas-asm-fib#</code></pre></div>
 <p>But what if we were to enter <code>./fib2 testing</code>? We&rsquo;d still just get <code>test</code> returned. Or worse still, if we enter less than 4 characters we get garbage printed from memory to make up the 4 characters. This is far from ideal for processing our commandline arguments.</p>
 
 <p>What we need is a way of determining the length of the argument in the stack. This is where the instruction pair <code>repne scasb</code> comes in useful.</p>
@@ -748,37 +640,34 @@ testroot@9a172ec363ca:/gas-asm-fib#
 <p>I&rsquo;ll show the code below then describe how it works.</p>
 
 <p><em>fib3.s</em></p>
-
-<pre><code class="language-asm"># framework - get first argument from the command line and print to stdout
-.section .text
-.globl _start
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#75715e"># framework - get first argument from the command line and print to stdout
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">.section</span> <span style="color:#66d9ef">.text</span>
+<span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
 _start:
-    nop
-    movl %esp, %ebp     # take a copy of esp to use
-    addl $8, %ebp       # address of first arg in stack
-    movl (%ebp), %edi   # move arg address into esi for scasb
-    push %edi           # store the string address as edi gets clobbered
-
-    movl $50, %ecx      # set ecx counter to a high value
-    movl $0, %eax       # zero al search char
-    movl %ecx, %ebx     # copy our max counter value to edx
-    cld                 # set direction down
-    repne scasb         # iterate until we find the al char
-
-    movl %ecx, %edx     # move count into edx
-    subl %ecx, %ebx     # subtract from our original ecx value
-    dec %ebx            # remove null byte at the end of the string from the count
-    pop %ecx            # restore our string address into ecx
-    mov %ebx, %edx      # move our count value to edx for the int 80 call
-
-    movl $4, %eax       # set eax to 4 for int 80 to write to file
-    movl $0, %ebx       # set ebx for file to write to as stdoout (file descriptor 0)
-    int $0x80           # make it so
-    movl $1, %eax       # set eax for int 80 for system exit
-    movl $0, %ebx       # set ebx for return code 0
-    int $0x80           # make it so again
-</code></pre>
-
+    <span style="color:#a6e22e">nop</span>
+    <span style="color:#a6e22e">movl</span> %esp, %ebp     <span style="color:#75715e"># take a copy of esp to use
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addl</span> <span style="color:#66d9ef">$8</span>, %ebp       <span style="color:#75715e"># address of first arg in stack
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> (%ebp), %edi   <span style="color:#75715e"># move arg address into esi for scasb
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">push</span> %edi           <span style="color:#75715e"># store the string address as edi gets clobbered
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$50</span>, %ecx      <span style="color:#75715e"># set ecx counter to a high value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %eax       <span style="color:#75715e"># zero al search char
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ecx, %ebx     <span style="color:#75715e"># copy our max counter value to edx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">cld</span>                 <span style="color:#75715e"># set direction down
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">repne</span> <span style="color:#66d9ef">scasb</span>         <span style="color:#75715e"># iterate until we find the al char
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">movl</span> %ecx, %edx     <span style="color:#75715e"># move count into edx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">subl</span> %ecx, %ebx     <span style="color:#75715e"># subtract from our original ecx value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">dec</span> %ebx            <span style="color:#75715e"># remove null byte at the end of the string from the count
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">pop</span> %ecx            <span style="color:#75715e"># restore our string address into ecx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> %ebx, %edx      <span style="color:#75715e"># move our count value to edx for the int 80 call
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$4</span>, %eax       <span style="color:#75715e"># set eax to 4 for int 80 to write to file
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># set ebx for file to write to as stdoout (file descriptor 0)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#75715e"># make it so
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$1</span>, %eax       <span style="color:#75715e"># set eax for int 80 for system exit
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># set ebx for return code 0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">make</span> <span style="color:#66d9ef">it</span> <span style="color:#66d9ef">so</span> <span style="color:#66d9ef">again</span></code></pre></div>
 <p>Building and running this from the <code>docker-shell</code> we can see that the full first argument is now displayed:</p>
 
 <pre><code>root@8ec496c15833:/gas-asm-fib# ./make-app fib3
@@ -843,14 +732,11 @@ The instructions <code>repne scasb</code> work on strings specifically to determ
 <p>and then we inspect our registers after stepping past <code>repne scasb</code>, we should see a value in <code>ecx</code> that is <em>50 - ( len(&lsquo;testing\0&rsquo;) - 1 )</em>. Which effectively equals 42. As <code>repne scasb</code> includes the byte it is searching for in the count, we need to subtract 1 from the length of our string. We then subtract the result in <code>ecx</code> from our original maximum length of 50 to find the actual length of the string that we want to print.</p>
 
 <p>This gives <strong>50 - 43 = 7</strong> and is what the following lines do:</p>
-
-<pre><code class="language-asm">    movl %ecx, %edx     # move count into edx
-    subl %ecx, %ebx     # subtract from our original ecx value
-    dec %ebx            # remove null byte at the end of the string from the count
-    pop %ecx            # restore our string address into ecx
-    mov %ebx, %edx      # move our count value to edx for the int 80 call
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">    <span style="color:#a6e22e">movl</span> %ecx, %edx     <span style="color:#75715e"># move count into edx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">subl</span> %ecx, %ebx     <span style="color:#75715e"># subtract from our original ecx value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">dec</span> %ebx            <span style="color:#75715e"># remove null byte at the end of the string from the count
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">pop</span> %ecx            <span style="color:#75715e"># restore our string address into ecx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> %ebx, %edx      <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">move</span> <span style="color:#66d9ef">our</span> <span style="color:#66d9ef">count</span> <span style="color:#66d9ef">value</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">edx</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">the</span> <span style="color:#66d9ef">int</span> <span style="color:#ae81ff">80</span> <span style="color:#66d9ef">call</span></code></pre></div>
 <p>Our string length is copied from <code>ebx</code> into the <code>edx</code> register so that the <code>int 0x80</code> call to write to stdout can then be performed to print the correct number of characters to the screen.
 There is also a <code>push</code> and <code>pop</code> instruction in <code>fib3.s</code> that firstly stores a copy of the address of our argument in <code>edi</code> then restores it into <code>ecx</code>. This is done as <code>ecx</code> is used for the address of the string to write to stdout, and the <code>repne scasb</code> instruction loop destroys this value in the <code>edi</code> register. Using <code>push</code> and <code>pop</code>, we can preserve the address of the string on the stack from <code>edi</code> and restore it into <code>ecx</code> when we need to use it later on._</p>
 
@@ -867,51 +753,47 @@ There is also a <code>push</code> and <code>pop</code> instruction in <code>fib3
 <p>The following is what we have done so far as being refactored into separate functions.</p>
 
 <p><em>fib4.s</em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#75715e"># framework - refactor into separate functions
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">.section</span> <span style="color:#66d9ef">.text</span>
+<span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
 
-<pre><code class="language-asm"># framework - refactor into separate functions
-.section .text
-.globl _start
+<span style="color:#75715e"># entrypoint of application
+</span><span style="color:#75715e"></span>_start:
+    <span style="color:#a6e22e">nop</span>
+    <span style="color:#a6e22e">movl</span> %esp, %ebp     <span style="color:#75715e"># take a copy of esp to use
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addl</span> <span style="color:#66d9ef">$8</span>, %ebp       <span style="color:#75715e"># address of first arg in stack
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> (%ebp), %edi   <span style="color:#75715e"># move arg address into esi for scasb
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">push</span> %edi           <span style="color:#75715e"># store the string address as edi gets clobbered
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">get_string_length</span>
+    <span style="color:#a6e22e">pop</span> %ecx            <span style="color:#75715e"># restore our string address into ecx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">print_string</span>
+    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">exit</span>
 
-# entrypoint of application
-_start:
-    nop
-    movl %esp, %ebp     # take a copy of esp to use
-    addl $8, %ebp       # address of first arg in stack
-    movl (%ebp), %edi   # move arg address into esi for scasb
-    push %edi           # store the string address as edi gets clobbered
-    call get_string_length
-    pop %ecx            # restore our string address into ecx
-    call print_string
-    call exit
+<span style="color:#75715e"># get length of string pointed to by edi and place result in ebx
+</span><span style="color:#75715e"></span>get_string_length:
+    <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$50</span>, %ecx      <span style="color:#75715e"># set ecx counter to a high value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %eax       <span style="color:#75715e"># zero al search char
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ecx, %ebx     <span style="color:#75715e"># copy our max counter value to edx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">cld</span>                 <span style="color:#75715e"># set direction down
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">repne</span> <span style="color:#66d9ef">scasb</span>         <span style="color:#75715e"># iterate until we find the al char
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ecx, %edx     <span style="color:#75715e"># move count into edx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">subl</span> %ecx, %ebx     <span style="color:#75715e"># subtract from our original ecx value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">dec</span> %ebx            <span style="color:#75715e"># remove null byte at the end of the string from the count
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">ret</span>
 
-# get length of string pointed to by edi and place result in ebx
-get_string_length:
-    movl $50, %ecx      # set ecx counter to a high value
-    movl $0, %eax       # zero al search char
-    movl %ecx, %ebx     # copy our max counter value to edx
-    cld                 # set direction down
-    repne scasb         # iterate until we find the al char
-    movl %ecx, %edx     # move count into edx
-    subl %ecx, %ebx     # subtract from our original ecx value
-    dec %ebx            # remove null byte at the end of the string from the count
-    ret
+<span style="color:#75715e"># print the string in ecx to the length of ebx
+</span><span style="color:#75715e"></span>print_string:
+    <span style="color:#a6e22e">mov</span> %ebx, %edx      <span style="color:#75715e"># move our count value to edx for the int 80 call
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$4</span>, %eax       <span style="color:#75715e"># set eax to 4 for int 80 to write to file
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># set ebx for file to write to as stdoout (file descriptor 0)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#75715e"># make it so
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">ret</span>
 
-# print the string in ecx to the length of ebx
-print_string:
-    mov %ebx, %edx      # move our count value to edx for the int 80 call
-    movl $4, %eax       # set eax to 4 for int 80 to write to file
-    movl $0, %ebx       # set ebx for file to write to as stdoout (file descriptor 0)
-    int $0x80           # make it so
-    ret
-
-# exit the application
-exit:
-    movl $1, %eax       # set eax for int 80 for system exit
-    movl $0, %ebx       # set ebx for return code 0
-    int $0x80           # make it so again
-
-</code></pre>
-
+<span style="color:#75715e"># exit the application
+</span><span style="color:#75715e"></span>exit:
+    <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$1</span>, %eax       <span style="color:#75715e"># set eax for int 80 for system exit
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># set ebx for return code 0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">make</span> <span style="color:#66d9ef">it</span> <span style="color:#66d9ef">so</span> <span style="color:#66d9ef">again</span></code></pre></div>
 <p>We can see here that we still have the label <code>_start</code> but we also have the additional labels of:
 - get_string_length
 - print_string
@@ -928,87 +810,84 @@ exit:
 <p>Now that we can read arguments from the command line and print them to the screen (sdout), we want to actually start using the command line argument to specify the number of iterations for our Fibonacci sequence. This involves reading the string from the command line and converting it to a number. The input from the command line will be in ASCII format, and so a numeric value in a string is not an actual numeric value for use in our application - hence the conversion.</p>
 
 <p><em>fib5.s</em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#75715e"># framework - convert string to number
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">.section</span> <span style="color:#66d9ef">.text</span>
+<span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
 
-<pre><code class="language-asm"># framework - convert string to number
-.section .text
-.globl _start
+<span style="color:#75715e"># entrypoint of application
+</span><span style="color:#75715e"></span>_start:
+    <span style="color:#a6e22e">nop</span>
+    <span style="color:#a6e22e">movl</span> %esp, %ebp     <span style="color:#75715e"># take a copy of esp to use
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addl</span> <span style="color:#66d9ef">$8</span>, %ebp       <span style="color:#75715e"># address of first arg in stack
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> (%ebp), %edi   <span style="color:#75715e"># move arg address into esi for scasb
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">push</span> %edi           <span style="color:#75715e"># store the string address as edi gets clobbered
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">get_string_length</span>
+    <span style="color:#a6e22e">pop</span> %edi             <span style="color:#75715e"># get edi string addr then push it as we are going to clobber it
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">push</span> %edi
+    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">long_from_string</span>
+    <span style="color:#a6e22e">cmpl</span> <span style="color:#66d9ef">$0</span>, %eax
+    <span style="color:#a6e22e">je</span> <span style="color:#66d9ef">exit</span>
+    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">fibonacci</span>
+    <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">exit</span>
 
-# entrypoint of application
-_start:
-    nop
-    movl %esp, %ebp     # take a copy of esp to use
-    addl $8, %ebp       # address of first arg in stack
-    movl (%ebp), %edi   # move arg address into esi for scasb
-    push %edi           # store the string address as edi gets clobbered
-    call get_string_length
-    pop %edi             # get edi string addr then push it as we are going to clobber it
-    push %edi
-    call long_from_string
-    cmpl $0, %eax
-    je exit
-    call fibonacci
-    call exit
-
-# using address of string edi
-# use eax register to store our result
-# jump to done if not a number
-# if numeric
-# subtract 48 from the byte to convert it to a number
-# multiply the result by 10 and add the number to eax
-# multiply the result register eax by 10
-# loop until the ecx counter has reached a non-numeric (null byte) and return
-
+<span style="color:#75715e"># using address of string edi
+</span><span style="color:#75715e"># use eax register to store our result
+</span><span style="color:#75715e"># jump to done if not a number
+</span><span style="color:#75715e"># if numeric
+</span><span style="color:#75715e"># subtract 48 from the byte to convert it to a number
+</span><span style="color:#75715e"># multiply the result by 10 and add the number to eax
+</span><span style="color:#75715e"># multiply the result register eax by 10
+</span><span style="color:#75715e"># loop until the ecx counter has reached a non-numeric (null byte) and return
+</span><span style="color:#75715e"></span>
 long_from_string:
-    xor %eax, %eax # set eax as our result register
-    xor %ecx, %ecx # set ecx(cl) as our temporary byte register
-.top:
-    movb (%edi), %cl
-    inc %edi
-    # check if we have a valid number in edi
-    cmpb $48, %cl  # check if value in ecx is less than ascii '0'. exit if less
-    jl .done
-    cmpb $57, %cl  # check if value in ecx is greater than ascii '9'. exit if greater
-    jg .done
-    sub $48, %cl
-    imul $10, %eax
-    add %ecx, %eax
-    jmp .top
+    <span style="color:#a6e22e">xor</span> %eax, %eax <span style="color:#75715e"># set eax as our result register
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">xor</span> %ecx, %ecx <span style="color:#75715e"># set ecx(cl) as our temporary byte register
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">.top</span>:
+    <span style="color:#a6e22e">movb</span> (%edi), %cl
+    <span style="color:#a6e22e">inc</span> %edi
+    <span style="color:#75715e"># check if we have a valid number in edi
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">cmpb</span> <span style="color:#66d9ef">$48</span>, %cl  <span style="color:#75715e"># check if value in ecx is less than ascii &#39;0&#39;. exit if less
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">jl</span> <span style="color:#66d9ef">.done</span>
+    <span style="color:#a6e22e">cmpb</span> <span style="color:#66d9ef">$57</span>, %cl  <span style="color:#75715e"># check if value in ecx is greater than ascii &#39;9&#39;. exit if greater
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">jg</span> <span style="color:#66d9ef">.done</span>
+    <span style="color:#a6e22e">sub</span> <span style="color:#66d9ef">$48</span>, %cl
+    <span style="color:#a6e22e">imul</span> <span style="color:#66d9ef">$10</span>, %eax
+    <span style="color:#a6e22e">add</span> %ecx, %eax
+    <span style="color:#a6e22e">jmp</span> <span style="color:#66d9ef">.top</span>
 .done:
-    ret
+    <span style="color:#a6e22e">ret</span>
 
 fibonacci:
-    ret
+    <span style="color:#a6e22e">ret</span>
 
-# get length of string pointed to by edi and place result in ebx
-
+<span style="color:#75715e"># get length of string pointed to by edi and place result in ebx
+</span><span style="color:#75715e"></span>
 get_string_length:
-    movl $50, %ecx      # set ecx counter to a high value
-    movl $0, %eax       # zero al search char
-    movl %ecx, %ebx     # copy our max counter value to edx
-    cld                 # set direction down
-    repne scasb         # iterate until we find the al char
-    movl %ecx, %edx     # move count into edx
-    subl %ecx, %ebx     # subtract from our original ecx value
-    dec %ebx            # remove null byte at the end of the string from the count
-    ret
+    <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$50</span>, %ecx      <span style="color:#75715e"># set ecx counter to a high value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %eax       <span style="color:#75715e"># zero al search char
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ecx, %ebx     <span style="color:#75715e"># copy our max counter value to edx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">cld</span>                 <span style="color:#75715e"># set direction down
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">repne</span> <span style="color:#66d9ef">scasb</span>         <span style="color:#75715e"># iterate until we find the al char
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ecx, %edx     <span style="color:#75715e"># move count into edx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">subl</span> %ecx, %ebx     <span style="color:#75715e"># subtract from our original ecx value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">dec</span> %ebx            <span style="color:#75715e"># remove null byte at the end of the string from the count
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">ret</span>
 
-# print the string in ecx to the length of ebx
-
+<span style="color:#75715e"># print the string in ecx to the length of ebx
+</span><span style="color:#75715e"></span>
 print_string:
-    mov %ebx, %edx      # move our count value to edx for the int 80 call
-    movl $4, %eax       # set eax to 4 for int 80 to write to file
-    movl $0, %ebx       # set ebx for file to write to as stdoout (file descriptor 0)
-    int $0x80           # make it so
-    ret
+    <span style="color:#a6e22e">mov</span> %ebx, %edx      <span style="color:#75715e"># move our count value to edx for the int 80 call
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$4</span>, %eax       <span style="color:#75715e"># set eax to 4 for int 80 to write to file
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># set ebx for file to write to as stdoout (file descriptor 0)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#75715e"># make it so
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">ret</span>
 
-# exit the application
-
+<span style="color:#75715e"># exit the application
+</span><span style="color:#75715e"></span>
 exit:
-    movl $1, %eax       # set eax for int 80 for system exit
-    movl $0, %ebx       # set ebx for return code 0
-    int $0x80           # make it so again
-</code></pre>
-
+    <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$1</span>, %eax       <span style="color:#75715e"># set eax for int 80 for system exit
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># set ebx for return code 0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">make</span> <span style="color:#66d9ef">it</span> <span style="color:#66d9ef">so</span> <span style="color:#66d9ef">again</span></code></pre></div>
 <p>This is quite a bit more code than before. We&rsquo;ll go though it in detail now so it all makes sense.</p>
 
 <h2 id="some-new-functions">Some new functions</h2>
@@ -1086,13 +965,10 @@ exit:
 <p>As our string is null-terminated (with a value of 0x00 or <code>$0</code>), the usual case would be that we jump to <code>.done</code> after all characters have been processed or a non-numeric string character is encountered as the value 0 is outside the range of 48-57.</p>
 
 <p>After these comparisons, the actual string processing is done as per below:</p>
-
-<pre><code class="language-asm">    sub $48, %cl
-    imul $10, %eax
-    add %ecx, %eax
-    jmp .top
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">    <span style="color:#a6e22e">sub</span> <span style="color:#66d9ef">$48</span>, %cl
+    <span style="color:#a6e22e">imul</span> <span style="color:#66d9ef">$10</span>, %eax
+    <span style="color:#a6e22e">add</span> %ecx, %eax
+    <span style="color:#a6e22e">jmp</span> <span style="color:#66d9ef">.top</span></code></pre></div>
 <p>At this point it is relatively straight-forward what occurs, but I will describe it here for completeness:</p>
 
 <ul>
@@ -1107,45 +983,42 @@ exit:
 <h1 id="the-actual-fibonacci-algorithm">The actual Fibonacci algorithm</h1>
 
 <p>It has been a long time coming to this point where I can actually show you the implementation of Fibonacci being calculated with assembly language. In <em>fib6.s</em> we implement this logic. I will show an excerpt of it below for brevity and describe how it works.</p>
-
-<pre><code class="language-asm"># input: eax holds our fibonacci n
-# processing: iterate the fibonacci sequence n times
-# output: return our fibonacci result in ebx
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#75715e"># input: eax holds our fibonacci n
+</span><span style="color:#75715e"># processing: iterate the fibonacci sequence n times
+</span><span style="color:#75715e"># output: return our fibonacci result in ebx
+</span><span style="color:#75715e"></span>
 fibonacci:
 
-    pushl %ebp                    # preserve ebp as we are going to use it to store our stack pointer for the return call
-    mov %esp, %ebp                # copy the stack pointer to ebp for use
-
-    mov %eax, %ebx                # make a copy of our fib(n) value for allocating an array on the stack
-    addl $2, %ebx                 # add 2 extra spaces to the array size in case n=1 or n=0
-    shl $2, %ebx                  # multiply by 4 as we are using longs (32 bits)
-    subl %ebx, %esp               # add the size of our array to the stack to allocate the required space
-    xor %ecx, %ecx                # set our counter to zero
-    movl %ecx, (%esp, %ecx, 4)    # initialise our array with 0 for esp[0]
-    incl %ecx                     # increase our counter
-    movl %ecx, (%esp, %ecx, 4)    # initialise our array with 1 for esp[1]
-    incl %ecx                     # our counter/iterator should be at 2 now
-    addl $2, %eax                 # increment our number of iterations by two as our ecx counter will be two higher from initialising our array
-
-.fib_loop:                        # we begin our for loop here
-
-    cmp %eax, %ecx                # compare our counter (ecx) to n (eax) if it's greater or equal, we're done
-    jge .fib_done
-    movl -4(%esp, %ecx, 4), %ebx  # get the value in the stack at esp-1 from our current stack pointer location
-    movl -8(%esp, %ecx, 4), %edx  # get the value in the stack esp-2 from our current stack pointer location
-    addl %edx, %ebx               # add the values esp-1 and esp-2 together
-    movl %ebx, (%esp, %ecx, 4)    # place the result in the current stack location
-    incl %ecx                     # bump our counter
-    jmp .fib_loop                 # loop again
-
+    <span style="color:#a6e22e">pushl</span> %ebp                    <span style="color:#75715e"># preserve ebp as we are going to use it to store our stack pointer for the return call
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> %esp, %ebp                <span style="color:#75715e"># copy the stack pointer to ebp for use
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">mov</span> %eax, %ebx                <span style="color:#75715e"># make a copy of our fib(n) value for allocating an array on the stack
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addl</span> <span style="color:#66d9ef">$2</span>, %ebx                 <span style="color:#75715e"># add 2 extra spaces to the array size in case n=1 or n=0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">shl</span> <span style="color:#66d9ef">$2</span>, %ebx                  <span style="color:#75715e"># multiply by 4 as we are using longs (32 bits)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">subl</span> %ebx, %esp               <span style="color:#75715e"># add the size of our array to the stack to allocate the required space
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">xor</span> %ecx, %ecx                <span style="color:#75715e"># set our counter to zero
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ecx, (%esp, %ecx, <span style="color:#ae81ff">4</span>)    <span style="color:#75715e"># initialise our array with 0 for esp[0]
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">incl</span> %ecx                     <span style="color:#75715e"># increase our counter
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ecx, (%esp, %ecx, <span style="color:#ae81ff">4</span>)    <span style="color:#75715e"># initialise our array with 1 for esp[1]
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">incl</span> %ecx                     <span style="color:#75715e"># our counter/iterator should be at 2 now
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addl</span> <span style="color:#66d9ef">$2</span>, %eax                 <span style="color:#75715e"># increment our number of iterations by two as our ecx counter will be two higher from initialising our array
+</span><span style="color:#75715e"></span>
+.fib_loop:                        <span style="color:#75715e"># we begin our for loop here
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">cmp</span> %eax, %ecx                <span style="color:#75715e"># compare our counter (ecx) to n (eax) if it&#39;s greater or equal, we&#39;re done
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">jge</span> <span style="color:#66d9ef">.fib_done</span>
+    <span style="color:#a6e22e">movl</span> -<span style="color:#ae81ff">4</span>(%esp, %ecx, <span style="color:#ae81ff">4</span>), %ebx  <span style="color:#75715e"># get the value in the stack at esp-1 from our current stack pointer location
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> -<span style="color:#ae81ff">8</span>(%esp, %ecx, <span style="color:#ae81ff">4</span>), %edx  <span style="color:#75715e"># get the value in the stack esp-2 from our current stack pointer location
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addl</span> %edx, %ebx               <span style="color:#75715e"># add the values esp-1 and esp-2 together
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ebx, (%esp, %ecx, <span style="color:#ae81ff">4</span>)    <span style="color:#75715e"># place the result in the current stack location
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">incl</span> %ecx                     <span style="color:#75715e"># bump our counter
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">jmp</span> <span style="color:#66d9ef">.fib_loop</span>                 <span style="color:#75715e"># loop again
+</span><span style="color:#75715e"></span>
 .fib_done:
 
-    movl %ebp, %esp               # move our copy of the stack pointer back to esp
-    popl %ebp                     # retrieve the original copy of ebp from the stack
-    ret
-</code></pre>
-
+    <span style="color:#a6e22e">movl</span> %ebp, %esp               <span style="color:#75715e"># move our copy of the stack pointer back to esp
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">popl</span> %ebp                     <span style="color:#75715e"># retrieve the original copy of ebp from the stack
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">ret</span></code></pre></div>
 <p>The first thing to note is that the comments as the top of the function specify <code>input</code>, <code>processing</code> and <code>output</code>. I find this a good habbit for functions as it makes explicit:
 - what the function expects
 - what the function does
@@ -1156,17 +1029,11 @@ fibonacci:
 <p>The <code>fibonacci</code> function introduces something not shown in the previous sections with how to set up the <code>esp</code> and <code>ebp</code> registers in order to use a local stack for our function. Up to this point most temporary variables have just been stored in registers (with the exception of the <code>push</code> and <code>pop</code> instructions). As the Fibonacci sequence uses an array to store results, memory on the stack needs to be allocated and used for this purpose.</p>
 
 <p>This is the reason for the following instructions at the start of our function:</p>
-
-<pre><code class="language-asm">    pushl %ebp                    # preserve ebp as we are going to use it to store our stack pointer for the return call
-    mov %esp, %ebp                # copy the stack pointer to ebp for use
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">    <span style="color:#a6e22e">pushl</span> %ebp                    <span style="color:#75715e"># preserve ebp as we are going to use it to store our stack pointer for the return call
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> %esp, %ebp                <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">copy</span> <span style="color:#66d9ef">the</span> <span style="color:#66d9ef">stack</span> <span style="color:#66d9ef">pointer</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">ebp</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">use</span></code></pre></div>
 <p>And for these at the end of our function:</p>
-
-<pre><code class="language-asm">    movl %ebp, %esp               # move our copy of the stack pointer back to esp
-    popl %ebp                     # retrieve the original copy of ebp from the stack
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">    <span style="color:#a6e22e">movl</span> %ebp, %esp               <span style="color:#75715e"># move our copy of the stack pointer back to esp
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">popl</span> %ebp                     <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">retrieve</span> <span style="color:#66d9ef">the</span> <span style="color:#66d9ef">original</span> <span style="color:#66d9ef">copy</span> <span style="color:#66d9ef">of</span> <span style="color:#66d9ef">ebp</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">the</span> <span style="color:#66d9ef">stack</span></code></pre></div>
 <p>In order to set up our local stack, the first thing that is done is that we save a copy of the base pointer <code>ebp</code> on the stack and copy the value of the stack pointer <code>esp</code> into the base pointer so that we have a copy of it and can restore it at the end of our function. At the end of our function we can copy <code>ebp</code> back into <code>esp</code> and restore the value of <code>ebp</code> from the stack as it was at the start of the function.</p>
 
 <p>After the first instructions, we can modify the stack pointer as we like and all changes will only be local to the function and will essentially be destroyed, for all intents and purposes, once the function completes. Using this approach to the stack pointer with functions is somewhat of a convention in assembly language.</p>
@@ -1199,30 +1066,21 @@ fibonacci:
 </ul>
 
 <p>This can be inferred from the following instructions:</p>
-
-<pre><code class="language-asm">    mov %eax, %ebx                # make a copy of our fib(n) value for allocating an array on the stack
-    addl $2, %ebx                 # add 2 extra spaces to the array size in case n=1 or n=0
-    shl $2, %ebx                  # multiply by 4 as we are using longs (32 bits)
-    subl %ebx, %esp               # add the size of our array to the stack to allocate the required space
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">    <span style="color:#a6e22e">mov</span> %eax, %ebx                <span style="color:#75715e"># make a copy of our fib(n) value for allocating an array on the stack
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addl</span> <span style="color:#66d9ef">$2</span>, %ebx                 <span style="color:#75715e"># add 2 extra spaces to the array size in case n=1 or n=0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">shl</span> <span style="color:#66d9ef">$2</span>, %ebx                  <span style="color:#75715e"># multiply by 4 as we are using longs (32 bits)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">subl</span> %ebx, %esp               <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">add</span> <span style="color:#66d9ef">the</span> <span style="color:#66d9ef">size</span> <span style="color:#66d9ef">of</span> <span style="color:#66d9ef">our</span> <span style="color:#66d9ef">array</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">the</span> <span style="color:#66d9ef">stack</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">allocate</span> <span style="color:#66d9ef">the</span> <span style="color:#66d9ef">required</span> <span style="color:#66d9ef">space</span></code></pre></div>
 <p>It is important to note that the <code>shl</code> instruction is actually a shift-left of the value in the <code>ebx</code> register, which in effect multiplies the value in <code>ecx</code> by 2^2, or 4 by shifting all the 1 bits in the register to the left. This could have also been achieved by the instruction <code>imul $4, $ebx</code>, but as the multiplication is a power of 2, it takes less cpu cycles if we use <code>shl</code>.</p>
 
 <h2 id="variable-initialisation">Variable initialisation</h2>
 
 <p>Once this is done, we zero our <code>ecx</code> counter register:</p>
-
-<pre><code class="language-asm">    xor %ecx, %ecx                # set our counter to zero
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">    <span style="color:#a6e22e">xor</span> %ecx, %ecx                <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">set</span> <span style="color:#66d9ef">our</span> <span style="color:#66d9ef">counter</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">zero</span></code></pre></div>
 <p>Then initialise the first two values in the array to 0 and 1 respectively, while incrementing our <code>ecx</code> register.</p>
-
-<pre><code class="language-asm">    movl %ecx, (%esp, %ecx, 4)    # initialise our array with 0 for esp[0]
-    incl %ecx                     # increase our counter
-    movl %ecx, (%esp, %ecx, 4)    # initialise our array with 1 for esp[1]
-    incl %ecx                     # our counter/iterator should be at 2 now
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">    <span style="color:#a6e22e">movl</span> %ecx, (%esp, %ecx, <span style="color:#ae81ff">4</span>)    <span style="color:#75715e"># initialise our array with 0 for esp[0]
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">incl</span> %ecx                     <span style="color:#75715e"># increase our counter
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ecx, (%esp, %ecx, <span style="color:#ae81ff">4</span>)    <span style="color:#75715e"># initialise our array with 1 for esp[1]
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">incl</span> %ecx                     <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">our</span> <span style="color:#66d9ef">counter</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#66d9ef">iterator</span> <span style="color:#66d9ef">should</span> <span style="color:#66d9ef">be</span> <span style="color:#66d9ef">at</span> <span style="color:#ae81ff">2</span> <span style="color:#66d9ef">now</span></code></pre></div>
 <h2 id="indexed-memory">Indexed memory</h2>
 
 <p>The format of <code>mov</code> above has not been shown previously as we have mainly been working with registers and pointers for counting strings. The format of <code>mov</code> with brackets around the second operand allows us to move, or copy the value of a register into an indexed memory location. This allows us to reference a greater number of memory locations than we could otherwise with a single register. This is mainly used when writing to memory as opposed to just reading from it.</p>
@@ -1249,28 +1107,22 @@ fibonacci:
 <p>Next we increment our counter <code>ecx</code> so that it contains 1. The second <code>mov</code> then places the value 1 into the next position up in memory in our stack, 4 bytes up from the previous <code>mov</code> instruction. Our <code>ecx</code> counter is then incremented again.</p>
 
 <p>This is closely reflects our C code with the lines:</p>
-
-<pre><code class="language-c">  f[0] = 0;
-  f[1] = 1;
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  f[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+  f[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;</code></pre></div>
 <p>It is important that the first two values are pre-populated as the loop makes the assumption that the last two values of the Fibonacci sequence already exist.</p>
 
 <h2 id="running-the-loop-to-completion">Running the loop to completion</h2>
 
 <p>The logic below shows the heart of our Fibonacci implementation:</p>
-
-<pre><code class="language-asm">.fib_loop:                        # we begin our for loop here
-    cmp %eax, %ecx                # compare our counter (ecx) to n (eax) if it's greater or equal, we're done
-    jge .fib_done
-    movl -4(%esp, %ecx, 4), %ebx  # get the value in the stack at esp-1 from our current stack pointer location
-    movl -8(%esp, %ecx, 4), %edx  # get the value in the stack esp-2 from our current stack pointer location
-    addl %edx, %ebx               # add the values esp-1 and esp-2 together
-    movl %ebx, (%esp, %ecx, 4)    # place the result in the current stack location
-    incl %ecx                     # bump our counter
-    jmp .fib_loop                 # loop again
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">.fib_loop:                        <span style="color:#75715e"># we begin our for loop here
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">cmp</span> %eax, %ecx                <span style="color:#75715e"># compare our counter (ecx) to n (eax) if it&#39;s greater or equal, we&#39;re done
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">jge</span> <span style="color:#66d9ef">.fib_done</span>
+    <span style="color:#a6e22e">movl</span> -<span style="color:#ae81ff">4</span>(%esp, %ecx, <span style="color:#ae81ff">4</span>), %ebx  <span style="color:#75715e"># get the value in the stack at esp-1 from our current stack pointer location
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> -<span style="color:#ae81ff">8</span>(%esp, %ecx, <span style="color:#ae81ff">4</span>), %edx  <span style="color:#75715e"># get the value in the stack esp-2 from our current stack pointer location
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addl</span> %edx, %ebx               <span style="color:#75715e"># add the values esp-1 and esp-2 together
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> %ebx, (%esp, %ecx, <span style="color:#ae81ff">4</span>)    <span style="color:#75715e"># place the result in the current stack location
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">incl</span> %ecx                     <span style="color:#75715e"># bump our counter
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">jmp</span> <span style="color:#66d9ef">.fib_loop</span>                 <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">loop</span> <span style="color:#66d9ef">again</span></code></pre></div>
 <p>In effect, it repeats the loop for the number of times specified on the coommand line (which we have previously placed in <code>eax</code>) and jumps to <code>.fib_done</code> if it has been reached, otherwise calculates the next number in the sequence.</p>
 
 <h2 id="calculating-the-sequence">Calculating the sequence</h2>
@@ -1292,57 +1144,54 @@ fibonacci:
 <h2 id="printing-our-result">Printing our result</h2>
 
 <p>The final piece in the puzzle for putting together our program is almost the reciprocal for one of the functions we created earlier, namely <code>get_long_from_string</code>. The following is the function <code>print_long</code>, from <em>fib7.s</em> which takes an unsigned long, converts it to a string then prints the string to stdout.</p>
-
-<pre><code class="language-asm"># print a 32-bit long integer
-# input: ebx contains the long value we wish to print
-# process:
-#  set a counter for the number of digits to 0
-#  start a loop and check if value is zero - jump to done if so
-#  divide the number by 10 and take the remainder as the first digit
-#  add 48 to the number to make it an ascii value
-#  store the byte in the address esp + ecx
-#  increment the counter
-#  jump to start of loop
-# output: no output registers
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#75715e"># print a 32-bit long integer
+</span><span style="color:#75715e"># input: ebx contains the long value we wish to print
+</span><span style="color:#75715e"># process:
+</span><span style="color:#75715e">#  set a counter for the number of digits to 0
+</span><span style="color:#75715e">#  start a loop and check if value is zero - jump to done if so
+</span><span style="color:#75715e">#  divide the number by 10 and take the remainder as the first digit
+</span><span style="color:#75715e">#  add 48 to the number to make it an ascii value
+</span><span style="color:#75715e">#  store the byte in the address esp + ecx
+</span><span style="color:#75715e">#  increment the counter
+</span><span style="color:#75715e">#  jump to start of loop
+</span><span style="color:#75715e"># output: no output registers
+</span><span style="color:#75715e"></span>
 print_long:
 
-    push %ebp
-    mov %esp, %ebp              # copy the stack pointer to ebp for use
-    add $10, %esp               # add 10 to esp to make space for our string
-    mov $10, %ecx               # set our counter to the end of the stack space allocated (higher)
-    mov %ebx, %eax              # our value ebx is placed into eax for division
-
+    <span style="color:#a6e22e">push</span> %ebp
+    <span style="color:#a6e22e">mov</span> %esp, %ebp              <span style="color:#75715e"># copy the stack pointer to ebp for use
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">add</span> <span style="color:#66d9ef">$10</span>, %esp               <span style="color:#75715e"># add 10 to esp to make space for our string
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">$10</span>, %ecx               <span style="color:#75715e"># set our counter to the end of the stack space allocated (higher)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> %ebx, %eax              <span style="color:#75715e"># our value ebx is placed into eax for division
+</span><span style="color:#75715e"></span>
 .loop_pl:
 
-    xor %edx, %edx              # clear edx for the dividend
-    mov $10, %ebx               # ebx is our divisor so we set it to divide by 10
-    div %ebx                    # do the division
-    addb $48, %dl               # convert the quotient to ascii
-    movb %dl, (%esp, %ecx, 1)   # place the string byte into memory
-    dec %ecx                    # decrease our counter (as we are working backwards through the number)
-    cmp $0, %ax                 # exit if the remainder is 0
-    je .done_pl
-    jmp .loop_pl                # loop again if necessary
-
+    <span style="color:#a6e22e">xor</span> %edx, %edx              <span style="color:#75715e"># clear edx for the dividend
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">$10</span>, %ebx               <span style="color:#75715e"># ebx is our divisor so we set it to divide by 10
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">div</span> %ebx                    <span style="color:#75715e"># do the division
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">addb</span> <span style="color:#66d9ef">$48</span>, %dl               <span style="color:#75715e"># convert the quotient to ascii
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movb</span> %dl, (%esp, %ecx, <span style="color:#ae81ff">1</span>)   <span style="color:#75715e"># place the string byte into memory
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">dec</span> %ecx                    <span style="color:#75715e"># decrease our counter (as we are working backwards through the number)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">cmp</span> <span style="color:#66d9ef">$0</span>, %ax                 <span style="color:#75715e"># exit if the remainder is 0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">je</span> <span style="color:#66d9ef">.done_pl</span>
+    <span style="color:#a6e22e">jmp</span> <span style="color:#66d9ef">.loop_pl</span>                <span style="color:#75715e"># loop again if necessary
+</span><span style="color:#75715e"></span>
 .done_pl:
 
-    addl %ecx, %esp             # shift our stack pointer up to the start of the buffer
-    incl %esp                   # add 1 to the stack pointer for the actual first string byte
-    sub $10, %ecx               # as we are counting down, we subtract 10 from ecx to give the actual number of digits
-    neg %ecx                    # convert to a positive value
-    mov %ecx, %edx              # move our count value to edx for the int 80 call
-
-    mov %esp, %ecx              # move our string start address into ecx
-    movl $4, %eax               # set eax to 4 for int 80 to write to file
-    movl $0, %ebx               # set ebx for file to write to as stdoout (file descriptor 0)
-    int $0x80                   # make it so
-
-    movl %ebp, %esp             # move our copy of the stack pointer back to esp
-    popl %ebp                   # retrieve the original copy of ebp from the stack
-    ret
-</code></pre>
-
+    <span style="color:#a6e22e">addl</span> %ecx, %esp             <span style="color:#75715e"># shift our stack pointer up to the start of the buffer
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">incl</span> %esp                   <span style="color:#75715e"># add 1 to the stack pointer for the actual first string byte
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">sub</span> <span style="color:#66d9ef">$10</span>, %ecx               <span style="color:#75715e"># as we are counting down, we subtract 10 from ecx to give the actual number of digits
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">neg</span> %ecx                    <span style="color:#75715e"># convert to a positive value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> %ecx, %edx              <span style="color:#75715e"># move our count value to edx for the int 80 call
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">mov</span> %esp, %ecx              <span style="color:#75715e"># move our string start address into ecx
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$4</span>, %eax               <span style="color:#75715e"># set eax to 4 for int 80 to write to file
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx               <span style="color:#75715e"># set ebx for file to write to as stdoout (file descriptor 0)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>                   <span style="color:#75715e"># make it so
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">movl</span> %ebp, %esp             <span style="color:#75715e"># move our copy of the stack pointer back to esp
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">popl</span> %ebp                   <span style="color:#75715e"># retrieve the original copy of ebp from the stack
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">ret</span></code></pre></div>
 <p>We can see the same <code>esp</code> and <code>ebp</code> store and retrieve pattern at the start and end of the function as described earlier. Additionally, there is another local loop present  in the form of <code>.loop_pl</code> and <code>.done_pl</code> for iterating the value we are printing.</p>
 
 <p>The way this function works is by dividing our number by 10, taking the remainder of the division as a digit, converting it to an ASCII representation, then placing this value into our stack for printing further down in the function. The string does not need to be null-terminated with a 0x00 byte as the syscall (<code>int 0x80</code>) to print the value uses the length of the string.</p>
@@ -1358,14 +1207,11 @@ print_long:
 <h2 id="doing-things-the-hard-way">Doing things the hard way</h2>
 
 <p>The five lines after <code>.jump_pl</code> involve getting the correct count of the digits processed.</p>
-
-<pre><code class="language-asm">    addl %ecx, %esp             # shift our stack pointer up to the start of the buffer
-    incl %esp                   # add 1 to the stack pointer for the actual first string byte
-    sub $10, %ecx               # as we are counting down, we subtract 10 from ecx to give the actual number of digits
-    neg %ecx                    # convert to a positive value
-    mov %ecx, %edx              # move our count value to edx for the int 80 call
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">    <span style="color:#a6e22e">addl</span> %ecx, %esp             <span style="color:#75715e"># shift our stack pointer up to the start of the buffer
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">incl</span> %esp                   <span style="color:#75715e"># add 1 to the stack pointer for the actual first string byte
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">sub</span> <span style="color:#66d9ef">$10</span>, %ecx               <span style="color:#75715e"># as we are counting down, we subtract 10 from ecx to give the actual number of digits
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">neg</span> %ecx                    <span style="color:#75715e"># convert to a positive value
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> %ecx, %edx              <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">move</span> <span style="color:#66d9ef">our</span> <span style="color:#66d9ef">count</span> <span style="color:#66d9ef">value</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">edx</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">the</span> <span style="color:#66d9ef">int</span> <span style="color:#ae81ff">80</span> <span style="color:#66d9ef">call</span></code></pre></div>
 <p>By subtracting our result with the <code>sub</code> instruction then using <code>neg</code> to convert the negative number to a positive one, we will have the actual
  count of digits to print and can place it in the <code>edx</code> register for the syscall.</p>
 
@@ -1376,122 +1222,54 @@ print_long:
 <p>If you have followed along, congratulations! This is a rather lengthy tutorial but you should now at least know some of the basics of assembly language and how processing is done very close to the CPU. This can have all sorts of uses from optimising higher-level code to debugging complex multi-threaded applications and everything in-between.</p>
 
 <p>If you have compiled the <em>fib7.s</em> code, you should be able to see the sequence in the <code>docker-shell</code> environment similar to below:</p>
-
-<pre><code class="language-bash">root@608eb3f49ac5:/gas-asm-fib# ./fib7 0
-root@608eb3f49ac5:/gas-asm-fib# ./fib7 1
-1root@608eb3f49ac5:/gas-asm-fib# ./fib7 2
-2root@608eb3f49ac5:/gas-asm-fib# ./fib7 3
-3root@608eb3f49ac5:/gas-asm-fib# ./fib7 4
-5root@608eb3f49ac5:/gas-asm-fib# ./fib7 5
-8root@608eb3f49ac5:/gas-asm-fib# ./fib7 6
-13root@608eb3f49ac5:/gas-asm-fib#
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@608eb3f49ac5:/gas-asm-fib# ./fib7 <span style="color:#ae81ff">0</span>
+root@608eb3f49ac5:/gas-asm-fib# ./fib7 <span style="color:#ae81ff">1</span>
+1root@608eb3f49ac5:/gas-asm-fib# ./fib7 <span style="color:#ae81ff">2</span>
+2root@608eb3f49ac5:/gas-asm-fib# ./fib7 <span style="color:#ae81ff">3</span>
+3root@608eb3f49ac5:/gas-asm-fib# ./fib7 <span style="color:#ae81ff">4</span>
+5root@608eb3f49ac5:/gas-asm-fib# ./fib7 <span style="color:#ae81ff">5</span>
+8root@608eb3f49ac5:/gas-asm-fib# ./fib7 <span style="color:#ae81ff">6</span>
+13root@608eb3f49ac5:/gas-asm-fib#</code></pre></div>
 <h2 id="from-here-to-there-improving-the-code">From here to there - improving the code</h2>
 
 <p>This is by no means the ultimate Fibonacci sequence generator (or even a sequence generator at all - it only prints the last value in the sequence, after all), and there are many tricks and tips to making this faster, more robust and more extensible both in design and application.</p>
 
-<p>A follow on blog from this may include:</p>
-
-<ul>
-<li><p>Optimising calculations using an alternative Fibonacci alogrithm</p></li>
-
-<li><p>Optimising calculations using the FPU math coprocessor, MMX, XMM, or SIMD instructions</p></li>
-
-<li><p>Handling of a higher range of numbers</p></li>
-
-<li><p>Designing for reuse with multiple files</p></li>
-</ul>
+<p>A follow on blog from this may include:
+- Optimising calculations using an alternative Fibonacci alogrithm implementation with the corresponding performance comparison
+- Optimising calculations using the FPU math coprocessor, MMX, XMM, or SIMD instructions
+- Handling of a higher range of numbers
+- Designing for reuse with multiple files</p>
 
 <p>Until next time, happy coding!</p>
 
-              </section>
 
-              <footer class="post-footer">
-                  <div class="post-tags">
-            
-                  </div>
-                
-              </footer>
+</article>
 
-            
-                <aside class="post-comments">
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://blog.seso.io/posts/first-post/"><i class="fa fa-chevron-circle-left"></i> First Post</a>
+        </li>
+        
+        
+    </ul>
+</section>
     
-    
-    
-</aside>
 
-            
-            </div>
 
-            <nav class="post-nav">
-                
-                
-                    <a class="post-nav-item post-nav-prev" href="https://blog.seso.io/posts/first-post/">
-                        <section class="post-nav-teaser">
-                            <span class="post-nav-icon"><i class="fa fa-chevron-right"></i></span>
-                            <span class="post-nav-info">
-                                <h4 class="post-nav-title">First Post</h4>
-                            </span>
-                        </section>
-                    </a>
-                
-                <div class="clear"></div>
-            </nav>
 
-        </div>
-    </article>
+
+
 </main>
-
-                <div id="body-class" style="display: none;"></div>
-                <footer id="footer">
-                    <section class="credits">
-                        <span class="credits-license"><i class="fa fa-copyright"></i>2018 Willem van Ketwich
-                    </span>
-                    </section>
-                </footer>
-                
-
-                
-<div id="menu" data-target="menu">
-    <div class="menu-header">
-        <span class="menu-label">Menu</span>
-        <a class="menu-close" data-action="menu" data-target="menu"></a>
-    </div>
-
-    <div class="menu-list">
-        
-        
-        <li class="menu-list-item">
-            
-            <a class="home current js-ajax-link" href="/posts/">blog</a>
-        </li>
-        
-        
-        <li class="menu-list-item">
-            
-            <a class="home current js-ajax-link" href="/about/">about</a>
-        </li>
-        
-        <li class="menu-list-item menu-list-social">
-            <a href="https://twitter.com/" title="Entre Dev Y Ops en Twitter"><i class="fa fa-twitter"></i></a>
-            <a href="https://github.com/" title="Entre Dev Y Ops en GitHub"><i class="fa fa-github"></i></a>
-        </li>
-    </div>
-
+    <footer>
+        <h6>Copyright &copy; 2017 - Willem van Ketwich | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+    </footer>
 </div>
-
-
-                
-                <div class="overlay"></div>
-            </div>
-        </section>
-
-    <script async src="https://blog.seso.io//js/main.js"></script>
-
-
-
-  <noscript><link rel="stylesheet" href="https://blog.seso.io//css/main.css"></noscript>
+<script src="https://blog.seso.io/js/scripts.js"></script>
 </body>
-</html>
 
+</html>
