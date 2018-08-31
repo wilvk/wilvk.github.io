@@ -116,13 +116,11 @@
 
 <p><img src="https://blog.seso.io/img/hugo_blog.svg" alt="hugo build diagram" /></p>
 
-<p><diagram></p>
-
-<p>We can see from the diagram that the build is done on blog-hugo repository, clones the wilvk.github.io repository, builds the full site and pushes the changes back to the wilvk.github.io repository.</p>
+<p>We can see from the diagram that the build clones the <code>wilvk/wilvk.github.io</code> repository inside the <code>wilvk/blog-hugo</code> repository to the <code>./public</code> path. It then builds the full Hugo site into the <code>./public</code> path and pushes the changes back to the <code>wilvk/wilvk.github.io</code> repository.</p>
 
 <h1 id="an-automated-process">An automated process</h1>
 
-<p>I place the following script in the base of the blog-hugo repository and run it to push the changes to the site:</p>
+<p>I place the following script in the base of the <code>wilvk/blog-hugo</code> repository and run it to push the changes to the site:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
 </span><span style="color:#75715e"></span>
 set -x
@@ -204,10 +202,12 @@ languageCode = &quot;en-US&quot;
 
 <p>I&rsquo;ll just point out a few things about the config file above.</p>
 
-<p>Your Google Analytics ID will go in the variable <code>googleAnalytics</code>.
-Your Disqus shortname ID will go in the variable <code>disqusShortname</code>.</p>
+<ul>
+<li>Your Google Analytics ID will go in the variable <code>googleAnalytics</code>.</li>
+<li>Your Disqus shortname ID will go in the variable <code>disqusShortname</code>.</li>
+</ul>
 
-<p>I am also using a custom domain name and so this is set in the variable <code>baseurl</code>. The variable <code>cannonifyurls</code> needs to be set to true to enable correct redirects to your custom domain name.</p>
+<p>I am also using a custom domain name and so this is set in the variable <code>baseurl</code>. The variable <code>cannonifyurls</code> needs to be set to <code>true</code> to enable correct redirects to your custom domain name.</p>
 
 <h1 id="skinning-theming-your-site">Skinning/theming your site</h1>
 
@@ -220,7 +220,7 @@ Your Disqus shortname ID will go in the variable <code>disqusShortname</code>.</
 <li>Edit the <code>config.toml</code> file and set the theme to the name of the directory cloned into the <code>./themes</code> path.</li>
 </ul>
 
-<p>Some themes require specific config settings in the <code>config.toml</code> file. They will usually tell you in their <code>README</code> on the specifics of this.</p>
+<p>Some themes require specific config settings in the <code>config.toml</code> file. They will usually tell you in the <code>README.md</code> on the specifics of this.</p>
 
 <h1 id="onwards-and-upwards">Onwards and upwards</h1>
 
