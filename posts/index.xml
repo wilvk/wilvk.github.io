@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <copyright>Copyright &amp;copy; 2017 - Willem van Ketwich</copyright>
-    <lastBuildDate>Thu, 30 Aug 2018 21:12:38 +1000</lastBuildDate>
+    <lastBuildDate>Fri, 31 Aug 2018 19:04:23 +1000</lastBuildDate>
     
 	<atom:link href="https://blog.seso.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Hugo for Beginners</title>
+      <link>https://blog.seso.io/posts/hugo-for-beginners/</link>
+      <pubDate>Fri, 31 Aug 2018 19:04:23 +1000</pubDate>
+      
+      <guid>https://blog.seso.io/posts/hugo-for-beginners/</guid>
+      <description>I wanted to put together some notes on how to set up a Github Pages blog using the Hugo static pages publishing application as when I went through this process myself, I found it less than intuitive.</description>
+    </item>
     
     <item>
       <title>Creating a Fibonacci Generator in Assembly</title>
