@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="en-US">
 
 <head>
   <title>Will&#39;s Blog</title>
@@ -32,7 +32,7 @@
            
       </ul>
       
-      <p><em>A Hugo theme for creative and technical writing</em></p>
+      <p><em>Just a dude that does stuff.. mostly with computers.</em></p>
       
     </header>
 
@@ -399,7 +399,6 @@ ld -m elf_i386 -o $app_name $app_name.o
 <tr>
 <th>Stack</th>
 <th>Data</th>
-<th>Notes</th>
 </tr>
 </thead>
 
@@ -407,55 +406,51 @@ ld -m elf_i386 -o $app_name $app_name.o
 <tr>
 <td>&hellip;</td>
 <td></td>
-<td></td>
 </tr>
 
 <tr>
 <td>ESP + n+8</td>
 <td>&lt; pointer to second environment variable &gt;</td>
-<td></td>
 </tr>
 
 <tr>
 <td>ESP + n+4</td>
 <td>&lt; pointer to first environment variable &gt;</td>
-<td></td>
 </tr>
 
 <tr>
 <td>ESP + n</td>
 <td>&lt; pointer to last string argument &gt;</td>
-<td></td>
 </tr>
 
 <tr>
 <td>&hellip;</td>
-<td></td>
 <td></td>
 </tr>
 
 <tr>
 <td>ESP + 12</td>
 <td>&lt; pointer to second string argument &gt;</td>
-<td></td>
 </tr>
 
 <tr>
 <td>ESP + 8</td>
 <td>&lt; pointer to a string that contains the first argument &gt;</td>
-<td></td>
 </tr>
 
 <tr>
 <td>ESP + 4</td>
 <td>&lt; pointer to a string containing the name of the application &gt;</td>
-<td></td>
 </tr>
 
 <tr>
 <td>ESP + 0</td>
 <td>&lt; number of arguments on command line &gt;</td>
-<td>&lt;- current position of Stack Pointer ESP</td>
+</tr>
+
+<tr>
+<td>&hellip;</td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -932,16 +927,34 @@ exit:
     <td colspan="1" align="center">bits 0-7</td>
   </tr>
   <tr>
-    <td colspan="8" align="center">rcx</td>
+    <td colspan="1" align="center">--rcx---</td>
+    <td colspan="1" align="center">--rcx---</td>
+    <td colspan="1" align="center">--rcx---</td>
+    <td colspan="1" align="center">--rcx---</td>
+    <td colspan="1" align="center">--rcx---</td>
+    <td colspan="1" align="center">--rcx---</td>
+    <td colspan="1" align="center">--rcx---</td>
+    <td colspan="1" align="center">--rcx---</td>
   </tr>
   <tr>
-    <td colspan="4" align="center">-</td>
-    <td colspan="4" align="center">ecx</td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center">--ecx---</td>
+    <td colspan="1" align="center">--ecx---</td>
+    <td colspan="1" align="center">--ecx---</td>
+    <td colspan="1" align="center">--ecx---</td>
   </tr>
   <tr>
-    <td colspan="6" align="center">-</td>
-    <td colspan="1" align="center">cl</td>
-    <td colspan="1" align="center">ch</td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center"></td>
+    <td colspan="1" align="center">--ch----</td>
+    <td colspan="1" align="center">--cl----</td>
   </tr>
 </table>
 
@@ -1127,7 +1140,7 @@ fibonacci:
 
 <h2 id="calculating-the-sequence">Calculating the sequence</h2>
 
-<p>As we have already initialised our array with the values 0 and 1 for <code>f[0]</code> and <code>f[1]</code> respectively, our loop will always be able to calculate the next number in the sequence. The line <code>movl -4(%esp, %ecx, 4), %ebx</code> shows another variation of indexing into memory with the <code>-4</code> out the front indicating a second, relative offset to the address within the parenthesis. What this does in effect is get the value 4 bytes down in memory (up the stack) from the current location of (esp + ecx * 4).</p>
+<p>As we have already initialised our array with the values 0 and 1 for <code>f[0]</code> and <code>f[1]</code> respectively, our loop will always be able to calculate the next number in the sequence. The line <code>movl -4(%esp, %ecx, 4), %ebx</code> shows another variation of indexing into memory with the <code>-4</code> out the front indicating a second, relative offset to the address within the parenthesis. What this does in effect is get the value 4 bytes down in memory (up the stack) from the current location of (esp + ecx * 4); effectively *( esp + ( ecx * 4 ) ) - 4* .</p>
 
 <p>This corresponds to the value in our C code of <code>f[i-1]</code>. The value in memory is placed into the <code>ebx</code> register for calculating the next value in the sequence.</p>
 
@@ -1256,6 +1269,59 @@ root@608eb3f49ac5:/gas-asm-fib# ./fib7 <span style="color:#ae81ff">1</span>
         
     </ul>
 </section>
+    
+        <section class="comments-block">
+      <button id="show-comments" style="display: none;"><i class="fa fa-comments-o"></i> Add/View Comments</button>
+</section>
+
+<section id="disqus_thread"></section>
+
+<script>
+      (function () {
+            
+            
+            if (window.location.hostname == "localhost")
+                  return;
+
+            var disqus_loaded = false;
+            var disqus_shortname = 'wilvk-github-io';
+            var disqus_button = document.getElementById("show-comments");
+
+            disqus_button.style.display = "";
+            disqus_button.addEventListener("click", disqus, false);
+
+            function disqus() {
+
+                  if (!disqus_loaded) {
+                        disqus_loaded = true;
+
+                        var e = document.createElement("script");
+                        e.type = "text/javascript";
+                        e.async = true;
+                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
+                        (document.getElementsByTagName("head")[0] ||
+                              document.getElementsByTagName("body")[0])
+                        .appendChild(e);
+
+                        
+                        document.getElementById("show-comments").style.display = "none";
+                  }
+            }
+
+            
+            var hash = window.location.hash.substr(1);
+            if (hash.length > 8) {
+                  if (hash.substring(0, 8) == "comment-") {
+                        disqus();
+                  }
+            }
+
+            
+            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
+                  disqus();
+            }
+      })();
+</script>
     
 
 
