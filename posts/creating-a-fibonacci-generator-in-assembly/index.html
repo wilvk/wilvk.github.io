@@ -75,7 +75,7 @@
 
         
 
-        <li>48 min read</li>
+        <li>49 min read</li>
     </ul>
 </aside>
     
@@ -97,7 +97,9 @@
 
 <ul>
 <li><a href="#building-binary-files-from-assembly-files">Building binary files from assembly files</a></li>
-<li><a href="#the-structure-of-a-gas-assembly-file">The structure of a gas assembly file</a></li>
+<li><a href="#the-structure-of-a-gas-assembly-file">The structure of a GAS assembly file</a></li>
+<li><a href="#sections">Sections</a></li>
+<li><a href="#comments">Comments</a></li>
 <li><a href="#instructions-and-opcodes">Instructions and opcodes</a></li>
 <li><a href="#the-application-entry--point-and-labels">The application entry-point and labels</a></li>
 <li><a href="#compiling-our-code">Compiling our code</a></li>
@@ -168,7 +170,7 @@
 
 <p>I found a good blog about different approaches to Fibonacci Equations <a href="https://www.geeksforgeeks.org/program-for-nth-fibonacci-number/">here</a> and armed with the new knowledge from reading a couple of books on the subject (specifically, <a href="https://www.amazon.com/Assembly-Language-Step-Step-Programming/dp/0470497025">Assembly Language Step-by-Step</a> and <a href="https://www.amazon.com.au/Professional-Assembly-Language-Richard-Blum-ebook/dp/B000Q7ZETY">Professional Assembly Language</a>) I set out to implement this.</p>
 
-<h3 id="some-starting-knowledge">Some starting knowledge</h3>
+<h2 id="some-starting-knowledge">Some starting knowledge</h2>
 
 <p>The basis of the algorithm to use was decided to be a space-optimised method using a dynamic programming approach. This effectively means using an array on the stack to hold our values while giving <strong>O(n)</strong> time and space complexity.</p>
 
@@ -249,13 +251,26 @@
 </span><span style="color:#75715e"></span>    <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$1</span>, %eax
     <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$0</span>, %ebx
     <span style="color:#a6e22e">int</span> <span style="color:#66d9ef">$0x80</span></code></pre></div>
-<h2 id="the-structure-of-a-gas-assembly-file">The structure of a gas assembly file</h2>
+<h2 id="the-structure-of-a-gas-assembly-file">The structure of a GAS assembly file</h2>
 
-<p>The code above introduces some of the syntax of a GAS assembly file (<code>.s</code>). The first thing to note is that comments begin with a hash (<code>#</code>) and can be at the start of a line or after an instruction/opcode.</p>
+<h2 id="sections">Sections</h2>
+
+<p>In the code above, the line <code>.section .text</code> indicates that the lines preceeding it will be part of the &lsquo;text&rsquo; section. The text section is a specific section in the compiled binary that contains all the assembly language instructions converted to machine code. The machine code is the binary representation of the assembly language instructions and is one of the main tasks of the assembler. By default in a Linux application there are also sections called <code>.data</code> and <code>.bss</code> that refer to initialised variables and uninitialised variables respectively. We won&rsquo;t delve into these types of variables but it is good to know they exist for more advanced development in assembly code.</p>
+
+<h2 id="comments">Comments</h2>
+
+<p>The code above introduces some of the syntax of a GAS assembly file (<code>.s</code>). Comments begin with a hash (<code>#</code>) and can be at the start of a line or after an instruction/opcode.</p>
 
 <h2 id="instructions-and-opcodes">Instructions and opcodes</h2>
 
-<p>An instruction/opcode is essentially an instruction for the CPU to process. Examples of intructions in <strong>fib1.s</strong> above include <code>nop</code>, <code>movl $1 %eax</code>, <code>movl $0, %ebx</code>, and <code>int $0x80</code>.</p>
+<p>An instruction/opcode is essentially an instruction for the CPU to process. Examples of intructions in <strong>fib1.s</strong> above include:</p>
+
+<ul>
+<li><code>nop</code></li>
+<li><code>movl $1 %eax</code></li>
+<li><code>movl $0, %ebx</code></li>
+<li><code>int $0x80</code>.</li>
+</ul>
 
 <p>I will use the terms instruction and opcode interchangeably, but they are essentially a mnemonic in assembly language that tells the CPU what to do. Opcodes/instructions can also have one or many operands depending on what the opcode does. Operands are the values that the opcode act upon and specify what the opcode does.</p>
 
@@ -264,9 +279,10 @@
 <table>
 <thead>
 <tr>
-<th>Full Instruction</th>
-<th>Opcode/instruction</th>
-<th>Operand(s)</th>
+<th>Line</th>
+<th>Opcode</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -275,46 +291,55 @@
 <tr>
 <td>nop</td>
 <td>nop</td>
-<td></td>
+<td>-</td>
+<td>-</td>
 <td>no-operation</td>
 </tr>
 
 <tr>
 <td>movl $1, %eax</td>
 <td>movl</td>
-<td>$1, %eax</td>
-<td>copy the value 0 into the register eax</td>
+<td>$1</td>
+<td>%eax</td>
+<td>copy 0 into register eax</td>
 </tr>
 
 <tr>
 <td>movl $0, %ebx</td>
 <td>movl</td>
-<td>$0, %ebx</td>
-<td>copy the value 1 into the register ebx</td>
+<td>$0</td>
+<td>%ebx</td>
+<td>copy 1 into register ebx</td>
 </tr>
 
 <tr>
 <td>int $0x80</td>
 <td>int</td>
 <td>$0x80</td>
-<td>call the interrupt numbered 0x80</td>
+<td>-</td>
+<td>call interrupt number 0x80</td>
 </tr>
 </tbody>
 </table>
 
-<p>The first <code>movl</code> instruction copies a long (4-byte) value of 0 into the register <code>eax</code>. The second does the same with 1 and the register <code>ebx</code> respectively. There are a few different variations of the <code>mov</code> command for copying values to and from registers. These are namely:
-- <code>movl</code> - copy a long, 4-byte value (32-bits)
-- <code>movw</code> - copy a word, 2-byte value (16-bits)
-- <code>movb</code> - copy a byte, 1-byte value (8-bits)</p>
+<p>The first <code>movl</code> instruction copies a long (4-byte) value of 0 into the register <code>eax</code>. The second does the same with 1 and the register <code>ebx</code> respectively. There are a few different variations of the <code>mov</code> command for copying values to and from registers.</p>
+
+<p>These are namely:</p>
+
+<ul>
+<li><code>movl</code> - copy a long, 4-byte value (32-bits)</li>
+<li><code>movw</code> - copy a word, 2-byte value (16-bits)</li>
+<li><code>movb</code> - copy a byte, 1-byte value (8-bits)</li>
+</ul>
 
 <p>It is important to know what type of <code>mov</code> instruction to use as there are times when you will want to move just a single byte, a word, a long (or double-word), or some other length. Larger lengths will usually require a loop or some other method when working on a 32-bit x86 architecture.</p>
 
 <p>A few extra things to note about the above instructions are:</p>
 
 <ul>
-<li>The <code>$1</code> and <code>$0</code> operands are called immediate values and are an exact value specified.</li>
+<li>The <code>$1</code> and <code>$0</code> operands are called immediate values and are an exact value, as specified by the <code>$</code> prefix.</li>
 <li>Registers are prefixed with a percentge sign (<code>%</code>).</li>
-<li>A Value starting with a <code>0x</code> is a hexadecimal number and includes values 0-9 and a-f.</li>
+<li>A value starting with a <code>0x</code> is a hexadecimal number and includes values 0-9 and a-f.</li>
 </ul>
 
 <h2 id="the-application-entry-point-and-labels">The application entry-point and labels</h2>
@@ -323,15 +348,15 @@
 
 <h2 id="compiling-our-code">Compiling our code</h2>
 
-<p>We&rsquo;re working backwards a bit here as we&rsquo;ve implemented our entrypoint (_start) and our syscall to exit first. The syscall using <code>eax=1</code> and <code>ebx=0</code> with <code>int 0x80</code> allows our program to exit gracefully. As noted by the comment, we shall fill in the logic from the middle as we progress.</p>
+<p>We&rsquo;re working backwards a bit here as we&rsquo;ve implemented our entrypoint (<code>_start</code>) and our syscall to exit first. The syscall using <code>eax=1</code> and <code>ebx=0</code> with <code>int 0x80</code> allows our program to exit gracefully. As noted by the comment, we shall fill in the logic from the middle as we progress.</p>
 
 <p>Ok, so we&rsquo;ve got a framework of GAS assembly to build on, but how do we convert this into an application?</p>
 
 <p>Well, it&rsquo;s easy. I&rsquo;m glad you asked.</p>
 
-<p>Firstly we need to make sure our gas assembler is installed. I&rsquo;m on Fedora, so the command is <code>sudo dnf install binutils</code>. From the supplementary <a href="https://github.com/wilvk/gas-asm-fib">repository</a>, the <code>docker-shell</code> application can spin you up an environment with the required tools already installed.</p>
+<p>Firstly we need to make sure our GAS assembler is installed. I&rsquo;m on Fedora, so the command is <code>sudo dnf install binutils</code>. From the supplementary <a href="https://github.com/wilvk/gas-asm-fib">repository</a>, the <code>docker-shell</code> application can spin you up an environment with the required tools already installed.</p>
 
-<p>Then we create a small shell script to run the gas assembler (as) and the linker (ld) on the output of the assembler.</p>
+<p>Then we create a small shell script to run the GAS assembler (as) and the linker (ld) on the output of the assembler.</p>
 
 <p>Say for example we call our assembly code file fib1.s, to run the assembler we would run <code>as -gstabs -o fib.o fib.s</code></p>
 
@@ -512,7 +537,7 @@ ld -m elf_i386 -o $app_name $app_name.o
 </code></pre>
 
 <p>For this example, if we enter <code>b 5</code>, a breakpoint will be set at line 5, ready to be executed.
-Line 5 is a no-operation (or noop), which means that it is a filler instruction and doesn&rsquo;t actually do anything but take up a CPU clock cycle. Older versions of gdb require this proceeding <code>_start</code>, and so I have left it in for these examples.</p>
+Line 5 is a no-operation (or noop), which means that it is a filler instruction and doesn&rsquo;t actually do anything but take up a CPU clock cycle. Older versions of GDB require this proceeding <code>_start</code>, and so I have left it in for these examples.</p>
 
 <pre><code>(gdb) b 5
 Breakpoint 1 at 0x8048054: file fib2.s, line 5.
@@ -1032,10 +1057,13 @@ fibonacci:
     <span style="color:#a6e22e">movl</span> %ebp, %esp               <span style="color:#75715e"># move our copy of the stack pointer back to esp
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">popl</span> %ebp                     <span style="color:#75715e"># retrieve the original copy of ebp from the stack
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">ret</span></code></pre></div>
-<p>The first thing to note is that the comments as the top of the function specify <code>input</code>, <code>processing</code> and <code>output</code>. I find this a good habbit for functions as it makes explicit:
-- what the function expects
-- what the function does
-- what is expected at completion of the function</p>
+<p>The first thing to note is that the comments as the top of the function specify <code>input</code>, <code>processing</code> and <code>output</code>. I find this a good habbit for functions as it makes explicit:</p>
+
+<ul>
+<li>what the function expects</li>
+<li>what the function does</li>
+<li>what is expected at completion of the function</li>
+</ul>
 
 <h2 id="creating-the-stack-space-for-our-array">Creating the stack space for our array</h2>
 
@@ -1053,9 +1081,12 @@ fibonacci:
 
 <h2 id="the-fibonacci-logic-in-assembly">The Fibonacci logic in assembly</h2>
 
-<p>There are essentially two parts to the logic in this section that can be seen as:
-- everything between the start of the function up to <code>.fib_loop</code>, which sets up our variables
-- everything between the label <code>.fib_loop</code> up to <code>.fib_done</code>, which processes the Fibonacci sequence in a loop</p>
+<p>There are essentially two parts to the logic in this section that can be seen as:</p>
+
+<ul>
+<li>everything between the start of the function up to <code>.fib_loop</code>, which sets up our variables</li>
+<li>everything between the label <code>.fib_loop</code> up to <code>.fib_done</code>, which processes the Fibonacci sequence in a loop</li>
+</ul>
 
 <h2 id="setting-up-our-variables">Setting up our variables</h2>
 
@@ -1140,7 +1171,9 @@ fibonacci:
 
 <h2 id="calculating-the-sequence">Calculating the sequence</h2>
 
-<p>As we have already initialised our array with the values 0 and 1 for <code>f[0]</code> and <code>f[1]</code> respectively, our loop will always be able to calculate the next number in the sequence. The line <code>movl -4(%esp, %ecx, 4), %ebx</code> shows another variation of indexing into memory with the <code>-4</code> out the front indicating a second, relative offset to the address within the parenthesis. What this does in effect is get the value 4 bytes down in memory (up the stack) from the current location of (esp + ecx * 4); effectively *( esp + ( ecx * 4 ) ) - 4* .</p>
+<p>As we have already initialised our array with the values 0 and 1 for <code>f[0]</code> and <code>f[1]</code> respectively, our loop will always be able to calculate the next number in the sequence. The line <code>movl -4(%esp, %ecx, 4), %ebx</code> shows another variation of indexing into memory with the <code>-4</code> out the front indicating a second, relative offset to the address within the parenthesis. What this does in effect is get the value 4 bytes down in memory (up the stack) from the current location of (esp + ecx * 4); effectively:</p>
+
+<p>&nbsp;&nbsp; ( esp + ( ecx * 4 ) ) - 4</p>
 
 <p>This corresponds to the value in our C code of <code>f[i-1]</code>. The value in memory is placed into the <code>ebx</code> register for calculating the next value in the sequence.</p>
 
@@ -1247,11 +1280,14 @@ root@608eb3f49ac5:/gas-asm-fib# ./fib7 <span style="color:#ae81ff">1</span>
 
 <p>This is by no means the ultimate Fibonacci sequence generator (or even a sequence generator at all - it only prints the last value in the sequence, after all), and there are many tricks and tips to making this faster, more robust and more extensible both in design and application.</p>
 
-<p>A follow on blog from this may include:
-- Optimising calculations using an alternative Fibonacci alogrithm implementation with the corresponding performance comparison
-- Optimising calculations using the FPU math coprocessor, MMX, XMM, or SIMD instructions
-- Handling of a higher range of numbers
-- Designing for reuse with multiple files</p>
+<p>A follow on blog from this may include:</p>
+
+<ul>
+<li>Optimising calculations using an alternative Fibonacci alogrithm implementation with the corresponding performance comparison</li>
+<li>Optimising calculations using the FPU math coprocessor, MMX, XMM, or SIMD instructions</li>
+<li>Handling of a higher range of numbers</li>
+<li>Designing for reuse with multiple files</li>
+</ul>
 
 <p>Until next time, happy coding!</p>
 
