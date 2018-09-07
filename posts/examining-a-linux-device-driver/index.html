@@ -41,7 +41,7 @@
     <ul>
         
         <li>
-            <a class="active" href="https://blog.seso.io/posts/">
+            <a class="" href="https://blog.seso.io/posts/">
                 <i class="fa-li fa  fa-lg"></i><span>blog</span>
             </a>
         </li>
@@ -60,86 +60,96 @@
 
 
 
-<section id="list">
+<article>
 
+    <h1>Examining a Linux Device Driver</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2018-09-02T11:01:47&#43;10:00">Sep 2, 2018</time>
+        </li>
+        
+        
+
+        
+
+        <li>0 min read</li>
+    </ul>
+</aside>
     
 
     
-        <h2>Posts</h2>
-    
 
-    
+</article>
 
-    
 
-    <h3>2018</h3>
+<section class="post-nav">
     <ul>
         
         <li>
-            <a href="https://blog.seso.io/posts/examining-a-linux-device-driver/">DRAFT: Examining a Linux Device Driver</a>
-            <time class="date-meta">Sep 2</time>
+            <a href="https://blog.seso.io/posts/extending-fibonacci/"><i class="fa fa-chevron-circle-left"></i> Extending Fibonacci</a>
         </li>
         
-        <li>
-            <a href="https://blog.seso.io/posts/extending-fibonacci/">DRAFT: Extending Fibonacci</a>
-            <time class="date-meta">Sep 2</time>
-        </li>
-        
-        <li>
-            <a href="https://blog.seso.io/posts/hugo-for-beginners/">Hugo for Beginners</a>
-            <time class="date-meta">Aug 31</time>
-        </li>
         
     </ul>
+</section>
     
-    
-
+        <section class="comments-block">
+      <button id="show-comments" style="display: none;"><i class="fa fa-comments-o"></i> Add/View Comments</button>
 </section>
 
+<section id="disqus_thread"></section>
 
+<script>
+      (function () {
+            
+            
+            if (window.location.hostname == "localhost")
+                  return;
 
-<ul class="pagination">
+            var disqus_loaded = false;
+            var disqus_shortname = 'wilvk-github-io';
+            var disqus_button = document.getElementById("show-comments");
+
+            disqus_button.style.display = "";
+            disqus_button.addEventListener("click", disqus, false);
+
+            function disqus() {
+
+                  if (!disqus_loaded) {
+                        disqus_loaded = true;
+
+                        var e = document.createElement("script");
+                        e.type = "text/javascript";
+                        e.async = true;
+                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
+                        (document.getElementsByTagName("head")[0] ||
+                              document.getElementsByTagName("body")[0])
+                        .appendChild(e);
+
+                        
+                        document.getElementById("show-comments").style.display = "none";
+                  }
+            }
+
+            
+            var hash = window.location.hash.substr(1);
+            if (hash.length > 8) {
+                  if (hash.substring(0, 8) == "comment-") {
+                        disqus();
+                  }
+            }
+
+            
+            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
+                  disqus();
+            }
+      })();
+</script>
     
-    <li class="page-item">
-        <a href="https://blog.seso.io/posts/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
-    </li>
-    
-    <li class="page-item disabled">
-    <a href="" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-    </li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item active"><a class="page-link" href="https://blog.seso.io/posts/">1</a></li>
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    <li class="page-item"><a class="page-link" href="https://blog.seso.io/posts/page/2/">2</a></li>
-    
-    
-    <li class="page-item">
-    <a href="https://blog.seso.io/posts/page/2/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-    </li>
-    
-    <li class="page-item">
-        <a href="https://blog.seso.io/posts/page/2/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
-    </li>
-    
-</ul>
+
 
 
 
