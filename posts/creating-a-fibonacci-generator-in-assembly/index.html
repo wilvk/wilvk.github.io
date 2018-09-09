@@ -639,9 +639,12 @@ test[Inferior 1 (process 24) exited normally]
 <p>Up to this point, we should have an app that can read and print the first four characters of the first argument passed on the commandline when our application is called.</p>
 
 <p>Using our <code>docker-shell</code> environment, the following should work:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@9a172ec363ca:/gas-asm-fib# ./make-app fib2
+
+<pre><code>root@9a172ec363ca:/gas-asm-fib# ./make-app fib2
 root@9a172ec363ca:/gas-asm-fib# ./fib2 test
-testroot@9a172ec363ca:/gas-asm-fib#</code></pre></div>
+testroot@9a172ec363ca:/gas-asm-fib#
+</code></pre>
+
 <p>But what if we were to enter <code>./fib2 testing</code>? We&rsquo;d still just get <code>test</code> returned. Or worse still, if we enter less than 4 characters we get garbage printed from memory to make up the 4 characters. This is far from ideal for processing our commandline arguments.</p>
 
 <p>What we need is a way of determining the length of the argument in the stack. This is where the instruction pair <code>repne scasb</code> comes in useful.</p>
