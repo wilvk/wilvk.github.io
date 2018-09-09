@@ -381,22 +381,18 @@ We then link the resultant object file to convert our object file into a binary 
 <p>We will be targetting the 32 bit x86 architecture to begin with as it is easier to understand. The following is a bash script for building the binary (also in the supplementary repo as <code>make-app</code>).</p>
 
 <p><em>make-app</em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -z <span style="color:#e6db74">&#34;</span>$1<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+  app_name<span style="color:#f92672">=</span>fib
+<span style="color:#66d9ef">else</span>
+  app_name<span style="color:#f92672">=</span>$1
+<span style="color:#66d9ef">fi</span>
 
-<pre><code>#!/bin/bash
-
-if [ -z &quot;$1&quot; ]; then
-  app_name=fib
-else
-  app_name=$1
-fi
-
-rm $app_name.o $app_name 2&gt; /dev/null
+rm $app_name.o $app_name <span style="color:#ae81ff">2</span>&gt; /dev/null
 
 as --32 -gstabs -o $app_name.o $app_name.s
-ld -m elf_i386 -o $app_name $app_name.o
-
-</code></pre>
-
+ld -m elf_i386 -o $app_name $app_name.o</code></pre></div>
 <p>Makefiles are the status-quo for building assembly files, but I&rsquo;m more used to working with bash scripts so the preceeding is a script that can be used to compile a single assembly file into a binary targetting 32 bit x86, and as we are working with a small number of files, we do not need some of te more advanced features of make anyway.</p>
 
 <p>If a name is passed on the commandline, it will attempt to compile the corresponding .s file.</p>
@@ -689,12 +685,9 @@ _start:
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># set ebx for return code 0
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">make</span> <span style="color:#66d9ef">it</span> <span style="color:#66d9ef">so</span> <span style="color:#66d9ef">again</span></code></pre></div>
 <p>Building and running this from the <code>docker-shell</code> we can see that the full first argument is now displayed:</p>
-
-<pre><code>root@8ec496c15833:/gas-asm-fib# ./make-app fib3
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@8ec496c15833:/gas-asm-fib# ./make-app fib3
 root@8ec496c15833:/gas-asm-fib# ./fib3 testing
-testingroot@8ec496c15833:/gas-asm-fib#
-</code></pre>
-
+testingroot@8ec496c15833:/gas-asm-fib#</code></pre></div>
 <p>Excellent, I hear you say, but how does it work? I&rsquo;m glad you asked.</p>
 
 <p>So what happens from the line <code>movl $50, %ecx</code> up to <code>repne scasb</code>, the registers are being set up to run <code>repne scasb</code>.
