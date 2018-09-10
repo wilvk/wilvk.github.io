@@ -734,17 +734,23 @@ The instructions <code>repne scasb</code> work on strings specifically to determ
 </tbody>
 </table>
 
-<p>The register <code>ecx</code> is considered the defacto count register on the x86 architecture and <code>repne scasb</code> implicitly uses this register to iterate, starting from the address in the <code>edi</code> register until either:
-- it finds a byte in memory specified in the lower byte of the <code>eax</code> register (in our case <code>0x00</code>)
-- the <code>ecx</code> register reaches 0</p>
+<p>The register <code>ecx</code> is considered the defacto count register on the x86 architecture and <code>repne scasb</code> implicitly uses this register to iterate, starting from the address in the <code>edi</code> register until either:</p>
+
+<ul>
+<li>it finds a byte in memory specified in the lower byte of the <code>eax</code> register (in our case <code>0x00</code>)</li>
+<li>the <code>ecx</code> register reaches 0</li>
+</ul>
 
 <p>The opcode <code>cld</code> sets a flag for the count direction as downward.</p>
 
-<p>And so <code>repne scasb</code> iterates, doing the following:
-- starting at the address <code>edi</code>
-- decrementing <code>ecx</code> by 1
-- incrementing <code>edi</code>
-- comparing the byte poined to by the new location of <code>edi</code> to the value stored in the lower byte of <code>eax</code>.</p>
+<p>And so <code>repne scasb</code> iterates, doing the following:</p>
+
+<ul>
+<li>starting at the address <code>edi</code></li>
+<li>decrementing <code>ecx</code> by 1</li>
+<li>incrementing <code>edi</code></li>
+<li>comparing the byte poined to by the new location of <code>edi</code> to the value stored in the lower byte of <code>eax</code>.</li>
+</ul>
 
 <p>For example, if we were to call from the commandline:</p>
 
