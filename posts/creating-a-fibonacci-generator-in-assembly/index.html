@@ -1268,7 +1268,7 @@ print_long:
 <p>By subtracting our result with the <code>sub</code> instruction then using <code>neg</code> to convert the negative number to a positive one, we will have the actual
  count of digits to print and can place it in the <code>edx</code> register for the syscall.</p>
 
-<p>There is a bit of arithmetic here as our <code>ecx</code> was being decremented by 1 from 10 for each digit, and so the actual count is <strong>-1 * ( count - 10 )</strong>. This is a rather rountabout way of doing this calculation and it would have actually been simpler to just count up. However this way afforded me the opportunity to introduce the <code>neg</code> instruction which takes a 2&rsquo;s compliment of the value in the specified register and is essentially multiplying the register by -1.</p>
+<p>There is a bit of arithmetic here as our <code>ecx</code> was being decremented by 1 from 10 for each digit, and so the actual count is <strong>-1 * ( count - 10 )</strong>. This is a rather roundabout way of doing this calculation and it would have actually been simpler to just count up. However this way afforded me the opportunity to introduce the <code>neg</code> instruction which takes a 2&rsquo;s compliment of the value in the specified register and is essentially multiplying the register by -1.</p>
 
 <h1 id="conclusion">Conclusion</h1>
 
