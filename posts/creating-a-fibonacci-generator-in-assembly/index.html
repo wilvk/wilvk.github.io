@@ -263,7 +263,7 @@
 
 <h2 id="instructions-and-opcodes">Instructions and opcodes</h2>
 
-<p>An instruction/opcode is essentially an instruction for the CPU to process. Examples of intructions in <strong>fib1.s</strong> above include:</p>
+<p>An instruction/opcode is essentially an instruction for the CPU to process. Examples of instructions in <strong>fib1.s</strong> above include:</p>
 
 <ul>
 <li><code>nop</code></li>
@@ -1186,7 +1186,7 @@ fibonacci:
 
 <p>The same is true of the line <code>movl -8(%esp, %ecx, 4), %edx</code>, however it represents the value <code>f[i-2]</code> in the array and is placed into the <code>edx</code> register.</p>
 
-<p>The format of these <code>mov</code> instructions can be summarised as:</p>
+<p>The format of these <code>mov</code> instructions can be summarized as:</p>
 
 <p>&nbsp;&nbsp; <strong>relative_offset(absolute_offset, index, size)</strong></p>
 
@@ -1255,7 +1255,7 @@ print_long:
 
 <p>The loop then begins where the heart of the transformation occurs. The key instruction here is the line <code>div %ebx</code> which both takes a bit of setting up and post-processing. This instruction implicitly takes the value in <code>eax</code>, divides it by the value specified in the operand (in our case <code>ebx</code>), then places the result in <code>eax</code> and the remainder in <code>edx</code>. This is why <code>edx</code> is <code>xor</code>ed at the start of the loop.</p>
 
-<p>As we are only dividing by 10, we can be certain that our result is in the lower byte of <code>edx</code> (as 8 bytes can have a value between 0 and 255), and so we move this lower byte <code>dl</code> into the indexed stack pointer location <code>(%esp, %ecx, 1)</code>. Following this, we decrement our <code>ecx</code> counter and compare the quotient of our division to 0. If the quotient equals 0, we know there are no digits to calculate and we can jump to <code>.done_pl</code>.</p>
+<p>As we are only dividing by 10, we can be certain that our result is in the lower byte of <code>edx</code> (as 8 bytes can have a value between 0 and 255), and so we move this lower byte <code>dl</code> into the indexed stack pointer location <code>(%esp, %ecx, 1)</code>. Following this, we decrement our <code>ecx</code> counter and compare the quotient of our division to 0. If the quotient equals 0, we know there are no digits to calculate, and we can jump to <code>.done_pl</code>.</p>
 
 <h2 id="doing-things-the-hard-way">Doing things the hard way</h2>
 
