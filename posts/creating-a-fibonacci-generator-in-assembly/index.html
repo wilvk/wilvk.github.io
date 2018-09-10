@@ -441,12 +441,12 @@ ld -m elf_i386 -o $app_name $app_name.o</code></pre></div>
 
 <tr>
 <td>ESP + n</td>
-<td>&lt; pointer to last string argument &gt;</td>
+<td>&lt; 0x00 value (NULL) indicating end of command line arguments &gt;</td>
 </tr>
 
 <tr>
 <td>ESP + n-4</td>
-<td>&lt; 0x00 value (NULL) indicating end of command line arguments &gt;</td>
+<td>&lt; pointer to last string argument &gt;</td>
 </tr>
 
 <tr>
