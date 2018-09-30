@@ -644,12 +644,9 @@ test[Inferior 1 (process 24) exited normally]
 <p>Up to this point, we should have an app that can read and print the first four characters of the first argument passed on the commandline when our application is called.</p>
 
 <p>Using our <code>docker-shell</code> environment, the following should work:</p>
-
-<pre><code>root@9a172ec363ca:/gas-asm-fib# ./make-app fib2
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@9a172ec363ca:/gas-asm-fib# ./make-app fib2
 root@9a172ec363ca:/gas-asm-fib# ./fib2 test
-testroot@9a172ec363ca:/gas-asm-fib#
-</code></pre>
-
+testroot@9a172ec363ca:/gas-asm-fib#</code></pre></div>
 <p>But what if we were to enter <code>./fib2 testing</code>? We&rsquo;d still just get <code>test</code> returned. Or worse still, if we enter less than 4 characters we get garbage printed from memory to make up the 4 characters. This is far from ideal for processing our commandline arguments.</p>
 
 <p>What we need is a way of determining the length of the argument in the stack. This is where the instruction pair <code>repne scasb</code> comes in useful.</p>
@@ -765,7 +762,7 @@ The instructions <code>repne scasb</code> work on strings specifically to determ
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">pop</span> %ecx            <span style="color:#75715e"># restore our string address into ecx
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">mov</span> %ebx, %edx      <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">move</span> <span style="color:#66d9ef">our</span> <span style="color:#66d9ef">count</span> <span style="color:#66d9ef">value</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">edx</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">the</span> <span style="color:#66d9ef">int</span> <span style="color:#ae81ff">80</span> <span style="color:#66d9ef">call</span></code></pre></div>
 <p>Our string length is copied from <code>ebx</code> into the <code>edx</code> register so that the <code>int 0x80</code> call to write to stdout can then be performed to print the correct number of characters to the screen.
-There is also a <code>push</code> and <code>pop</code> instruction in <code>fib3.s</code> that firstly stores a copy of the address of our argument in <code>edi</code> then restores it into <code>ecx</code>. This is done as <code>ecx</code> is used for the address of the string to write to stdout, and the <code>repne scasb</code> instruction loop destroys this value in the <code>edi</code> register. Using <code>push</code> and <code>pop</code>, we can preserve the address of the string on the stack from <code>edi</code> and restore it into <code>ecx</code> when we need to use it later on._</p>
+There is also a <code>push</code> and <code>pop</code> instruction in <code>fib3.s</code> that firstly stores a copy of the address of our argument in <code>edi</code> then restores it into <code>ecx</code>. This is done as <code>ecx</code> is used for the address of the string to write to stdout, and the <code>repne scasb</code> instruction loop destroys this value in the <code>edi</code> register. Using <code>push</code> and <code>pop</code>, we can preserve the address of the string on the stack from <code>edi</code> and restore it into <code>ecx</code> when we need to use it later on.</p>
 
 <h1 id="making-things-easier-to-understand-using-function-calls">Making things easier to understand using function calls</h1>
 
@@ -821,12 +818,12 @@ There is also a <code>push</code> and <code>pop</code> instruction in <code>fib3
     <span style="color:#a6e22e">movl</span> <span style="color:#66d9ef">$1</span>, %eax       <span style="color:#75715e"># set eax for int 80 for system exit
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">movl</span> <span style="color:#66d9ef">$0</span>, %ebx       <span style="color:#75715e"># set ebx for return code 0
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">$0x80</span>           <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#66d9ef">make</span> <span style="color:#66d9ef">it</span> <span style="color:#66d9ef">so</span> <span style="color:#66d9ef">again</span></code></pre></div>
-<p>We can see here that we still have the label <code>\_start</code> but we also have the additional labels of:
+<p>We can see here that we still have the label <code>_start</code> but we also have the additional labels of:
 - get_string_length
 - print_string
 - exit</p>
 
-<p>This helps greatly for the readability of our code. We can see that all the calls are done from the <code>\_start</code> label and each section of code concludes with a <code>ret</code> instruction, except for the <code>exit</code> label, which exits our application.</p>
+<p>This helps greatly for the readability of our code. We can see that all the calls are done from the <code>_start</code> label and each section of code concludes with a <code>ret</code> instruction, except for the <code>exit</code> label, which exits our application.</p>
 
 <p>When using labels and functions, it helps to add comments at the start of the section of code indicating what the expected state of any registers and memory should be, what is actually done by the code and what is expected to be returned by the code. The comments above are very brief, but we will see later greater use of this approach.</p>
 
@@ -931,7 +928,7 @@ exit:
 
 <p>Jump instructions are very useful for loop type logic such as <code>for</code>, <code>while</code> and <code>do</code> loops, and even conditional statements like <code>if</code> and <code>case</code> that you may be familiar with from other languages. They can, however have performance impacts for performance-critical sections of code under some circumstances.</p>
 
-<p>When the function <code>long_from_string</code> is called from the <code>\_start</code> section, we make the assumption that the address of our string has been placed in the <code>edi</code> register, ready for processing. We also assume that the calling function knows that the numeric result will be placed into the <code>eax</code> register at completion of the function. It is a convention in assembly language that the result from a function is placed into the <code>eax</code> register. For more complex return types, an address that points to an array or struct or some other complex type can be specified in <code>eax</code>. This same convention is used in the C language for returning values from functions.</p>
+<p>When the function <code>long_from_string</code> is called from the <code>_start</code> section, we make the assumption that the address of our string has been placed in the <code>edi</code> register, ready for processing. We also assume that the calling function knows that the numeric result will be placed into the <code>eax</code> register at completion of the function. It is a convention in assembly language that the result from a function is placed into the <code>eax</code> register. For more complex return types, an address that points to an array or struct or some other complex type can be specified in <code>eax</code>. This same convention is used in the C language for returning values from functions.</p>
 
 <h2 id="zeroing-registers">Zeroing registers</h2>
 
@@ -1097,7 +1094,7 @@ fibonacci:
 
 <h2 id="setting-up-our-variables">Setting up our variables</h2>
 
-<p>Casting our minds back to the original C source code in [#Some starting knowledge](), we would like to design our assembly code to replicate the C code. The C code is similar in design with two sections where a counter and an array are defined, followed by a loop to calculate the Fibonacci number. The function assumes <code>eax</code> is set with the value for the number of iterations, <em>n</em> (plus 2), and returns the result in the register <code>ebx</code>.</p>
+<p>Casting our minds back to the original C source code in <a href="#some-starting-knowledge">Some starting knowledge</a>, we would like to design our assembly code to replicate the C code. The C code is similar in design with two sections where a counter and an array are defined, followed by a loop to calculate the Fibonacci number. The function assumes <code>eax</code> is set with the value for the number of iterations, <em>n</em> (plus 2), and returns the result in the register <code>ebx</code>.</p>
 
 <p>The counter <em>i</em> is relatively simple and the register <code>ecx</code> is used for this purpose.</p>
 
@@ -1197,6 +1194,8 @@ fibonacci:
 <h2 id="printing-our-result">Printing our result</h2>
 
 <p>The final piece in the puzzle for putting together our program is almost the reciprocal for one of the functions we created earlier, namely <code>get_long_from_string</code>. The following is the function <code>print_long</code>, from <em>fib7.s</em> which takes an unsigned long, converts it to a string then prints the string to stdout.</p>
+
+<p><em>fib7.s</em></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#75715e"># print a 32-bit long integer
 </span><span style="color:#75715e"># input: ebx contains the long value we wish to print
 </span><span style="color:#75715e"># process:
