@@ -62,65 +62,54 @@
 
 <article>
 
-    <h1>Gdb on MacOS</h1>
+    <h1>Common Ide Keyboard Shortcuts</h1>
 
     
         <aside>
     <ul>
         <li>
-            <time class="post-date" datetime="2019-06-29T17:22:07&#43;10:00">Jun 29, 2019</time>
+            <time class="post-date" datetime="2019-06-29T22:56:30&#43;10:00">Jun 29, 2019</time>
         </li>
         
         
 
         
 
-        <li>3 min read</li>
+        <li>2 min read</li>
     </ul>
 </aside>
     
 
     
 
-<p>GDB, or the GNU Debugger has been around for years. It was first written by Richard Stallman in 1986 and has a long heritage on Unix, Linux and other Operating Systems. I’ve started using it recently for debugging applications in assembly from my MacBook Pro.</p>
+<h1 id="initial-thoughts">Initial Thoughts</h1>
 
-<p>I wanted to be able to debug both local MacOS binary applications as well as remotely debug Linux applications in Docker containers. This is not as simple as it seems as the format of binaries used on MacOS and Linux are different - MacOS uses the MachO binary format and Linux uses the ELF binary format. This on its own isn’t a problem, but it turns out that different versions of GDB are needed to interpret the different binary formats.</p>
+<p>I’m working on (yet and tiresomely) another IDE for Vim and other editors, and thought that it would be useful to survey the ‘lay of the land’ in the space of keyboard shorcuts in existing IDEs. Below are the results of a 20 minute Googling on the subject.</p>
 
-<p>Adding to the confusion, Apple has been moving away from GDB for low-level debugging on MacOS in favour of LLVM, where since Mac OS X version 10.4 (Maverick) applications like Eclipse which rely on GDB started to fail.</p>
+<h1 id="the-sensis">The Sensis</h1>
 
-<h1 id="my-use-cases">My Use-Cases</h1>
+<p>Editor|Start Debugging|Step Into|Step Over|Step Out/Step Return|Continue/Pause/Resume|Stop
+Eclipse|?|F5|F6|F7|F8|F12|?
+Visual Studio|?|F11|F10|Shift-F11|F5|Shift-F5|
+Android Studio|Shift-F9|F7|F8|Shift-F8|Alt-F9/F9|?
+Netbeans 8.0|Ctrl-F5|F7|F8|Ctrl-F7|F5|Shift-F5
+IntelliJ|?|F7|F8|Shift-F8|F9|?</p>
 
-<p>I essentially have 2 use-cases I need to be able to debug for:</p>
+<h1 id="conclusions">Conclusions:</h1>
 
-<p><img src="https://blog.seso.io/img/gdb.drawio.png" alt="gdb use cases" /></p>
+<p>It would appear that start and stop keys are ill-defined - at least in terms of keyboard shortcuts. The main reason these are missing is that there was slim-to-no information on these online. I just assume everyone is using the start/stop icons that most IDEs provide instead of doing this in an input-consistent way. It speaks volumes to the psychology behind clicking a button to start debugging as opposed to pressing a key combination. It’s still seen as that ‘entertaining’ part where the developer ‘clicks the button’ to take a ride on luck before discovering the turmoil that lay within their own paradigm of code logic.</p>
 
-<h1 id="installing-gdb-to-debug-macho-binaries-locally">Installing GDB to debug MachO binaries locally:</h1>
+<p>Looking at the table above, there are only a few things that can be derived by the current state of play in the IDE space:</p>
 
-<p>There are some great instructions on how to do this <a href="https://www.ics.uci.edu/~pattis/common/handouts/macmingweclipse/allexperimental/mac-gdb-install.html">here</a>, that go through the code-signing process required when installing gdb from brew.</p>
+<ul>
+<li>F7 looks like a good key to ‘step into’ a code base</li>
+<li>F8 is a likely contender as a ‘step over’ key binding</li>
+<li>Anything to step out of the current line of code should be a key combination of a Ctrl or Shift and a function key above F6</li>
+<li>F5 or F9 are common for continuing the debugging process once started - I find this super confusing, to be honest.</li>
+<li>As previously mentioned, start and stop are ill-defined from a debugging perspective and is probably more due to the psychology involved with a click vs a keyboard shortcut than anything else (IMHO).</li>
+</ul>
 
-<p>In addition, since GDB vesion 8.2 in conjunction with MacOS X Mojave 10.14, the GDB libraries have not been kept up to date on MacOS, and so further instructions, with a specific brew formula for installing a patched version of GDB have been necessary to get this to work. Take a look <a href="https://stackoverflow.com/a/53586598/512965">here</a> and <a href="https://raw.githubusercontent.com/timotheecour/homebrew-timutil/master/gdb_tim.rb">here</a> for instructions on this.</p>
-
-<p>So, this should get you most of the way towards debugging a MacOS MachO binary locally, but what about if we want to remotely debug a Linux binary in a Docker container from our Mac?</p>
-
-<h1 id="remote-debugging-linux-applications-from-macos">Remote debugging Linux applications from MacOS</h1>
-
-<p>Well, it turns out that remote targets needs to be enabled in the build of gdb we install via brew. There is a great blog post on this <a href="http://tomszilagyi.github.io/2018/03/Remote-gdb-with-stl-pp">here</a>. The post also goes through the process of remote debugging via an exposed port, which is a useful reference.</p>
-
-<h1 id="switching-between-the-two-versions-of-gdb">Switching between the two versions of gdb:</h1>
-
-<p>So, it’s great that we can now debug locally and remotely with GDB, but they are both different versions of GDB and will need to be switched between within brew in order to be run.</p>
-
-<h2 id="for-remote-linux-debugging-we-want-to-run">For remote Linux debugging we want to run:</h2>
-
-<pre><code>brew unlink gdb &amp;&amp; brew link gdb
-</code></pre>
-
-<h2 id="for-local-macos-debugging-we-want-to-run">For local MacOS debugging we want to run:</h2>
-
-<pre><code>brew unlink gdb_tim &amp;&amp; brew link –overwrite gdb_tim
-</code></pre>
-
-<p>I hope this is useful to someone out there who was as lost as I was encountering this.</p>
+<p>Anyway, this was a fun little survey in the area of popular IDEs and is by on means exhaustive, but more a way of getting an understanding for what is being used out there. Happy keyboard coding!</p>
 
 
 </article>
@@ -130,13 +119,9 @@
     <ul>
         
         <li>
-            <a href="https://blog.seso.io/posts/hugo-for-beginners/"><i class="fa fa-chevron-circle-left"></i> Hugo for Beginners</a>
+            <a href="https://blog.seso.io/posts/gdb-on-macos/"><i class="fa fa-chevron-circle-left"></i> Gdb on MacOS</a>
         </li>
         
-        
-        <li>
-            <a href="https://blog.seso.io/posts/common-ide-keyboard-shortcuts/">Common Ide Keyboard Shortcuts <i class="fa fa-chevron-circle-right"></i> </a>
-        </li>
         
     </ul>
 </section>
