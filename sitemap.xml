@@ -3,17 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://blog.seso.io/posts/common-ide-keyboard-shortcuts/</loc>
-    <lastmod>2019-06-29T22:56:30+10:00</lastmod>
+    <loc>https://blog.seso.io/posts/</loc>
+    <lastmod>2019-10-10T21:27:52+11:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.seso.io/posts/</loc>
-    <lastmod>2019-06-29T22:56:30+10:00</lastmod>
+    <loc>https://blog.seso.io/posts/python-hex-strings/</loc>
+    <lastmod>2019-10-10T21:27:52+11:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.seso.io/</loc>
+    <lastmod>2019-10-10T21:27:52+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.seso.io/posts/common-ide-keyboard-shortcuts/</loc>
     <lastmod>2019-06-29T22:56:30+10:00</lastmod>
   </url>
   
