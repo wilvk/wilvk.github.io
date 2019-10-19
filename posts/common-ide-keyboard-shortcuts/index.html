@@ -82,7 +82,7 @@
 
     
 
-<p>I’m working on (yet and tiresomely) another IDE for Vim and other editors, and thought that it would be useful to survey the ‘lay of the land’ in the space of keyboard shorcuts in existing IDEs. Below are the results of a 20 minute Googling on the subject.</p>
+<p>I’m working on an IDE framework called <a href="https://github.com/wilvk/tide">Tide</a> for Vim and other editors, and thought that it would be useful to survey the ‘lay of the land’ in the space of keyboard shorcuts in existing IDEs. Below are the results of a 20 minute survey on the subject.</p>
 
 <h1 id="the-representative-sample">The Representative Sample</h1>
 
@@ -90,64 +90,81 @@
 <thead>
 <tr>
 <th>Editor</th>
-<th>Start Debugging</th>
-<th>Step Into</th>
-<th>Step Over</th>
-<th>Step Out / Step Return</th>
-<th>Continue / Pause / Resume</th>
-<th>Stop</th>
+<th align="center">Toggle Breakpoint</th>
+<th align="center">Start</th>
+<th align="center">Step Into</th>
+<th align="center">Step Over</th>
+<th align="center">Step Out</th>
+<th align="center">Continue</th>
+<th align="center">Stop</th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
 <td>Eclipse</td>
-<td>?</td>
-<td>F5</td>
-<td>F6</td>
-<td>F7</td>
-<td>F8</td>
-<td>F12</td>
+<td align="center">Ctrl-Shift-B</td>
+<td align="center">F11</td>
+<td align="center">F5</td>
+<td align="center">F6</td>
+<td align="center">F7</td>
+<td align="center">F8</td>
+<td align="center">F12</td>
 </tr>
 
 <tr>
 <td>Visual Studio</td>
-<td>?</td>
-<td>F11</td>
-<td>F10</td>
-<td>Shift-F11</td>
-<td>F5</td>
-<td>Shift-F5</td>
+<td align="center">F9</td>
+<td align="center">F5</td>
+<td align="center">F11</td>
+<td align="center">F10</td>
+<td align="center">Shift-F11</td>
+<td align="center">F5</td>
+<td align="center">Shift-F5</td>
 </tr>
 
 <tr>
 <td>Android Studio</td>
-<td>Shift-F9</td>
-<td>F7</td>
-<td>F8</td>
-<td>Shift-F8</td>
-<td>Alt-F9</td>
-<td>F9</td>
+<td align="center">Ctrl-F8</td>
+<td align="center">Shift-F9</td>
+<td align="center">F7</td>
+<td align="center">F8</td>
+<td align="center">Shift-F8</td>
+<td align="center">Alt-F9</td>
+<td align="center">F9</td>
 </tr>
 
 <tr>
 <td>Netbeans 8.0</td>
-<td>Ctrl-F5</td>
-<td>F7</td>
-<td>F8</td>
-<td>Ctrl-F7</td>
-<td>F5</td>
-<td>Shift-F5</td>
+<td align="center">Ctrl-F8</td>
+<td align="center">Ctrl-F5</td>
+<td align="center">F7</td>
+<td align="center">F8</td>
+<td align="center">Ctrl-F7</td>
+<td align="center">F5</td>
+<td align="center">Shift-F5</td>
 </tr>
 
 <tr>
 <td>IntelliJ</td>
-<td>?</td>
-<td>F7</td>
-<td>F8</td>
-<td>Shift-F8</td>
-<td>F9</td>
-<td>?</td>
+<td align="center">Ctrl-F8</td>
+<td align="center">Ctrl-F9</td>
+<td align="center">F7</td>
+<td align="center">F8</td>
+<td align="center">Ctrl-F7</td>
+<td align="center">F5</td>
+<td align="center">Shift-F5</td>
+</tr>
+
+<tr>
+<td>Atom node-debugger</td>
+<td align="center">F9</td>
+<td align="center">F5</td>
+<td align="center">F11</td>
+<td align="center">Shift-F11</td>
+<td align="center">F5</td>
+<td align="center">Shift-F5</td>
+<td align="center">F9</td>
 </tr>
 </tbody>
 </table>
@@ -161,9 +178,20 @@
 <li>F8 is commonly used to ‘step over’ code</li>
 <li>Anything to &lsquo;step out&rsquo; of the current line of code should be a key combination of a Ctrl or Shift and a function key above F6</li>
 <li>F5 or F9 are common for continuing the debugging process once started</li>
+<li>Ctrl-F8 or F9 are common for Toggling Breakpoints</li>
 </ul>
 
 <p>Anyway, this was a fun little survey in the area of popular IDEs and is by no means exhaustive; but more a way of getting an understanding for what is being used out there. Happy keyboarding!</p>
+
+<h1 id="refs">Refs</h1>
+
+<p><a href="https://github.com/kiddkai/atom-node-debugger">https://github.com/kiddkai/atom-node-debugger</a>
+<a href="https://www.dofactory.com/reference/visual-studio-shortcuts">https://www.dofactory.com/reference/visual-studio-shortcuts</a>
+<a href="https://blog.codecentric.de/en/2013/04/again-10-tips-on-java-debugging-with-eclipse/">https://blog.codecentric.de/en/2013/04/again-10-tips-on-java-debugging-with-eclipse/</a>
+<a href="https://stackoverflow.com/questions/321118/what-is-the-short-cut-in-eclipse-to-terminate-debugging-running">https://stackoverflow.com/questions/321118/what-is-the-short-cut-in-eclipse-to-terminate-debugging-running</a>
+<a href="https://netbeans.org/project_downloads/www/shortcuts.pdf">https://netbeans.org/project_downloads/www/shortcuts.pdf</a>
+<a href="https://stackoverflow.com/a/34723886/512965">https://stackoverflow.com/a/34723886/512965</a>
+<a href="https://developer.android.com/studio/intro/keyboard-shortcuts">https://developer.android.com/studio/intro/keyboard-shortcuts</a></p>
 
 
 </article>

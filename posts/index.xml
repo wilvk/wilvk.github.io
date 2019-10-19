@@ -27,7 +27,7 @@
       <pubDate>Sat, 29 Jun 2019 22:56:30 +1000</pubDate>
       
       <guid>https://blog.seso.io/posts/common-ide-keyboard-shortcuts/</guid>
-      <description>I’m working on (yet and tiresomely) another IDE for Vim and other editors, and thought that it would be useful to survey the ‘lay of the land’ in the space of keyboard shorcuts in existing IDEs.</description>
+      <description>I’m working on an IDE framework called Tide for Vim and other editors, and thought that it would be useful to survey the ‘lay of the land’ in the space of keyboard shorcuts in existing IDEs.</description>
     </item>
     
     <item>
