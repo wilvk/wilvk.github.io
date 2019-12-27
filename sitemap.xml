@@ -4,16 +4,21 @@
   
   <url>
     <loc>https://blog.seso.io/posts/</loc>
-    <lastmod>2019-10-10T21:27:52+11:00</lastmod>
+    <lastmod>2019-12-27T20:26:22+11:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.seso.io/posts/python-hex-strings/</loc>
-    <lastmod>2019-10-10T21:27:52+11:00</lastmod>
+    <loc>https://blog.seso.io/posts/using-volumes-with-docker-in-docker/</loc>
+    <lastmod>2019-12-27T20:26:22+11:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.seso.io/</loc>
+    <lastmod>2019-12-27T20:26:22+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.seso.io/posts/python-hex-strings/</loc>
     <lastmod>2019-10-10T21:27:52+11:00</lastmod>
   </url>
   
