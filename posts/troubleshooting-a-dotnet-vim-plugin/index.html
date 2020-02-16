@@ -93,12 +93,10 @@
 <p>The project was a dotnet core mvc application and a few of the relevant libraries weren&rsquo;t showing.</p>
 
 <p>Libraries like:</p>
-
-<pre><code>using microsoft.extensions.hosting
-using microsoft.extensions.loggin
-using microsoft.aspnetcore.http
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">using</span> microsoft.extensions.hosting;
+<span style="color:#66d9ef">using</span> microsoft.extensions.logging;
+<span style="color:#66d9ef">using</span> microsoft.aspnetcore.http;
+</code></pre></div>
 <p>were showing the ubiquitous:</p>
 
 <pre><code>The type or namespace cannot be found (are you missing a using directive or an assembly reference?)
@@ -110,11 +108,11 @@ using microsoft.aspnetcore.http
 
 <p>I ran the build locally with <code>dotnet build</code> and it built as expected. So what was causing the dependencies to be missing?</p>
 
-<p>Firstly, I looked at the <code>omnisharp-vim code</code> to determine how it works.</p>
+<p>Firstly, I looked at the <em>omnisharp-vim</em> code to determine how it works.</p>
 
 <p>The plugin has two options - stdio and http for sending messages from the debugger to Vim. The plugin called it from the command line and the output json is consumed by the plugin to define features of the code.</p>
 
-<p>I decided to blow away all the <code>omnisharp-vim</code> files in my <code>~/.vim/bundle/omnisharp-vim</code> path as well as the <code>~/.cache/omnisharp-roslyn</code> path.</p>
+<p>I decided to blow away all the <em>omnisharp-vim</em> files in my <code>~/.vim/bundle/omnisharp-vim</code> path as well as the <code>~/.cache/omnisharp-roslyn</code> path.</p>
 
 <p>No luck - the same issue occurred.</p>
 
@@ -124,17 +122,17 @@ using microsoft.aspnetcore.http
 
 <p>The same references were still not being resolved. I couldn&rsquo;t figure it out.</p>
 
-<p>Looking in the path <code>/usr/local/share/dotnet/packs/Microsoft.AspNetCore.App.Ref/3.1.0/ref/netcoreapp3.1/</code> I could actually see the binaries for the missing imports there, yet for some reason <code>omnisharp-vim</code> couldn&rsquo;t find them.</p>
+<p>Looking in the path <code>/usr/local/share/dotnet/packs/Microsoft.AspNetCore.App.Ref/3.1.0/ref/netcoreapp3.1/</code> I could actually see the binaries for the missing imports there, yet for some reason <em>omnisharp-vim</em> couldn&rsquo;t find them.</p>
 
 <h2 id="assumptions">assumptions</h2>
 
-<p>The plugin <code>omnisharp-vim</code> also installs a package called <a href="https://github.com/OmniSharp/omnisharp-roslyn">omnisharp-roslyn</a> that is used to communicate with the debugger and uses the .net roslyn workspaces for defining type safety and other things in code.</p>
+<p>The plugin <em>omnisharp-vim</em> installs a package called <a href="https://github.com/OmniSharp/omnisharp-roslyn">omnisharp-roslyn</a> that is used to communicate with the debugger and uses .net roslyn workspaces for defining type safety and other things in code.</p>
 
-<p>Stepping back from the issue a bit and thinking about all the parts in the chain, I decided to look into how <code>omnisharp-roslyn</code> actually worked.</p>
+<p>Stepping back from the issue a bit and thinking about all the parts in the chain, I decided to look into how <em>omnisharp-roslyn</em> actually worked.</p>
 
 <p>Looking around in the source code I could see that there were references to a packaged version of Mono, but not dotnet core. Initially I thought that this was because there may be licencing or other things preventing dotnet core being packaged as well.</p>
 
-<p>I then searched online as it  may have been that a dotnet core version of <code>omnisharp-roslyn</code> existed that just hadn&rsquo;t installedfor some reason. To my surprise, it turns out that <code>omnisharp-roslyn</code> only targets Mono, as mentioned <a href="https://github.com/OmniSharp/omnisharp-roslyn/issues/1489">here</a>.  This confused me a bit but reading further, this is the only way that full compatibility with both .net framework and dotnet core can currently be achieved.</p>
+<p>I then searched online as it may have been that a dotnet core version of <em>omnisharp-roslyn</em> existed that just hadn&rsquo;t installedfor some reason. To my surprise, it turns out that <em>omnisharp-roslyn</em> only targets Mono, as mentioned <a href="https://github.com/OmniSharp/omnisharp-roslyn/issues/1489">here</a>.  This confused me a bit but reading further, this is the only way that full compatibility with both .net framework and dotnet core can currently be achieved.</p>
 
 <p>Reading the docs, I could see there was a setting called <code>g:OmniSharp_server_use_mono</code> - my previous assumption was that this was a toggle between Mono and dotnet core.  Reading the docs closer I could see that it toggles between the packaged and system-installed versions of Mono, and not between Mono and dotnet core. A rookie mistake in the new, open source .net world.</p>
 
@@ -142,7 +140,7 @@ using microsoft.aspnetcore.http
 
 <h2 id="solution">solution</h2>
 
-<p>Well, that answered that, so I duly removed all the versions of Mono that I had and did a full reinstall of <code>omnisharp-vim</code>. However, the plugin  was still not resolving.</p>
+<p>Well, that answered that, so I duly removed all the versions of Mono that I had and did a full reinstall of <em>omnisharp-vim</em>. However, the plugin  was still not resolving.</p>
 
 <p>I was quite perplexed until I read a couple of github issues for the plugin:</p>
 
@@ -189,9 +187,9 @@ using microsoft.aspnetcore.http
 
 <p><strong>Name your assumptions</strong>  - My initial assumption was that as it was a dotnet core application, the debugger would also be targeting dotnet core. This was incorrect. Only by defining what my assumption was could I challenge it and come to a new understanding.</p>
 
-<p><strong>Check your assumptions</strong> - At one stage through this process I was thinking that the Omnisharp-vim plugin was broken (which is is, but not in the way I thought). I tried running the plugin on another laptop and it worked. This gave me the confidence to continue troubleshooting and fully understand and resolve the issue.</p>
+<p><strong>Check your assumptions</strong> - At one stage through this process I was thinking that the <em>omnisharp-vim</em> plugin was broken (which is is, but not in the way I thought). I tried running the plugin on another laptop and it worked. This gave me the confidence to continue troubleshooting and fully understand and resolve the issue.</p>
 
-<p><strong>Read closely</strong> - Read the docs carefully - going back to the omnisharp-vim docs it clearly states that it must be run on mono. I must have skimmed over this in my initial research of the problem. The problem was that the version I was using didn&rsquo;t have the asp.net libraries.</p>
+<p><strong>Read closely</strong> - Read the docs carefully - going back to the <em>omnisharp-vim</em> docs it clearly states that it must be run on mono. I must have skimmed over this in my initial research of the problem. The problem was that the version I was using didn&rsquo;t have the asp.net libraries.</p>
 
 <p><strong>Have patience</strong> - It took me about a day to figure all this out but through perseverence, there comes a solution.</p>
 
