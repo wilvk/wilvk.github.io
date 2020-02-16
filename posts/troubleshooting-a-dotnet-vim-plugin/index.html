@@ -118,7 +118,7 @@
 
 <p>I began to think that it may have been the version of dotnet core on my laptop so uninstalled all the dotnet components using the dotnet sdk uninstall tool. Then removing all files from <code>/usr/local/share/dotnet</code>, as well as deleting <code>/usr/local/bin/dotnet</code>, and all references to it in my environment.</p>
 
-<p>I reinstalled the <a href="https://formulae.brew.sh/cask/dotnet-sdk">dotnet-sdk</a> from brew.</p>
+<p>I reinstalled the <a href="https://formulae.brew.sh/cask/dotnet-sdk">dotnet-sdk</a> from Brew.</p>
 
 <p>The same references were still not being resolved. I couldn&rsquo;t figure it out.</p>
 
@@ -149,7 +149,7 @@
 <li><a href="https://github.com/OmniSharp/omnisharp-vim/issues/556">https://github.com/OmniSharp/omnisharp-vim/issues/556</a></li>
 </ul>
 
-<p>and realised that there was another system-wide Mono version being referenced by brew. Doing a system-wide search using on any file with Mono in it (<code>find / -name &quot;*mono*&quot;</code>) showed me there was a Mono brew cellar still present.</p>
+<p>and realised that there was another system-wide Mono version being referenced by Brew. Doing a system-wide search on any file with the name mono in it (<code>find / -name &quot;*mono*&quot;</code>) showed me there was a Mono Brew cellar still present.</p>
 
 <pre><code>brew uninstall --force mono
 </code></pre>
