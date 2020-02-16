@@ -1,0 +1,297 @@
+<!doctype html>
+
+<html lang="en-US">
+
+<head>
+  <title>Will&#39;s Blog</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Willem van Ketwich" />
+  <meta name="generator" content="Hugo 0.57.2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>Just a dude that does stuff.. mostly with computers.</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>blog</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/about/">
+                <i class="fa-li fa  fa-lg"></i><span>about</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Troubleshooting a Vim dotnet Plugin</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2020-02-16T17:34:02&#43;11:00">Feb 16, 2020</time>
+        </li>
+        
+        
+
+        
+
+        <li>5 min read</li>
+    </ul>
+</aside>
+    
+
+    
+
+<h2 id="problem">problem</h2>
+
+<p>I had a problem on a new MacBook.</p>
+
+<p>I was trying to get C# working in Vim. I found a package online called <a href="https://github.com/OmniSharp/omnisharp-vim">omnisharp-vim</a> and decided to give it a go.</p>
+
+<p>After installing the plugin in my <code>.vimrc</code> file, I opened a project file. The syntax highlighting was there, although there was a small problem. Some of the imports wouldn&rsquo;t import:</p>
+
+<p>The project was a dotnet core mvc application and a few of the relevant libraries weren&rsquo;t showing.</p>
+
+<p>Libraries like:</p>
+
+<pre><code>using microsoft.extensions.hosting
+using microsoft.extensions.loggin
+using microsoft.aspnetcore.http
+</code></pre>
+
+<p>were showing the ubiquitous:</p>
+
+<pre><code>The type or namespace cannot be found (are you missing a using directive or an assembly reference?)
+</code></pre>
+
+<h2 id="investigation">investigation</h2>
+
+<p>This was strange to me as I was of the impression that once dotnet core was installed, all the dependencies should be there too. This was my first incorrect assumption that would turn into a rabbit hole of investigation.</p>
+
+<p>I ran the build locally with <code>dotnet build</code> and it built as expected. So what was causing the dependencies to be missing?</p>
+
+<p>Firstly, I looked at the <code>omnisharp-vim code</code> to determine how it works.</p>
+
+<p>The plugin has two options - stdio and http for sending messages from the debugger to Vim. The plugin called it from the command line and the output json is consumed by the plugin to define features of the code.</p>
+
+<p>I decided to blow away all the <code>omnisharp-vim</code> files in my <code>~/.vim/bundle/omnisharp-vim</code> path as well as the <code>~/.cache/omnisharp-roslyn</code> path.</p>
+
+<p>No luck - the same issue occurred.</p>
+
+<p>I began to think that it may have been the version of dotnet core on my laptop so uninstalled all the dotnet components using the dotnet sdk uninstall tool. Then removing all files from <code>/usr/local/share/dotnet</code>, as well as deleting <code>/usr/local/bin/dotnet</code>, and all references to it in my environment.</p>
+
+<p>I reinstalled the <a href="https://formulae.brew.sh/cask/dotnet-sdk">dotnet-sdk</a> from brew.</p>
+
+<p>The same references were still not being resolved. I couldn&rsquo;t figure it out.</p>
+
+<p>Looking in the path <code>/usr/local/share/dotnet/packs/Microsoft.AspNetCore.App.Ref/3.1.0/ref/netcoreapp3.1/</code> I could actually see the binaries for the missing imports there, yet for some reason <code>omnisharp-vim</code> couldn&rsquo;t find them.</p>
+
+<h2 id="assumptions">assumptions</h2>
+
+<p>The plugin <code>omnisharp-vim</code> also installs a package called <a href="https://github.com/OmniSharp/omnisharp-roslyn">omnisharp-roslyn</a> that is used to communicate with the debugger and uses the .net roslyn workspaces for defining type safety and other things in code.</p>
+
+<p>Stepping back from the issue a bit and thinking about all the parts in the chain, I decided to look into how <code>omnisharp-roslyn</code> actually worked.</p>
+
+<p>Looking around in the source code I could see that there were references to a packaged version of Mono, but not dotnet core. Initially I thought that this was because there may be licencing or other things preventing dotnet core being packaged as well.</p>
+
+<p>I then searched online as it  may have been that a dotnet core version of <code>omnisharp-roslyn</code> existed that just hadn&rsquo;t installedfor some reason. To my surprise, it turns out that <code>omnisharp-roslyn</code> only targets Mono, as mentioned <a href="https://github.com/OmniSharp/omnisharp-roslyn/issues/1489">here</a>.  This confused me a bit but reading further, this is the only way that full compatibility with both .net framework and dotnet core can currently be achieved.</p>
+
+<p>Reading the docs, I could see there was a setting called <code>g:OmniSharp_server_use_mono</code> - my previous assumption was that this was a toggle between Mono and dotnet core.  Reading the docs closer I could see that it toggles between the packaged and system-installed versions of Mono, and not between Mono and dotnet core. A rookie mistake in the new, open source .net world.</p>
+
+<p><img src="https://blog.seso.io/img/omnisharp.png" alt="connection between omnisharp-vim and mono" /></p>
+
+<h2 id="solution">solution</h2>
+
+<p>Well, that answered that, so I duly removed all the versions of Mono that I had and did a full reinstall of <code>omnisharp-vim</code>. However, the plugin  was still not resolving.</p>
+
+<p>I was quite perplexed until I read a couple of github issues for the plugin:</p>
+
+<ul>
+<li><a href="https://github.com/OmniSharp/omnisharp-roslyn/issues/1693">https://github.com/OmniSharp/omnisharp-roslyn/issues/1693</a></li>
+<li><a href="https://github.com/OmniSharp/omnisharp-vim/issues/556">https://github.com/OmniSharp/omnisharp-vim/issues/556</a></li>
+</ul>
+
+<p>and realised that there was another system-wide Mono version being referenced by brew. Doing a system-wide search using on any file with Mono in it (<code>find / -name &quot;*mono*&quot;</code>) showed me there was a Mono brew cellar still present.</p>
+
+<pre><code>brew uninstall --force mono
+</code></pre>
+
+<p>Boom. All sorted and back in business.</p>
+
+<h2 id="understanding">understanding</h2>
+
+<p>There are quite a lot of variations of .Net now. It&rsquo;s an entire ecosystem of different flavours - similar in some ways to the Linux Distro ecosystem (although not as diverse). What I understand now is that these flavors consist of:</p>
+
+<ul>
+<li>dotnet core</li>
+<li>dotnet-core-sdk</li>
+<li>Mono</li>
+<li>Mono without asp.net</li>
+<li>Legacy .Net Framework</li>
+<li>and others</li>
+</ul>
+
+<p>There are also a variety of ways these can be downloaded and installed onto a computer, placing copies in different locations in the filesystem, including through:</p>
+
+<ul>
+<li>Brew</li>
+<li>Direct download</li>
+<li>Plugins (such as omnisharp-vim)</li>
+<li>IDEs (such as VS Code and Visual Studio for Mac)</li>
+<li>and others</li>
+</ul>
+
+<p>This all adds to increasing the surface area for error and frustration in the troubleshooting process.</p>
+
+<h2 id="learnings">learnings</h2>
+
+<p>This highlighted to me a few things around:</p>
+
+<p><strong>Name your assumptions</strong>  - My initial assumption was that as it was a dotnet core application, the debugger would also be targeting dotnet core. This was incorrect. Only by defining what my assumption was could I challenge it and come to a new understanding.</p>
+
+<p><strong>Check your assumptions</strong> - At one stage through this process I was thinking that the Omnisharp-vim plugin was broken (which is is, but not in the way I thought). I tried running the plugin on another laptop and it worked. This gave me the confidence to continue troubleshooting and fully understand and resolve the issue.</p>
+
+<p><strong>Read closely</strong> - Read the docs carefully - going back to the omnisharp-vim docs it clearly states that it must be run on mono. I must have skimmed over this in my initial research of the problem. The problem was that the version I was using didn&rsquo;t have the asp.net libraries.</p>
+
+<p><strong>Have patience</strong> - It took me about a day to figure all this out but through perseverence, there comes a solution.</p>
+
+<p><em>Happy vimming!</em></p>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://blog.seso.io/posts/using-volumes-with-docker-in-docker/"><i class="fa fa-chevron-circle-left"></i> Using Volumes With Docker in Docker</a>
+        </li>
+        
+        
+    </ul>
+</section>
+    
+        <section class="comments-block">
+      <button id="show-comments" style="display: none;"><i class="fa fa-comments-o"></i> Add/View Comments</button>
+</section>
+
+<section id="disqus_thread"></section>
+
+<script>
+      (function () {
+            
+            
+            if (window.location.hostname == "localhost")
+                  return;
+
+            var disqus_loaded = false;
+            var disqus_shortname = 'wilvk-github-io';
+            var disqus_button = document.getElementById("show-comments");
+
+            disqus_button.style.display = "";
+            disqus_button.addEventListener("click", disqus, false);
+
+            function disqus() {
+
+                  if (!disqus_loaded) {
+                        disqus_loaded = true;
+
+                        var e = document.createElement("script");
+                        e.type = "text/javascript";
+                        e.async = true;
+                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
+                        (document.getElementsByTagName("head")[0] ||
+                              document.getElementsByTagName("body")[0])
+                        .appendChild(e);
+
+                        
+                        document.getElementById("show-comments").style.display = "none";
+                  }
+            }
+
+            
+            var hash = window.location.hash.substr(1);
+            if (hash.length > 8) {
+                  if (hash.substring(0, 8) == "comment-") {
+                        disqus();
+                  }
+            }
+
+            
+            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
+                  disqus();
+            }
+      })();
+</script>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright &copy; 2018 - Willem van Ketwich | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://blog.seso.io/js/scripts.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-122351489-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

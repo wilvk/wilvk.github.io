@@ -4,16 +4,21 @@
   
   <url>
     <loc>https://blog.seso.io/posts/</loc>
-    <lastmod>2019-12-27T20:26:22+11:00</lastmod>
+    <lastmod>2020-02-16T17:34:02+11:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.seso.io/posts/using-volumes-with-docker-in-docker/</loc>
-    <lastmod>2019-12-27T20:26:22+11:00</lastmod>
+    <loc>https://blog.seso.io/posts/troubleshooting-a-dotnet-vim-plugin/</loc>
+    <lastmod>2020-02-16T17:34:02+11:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.seso.io/</loc>
+    <lastmod>2020-02-16T17:34:02+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.seso.io/posts/using-volumes-with-docker-in-docker/</loc>
     <lastmod>2019-12-27T20:26:22+11:00</lastmod>
   </url>
   
