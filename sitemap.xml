@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://blog.seso.io/posts/going-beyond-reading-the-docs/</loc>
+    <lastmod>2020-04-18T14:02:20+10:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://blog.seso.io/posts/</loc>
-    <lastmod>2020-02-16T17:34:02+11:00</lastmod>
+    <lastmod>2020-04-18T14:02:20+10:00</lastmod>
   </url>
   
   <url>
     <loc>https://blog.seso.io/posts/troubleshooting-a-dotnet-vim-plugin/</loc>
-    <lastmod>2020-02-16T17:34:02+11:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://blog.seso.io/</loc>
     <lastmod>2020-02-16T17:34:02+11:00</lastmod>
   </url>
   
@@ -54,6 +54,11 @@
   
   <url>
     <loc>https://blog.seso.io/posts/first-post/</loc>
+    <lastmod>2018-06-15T21:49:30+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.seso.io/</loc>
     <lastmod>2018-06-15T21:49:30+10:00</lastmod>
   </url>
   

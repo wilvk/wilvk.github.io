@@ -1,0 +1,222 @@
+<!doctype html>
+
+<html lang="en-US">
+
+<head>
+  <title>Will&#39;s Blog</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Willem van Ketwich" />
+  <meta name="generator" content="Hugo 0.65.2" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>Just a dude that does stuff.. mostly with computers.</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>blog</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/about/">
+                <i class="fa-li fa  fa-lg"></i><span>about</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Going Beyond Reading the Docs</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2020-04-18T14:02:20&#43;10:00">Apr 18, 2020</time>
+        </li>
+        
+        
+
+        
+
+        <li>3 min read</li>
+    </ul>
+</aside>
+    
+
+    <h1 id="starting-at-the-start">Starting at the start</h1>
+<p>This is something I&rsquo;ve always done, but it became more apparent to me recently while attempting to build the latest source code for the dotnet core v5.0 runtime and libraries.</p>
+<p>The goal was to get the binaries built with debugging output so that I could investigate further how lldb and sos work. This was also for a higher goal of integrating dotnet core into a library I am writing for cross-editor debugging called <a href="https://github.com/tide-org">Tide</a>.</p>
+<p>Having read the Docker build instructions <a href="https://github.com/dotnet/runtime/blob/master/docs/workflow/building/coreclr/linux-instructions.md">here</a> and considering it not too difficult or time-consuming, I ventured into getting a build toolchain working that could build the binaries.</p>
+<p>The build was for the <a href="https://github.com/dotnet/runtime/">dotnet runtime</a> where I intended to run the <code>./build.sh</code> command with some target settings to output the biniaries.</p>
+<p>Having installed all the prerequisite libraries, I was getting some errors. Thus begun the rabbit-hole of experimenting with different library versions, package repositories, library configuration settings and docker settings in an attempt to get it working.</p>
+<p>The <code>./build.sh</code> can build a subset of the full build. This is split into the <code>clr</code> component and the <code>libs</code> component. Starting with only 1, using <code>--subset clr</code> halved the build time, but this was still taking 5-10 minutes to build. Every time I changed the <code>apt</code> libraries installed, this would take another 5-10 minutes.</p>
+<h1 id="digging-deeper">Digging deeper</h1>
+<p>Blind faith on the installation instructions was taking too long. Looking through the dotnet github repositories, there are a few repositories just for doing the docker builds alone:</p>
+<ul>
+<li>Building the various dotnet core Docker images that are published to DockerHub. These depend on other prerequisite docker images that set up the toolchain. This includes all the various architectures and operating systems that dotnet core can run on.</li>
+</ul>
+<p><a href="https://github.com/dotnet/dotnet-docker">https://github.com/dotnet/dotnet-docker</a></p>
+<ul>
+<li>Building the prerequisite Docker images for the various dotnet core components, including the build toolchain.</li>
+</ul>
+<p><a href="https://github.com/dotnet/dotnet-buildtools-prereqs-docker">https://github.com/dotnet/dotnet-buildtools-prereqs-docker</a></p>
+<ul>
+<li>Build pipelines for the dotnet core Docker nightly builds:</li>
+</ul>
+<p><a href="https://github.com/dotnet/dotnet-docker/blob/nightly">https://github.com/dotnet/dotnet-docker/blob/nightly</a></p>
+<ul>
+<li>A set of common tools for building dotnet core docker containers exposed via a cli in a docker container</li>
+</ul>
+<p><a href="https://github.com/dotnet/docker-tools">https://github.com/dotnet/docker-tools</a></p>
+<ul>
+<li>A set of build tools for setting up and running the build pipelines</li>
+</ul>
+<p><a href="https://github.com/dotnet/buildtools">https://github.com/dotnet/buildtools</a></p>
+<ul>
+<li>A new set of build tools to supercede <code>buildtools</code></li>
+</ul>
+<p><a href="https://github.com/dotnet/arcade">https://github.com/dotnet/arcade</a></p>
+<h1 id="light-at-the-end-of-the-tunnel">Light at the end of the tunnel</h1>
+<p>Doing a Google search around keywords to do this build didn&rsquo;t give much information as to how to set up the toolchain (or maybe my Google-fu was off). But I found that by stepping back, and not blindly driving forwards, then looking at the context that the document existed in helped greatly in resolving the issue.</p>
+<p>Somtimes the solution is straightforward and doesn&rsquo;t require such tactics to resolve the issue. Other times, understanding the context around the problem one is attempting to solve can help greatly.</p>
+<p>Sometimes, however, the problem space is so large, or it takes so long to get feedback from the process that alternatives must be entertained.</p>
+<p>It turned out the the <code>dotnet-buildtools-prereqs-docker</code> repo had a <code>Dockerfile</code> of exactly what I was after and the binaries could be built after configuring the docker container the same way.</p>
+<p>It&rsquo;s a useful skill, indeed, to have the perseverence and resourcefulness to not blindly accept what is presented at face value; as often things can be either incorrect or incomplete.</p>
+<h1 id="going-forward">Going forward</h1>
+<p>In investigating all this, it made me also realise that the ecosystem of dotnet core has had many changes in it&rsquo;s brief history on github, and while being trailblazing as it is, it&rsquo;s left many dark alleys and quagmires in it&rsquo;s path - but that&rsquo;s a story for another day.</p>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://blog.seso.io/posts/troubleshooting-a-dotnet-vim-plugin/"><i class="fa fa-chevron-circle-left"></i> Troubleshooting a Vim dotnet Plugin</a>
+        </li>
+        
+        
+    </ul>
+</section>
+    
+        <section class="comments-block">
+      <button id="show-comments" style="display: none;"><i class="fa fa-comments-o"></i> Add/View Comments</button>
+</section>
+
+<section id="disqus_thread"></section>
+
+<script>
+      (function () {
+            
+            
+            if (window.location.hostname == "localhost")
+                  return;
+
+            var disqus_loaded = false;
+            var disqus_shortname = 'wilvk-github-io';
+            var disqus_button = document.getElementById("show-comments");
+
+            disqus_button.style.display = "";
+            disqus_button.addEventListener("click", disqus, false);
+
+            function disqus() {
+
+                  if (!disqus_loaded) {
+                        disqus_loaded = true;
+
+                        var e = document.createElement("script");
+                        e.type = "text/javascript";
+                        e.async = true;
+                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
+                        (document.getElementsByTagName("head")[0] ||
+                              document.getElementsByTagName("body")[0])
+                        .appendChild(e);
+
+                        
+                        document.getElementById("show-comments").style.display = "none";
+                  }
+            }
+
+            
+            var hash = window.location.hash.substr(1);
+            if (hash.length > 8) {
+                  if (hash.substring(0, 8) == "comment-") {
+                        disqus();
+                  }
+            }
+
+            
+            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
+                  disqus();
+            }
+      })();
+</script>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright © 2018 - Willem van Ketwich | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://blog.seso.io/js/scripts.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-122351489-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

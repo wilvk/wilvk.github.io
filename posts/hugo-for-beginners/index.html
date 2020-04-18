@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="The HTML5 Herald" />
   <meta name="author" content="Willem van Ketwich" />
-  <meta name="generator" content="Hugo 0.57.2" />
+  <meta name="generator" content="Hugo 0.65.2" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
@@ -80,48 +80,26 @@
 </aside>
     
 
-    
-
-<p>I wanted to put together some notes on how to set up a <a href="https://pages.github.com/">Github Pages</a> blog using the <a href="https://gohugo.io/">Hugo</a> static pages publishing application as when I went through this process myself, I found it less than intuitive.</p>
-
+    <p>I wanted to put together some notes on how to set up a <a href="https://pages.github.com/">Github Pages</a> blog using the <a href="https://gohugo.io/">Hugo</a> static pages publishing application as when I went through this process myself, I found it less than intuitive.</p>
 <p>Github Pages is a great way to spin up a personal blog, product page or any other type of site that doesn&rsquo;t require stateful application logic to be involved.</p>
-
 <p>The defacto static page generator is considered to be Jekyll, which is a versatile, and extensible framework. However, being a fan of Golang I decided to go with the more gopher-friendly option, Hugo.</p>
-
 <h1 id="using-github-pages">Using Github Pages</h1>
-
 <p>The way Github Pages works is to use a repo with the format:</p>
-
 <p><code>&lt;username/org&gt;.github.io</code></p>
-
 <p>In effect this means that a repo at something like the the following address is created:</p>
-
 <p><code>https://github.com/&lt;username/org&gt;/&lt;username/org&gt;.github.io</code></p>
-
 <p>For example, my username is <code>wilvk</code> and so my Github Pages repository is:</p>
-
 <p><code>wilvk/wilvk.github.io</code></p>
-
 <p>with the repository address:</p>
-
 <p><code>https://github.com/wilvk/wilvk.github.io</code></p>
-
 <p>The corresponding static pages are delivered from the address:</p>
-
 <p><a href="https://wilvk.github.io">https://wilvk.github.io</a></p>
-
 <p>If you have your own domain name, this can be integrated into Github Pages by going to the Settings section of the repository.</p>
-
 <h1 id="an-overview">An overview</h1>
-
 <p>The way I set up my blog was to have one repository for the static pages to be delivered by Github Pages, and another for generating the static pages using Hugo. I have a script for generating the site and pushing the changes to the Github Pages site so I don&rsquo;t have to do this manually every time.</p>
-
-<p><img src="https://blog.seso.io/img/hugo_blog.svg" alt="hugo build diagram" /></p>
-
+<p><img src="https://blog.seso.io/img/hugo_blog.svg" alt="hugo build diagram"></p>
 <p>We can see from the diagram that the build clones the <code>wilvk/wilvk.github.io</code> repository inside the <code>wilvk/blog-hugo</code> repository to the <code>./public</code> path. It then builds the full Hugo site into the <code>./public</code> path and pushes the changes back to the <code>wilvk/wilvk.github.io</code> repository.</p>
-
 <h1 id="an-automated-process">An automated process</h1>
-
 <p>I place the following script in the base of the <code>wilvk/blog-hugo</code> repository and run it to push the changes to the site:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
 </span><span style="color:#75715e"></span>
@@ -135,31 +113,19 @@ git add .
 git commit -m <span style="color:#e6db74">&#34;build release&#34;</span>
 git push --set-upstream origin master
 cd ..
-rm -rf ./public</code></pre></div>
-<p>The <code>set -x</code> allows me to see any errors that may occur during the build process. Using different themes or various settings can cause Hugo to fail the build process and not push new changes to the static website repository <code>wilvk.github.io</code>. Showing the full output enables inspection of this process for any errors.</p>
-
+rm -rf ./public
+</code></pre></div><p>The <code>set -x</code> allows me to see any errors that may occur during the build process. Using different themes or various settings can cause Hugo to fail the build process and not push new changes to the static website repository <code>wilvk.github.io</code>. Showing the full output enables inspection of this process for any errors.</p>
 <p>Hugo can also be run with verbose output with <code>hugo --verbose</code>, or even <code>hugo --debug</code> for greater levels of detail in the build process if required.</p>
-
 <p>The static site is built to the path <code>./public</code> and so the first thing the script does is delete the <code>./public</code> path.</p>
-
 <p>Then the <code>wilvk/wilvk.github.io</code> repository is cloned into the base of the <code>blog-hugo</code> repository.</p>
-
 <p>Running <code>hugo</code> builds all the static files to the <code>./public</code> path.</p>
-
 <p>The new static website is then &lsquo;pushed&rsquo; back up to the repository <code>wilvk.github.io</code> and the <code>./public</code> path deleted so that is is not accidentally committed to the <code>blog-hugo</code> repository. It may be useful sometimes to comment this line out if investigating why a build didn&rsquo;t complete but most of the time it is useful to have it delete the path.</p>
-
 <p>This way there is delineage between the build process and the resultant artefact, the static website.</p>
-
-<h1 id="configuring-config-toml">Configuring config.toml</h1>
-
+<h1 id="configuring-configtoml">Configuring config.toml</h1>
 <p>Hugo has built-in support for <a href="https://analytics.google.com/analytics/web/#/">Google Analytics</a> so you can see pageviews over time, users currently viewing your site and other relevant details about your site.</p>
-
 <p>Hugo also has support for <a href="https://disqus.com/">Disqus</a> so that users can comment on your blogs and you don&rsquo;t have to store the comments in an application - allowing your website to remain stateless.</p>
-
 <p>Google Analytics is free from Google and Disqus is also a free service. With IDs from both these services, you can turn your Github Pages into a proper blog.</p>
-
 <p>The following is how I have set up my <code>config.toml</code> file:</p>
-
 <pre><code>baseurl = &quot;https://blog.seso.io&quot;
 title = &quot;Will's Blog&quot;
 copyright = &quot;Copyright &amp;copy; 2018 - Willem van Ketwich&quot;
@@ -200,34 +166,22 @@ languageCode = &quot;en-US&quot;
     identifier = &quot;about&quot;
     weight = 20
     url = &quot;/about/&quot;
-</code></pre>
-
-<p>I&rsquo;ll just point out a few things about the config file above.</p>
-
+</code></pre><p>I&rsquo;ll just point out a few things about the config file above.</p>
 <ul>
 <li>Your Google Analytics ID will go in the variable <code>googleAnalytics</code>.</li>
 <li>Your Disqus shortname ID will go in the variable <code>disqusShortname</code>.</li>
 </ul>
-
 <p>I am also using a custom domain name and so this is set in the variable <code>baseurl</code>. The variable <code>cannonifyurls</code> needs to be set to <code>true</code> to enable correct redirects to your custom domain name.</p>
-
-<h1 id="skinning-theming-your-site">Skinning/theming your site</h1>
-
+<h1 id="skinningtheming-your-site">Skinning/theming your site</h1>
 <p>If you are just starting out with Hugo (or even if you&rsquo;re not), you may want to change the theme for your site.</p>
-
 <p>To do this, the usual procedure is to:</p>
-
 <ul>
 <li>Clone the theme into the <code>./themes</code> path.</li>
 <li>Edit the <code>config.toml</code> file and set the theme to the name of the directory cloned into the <code>./themes</code> path.</li>
 </ul>
-
 <p>Some themes require specific config settings in the <code>config.toml</code> file. They will usually tell you in the <code>README.md</code> on the specifics of this.</p>
-
 <h1 id="onwards-and-upwards">Onwards and upwards</h1>
-
 <p>These are just a few things I have found while setting up a Hugo blog. For more info, I have found the <a href="https://gohugo.io/getting-started/usage/">Hugo docs</a> are also quite useful.</p>
-
 <p>Happy blogging!</p>
 
 
@@ -309,7 +263,7 @@ languageCode = &quot;en-US&quot;
 
 </main>
     <footer>
-        <h6>Copyright &copy; 2018 - Willem van Ketwich | 
+        <h6>Copyright © 2018 - Willem van Ketwich | 
             Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
             <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
     </footer>
