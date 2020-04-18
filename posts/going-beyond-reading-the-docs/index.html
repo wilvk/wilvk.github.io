@@ -81,7 +81,7 @@
     
 
     <h1 id="starting-at-the-start">Starting at the start</h1>
-<p>This is something I&rsquo;ve always done, but it became more apparent to me recently while attempting to build the latest source code for the dotnet core v5.0 runtime and libraries.</p>
+<p>This is something I&rsquo;ve always done, but it became more apparent to me recently while attempting to build the latest source code for the <code>dotnet core v5.0</code> runtime and libraries.</p>
 <p>The goal was to get the binaries built with debugging output so that I could investigate further how lldb and sos work. This was also for a higher goal of integrating dotnet core into a library I am writing for cross-editor debugging called <a href="https://github.com/tide-org">Tide</a>.</p>
 <p>Having read the Docker build instructions <a href="https://github.com/dotnet/runtime/blob/master/docs/workflow/building/coreclr/linux-instructions.md">here</a> and considering it not too difficult or time-consuming, I ventured into getting a build toolchain working that could build the binaries.</p>
 <p>The build was for the <a href="https://github.com/dotnet/runtime/">dotnet runtime</a> where I intended to run the <code>./build.sh</code> command with some target settings to output the biniaries.</p>
@@ -110,12 +110,12 @@
 </ul>
 <p><a href="https://github.com/dotnet/buildtools">https://github.com/dotnet/buildtools</a></p>
 <ul>
-<li>A new set of build tools to supercede <code>buildtools</code></li>
+<li>A new set of build tools to supersede <code>buildtools</code></li>
 </ul>
 <p><a href="https://github.com/dotnet/arcade">https://github.com/dotnet/arcade</a></p>
 <h1 id="light-at-the-end-of-the-tunnel">Light at the end of the tunnel</h1>
 <p>Doing a Google search around keywords to do this build didn&rsquo;t give much information as to how to set up the toolchain (or maybe my Google-fu was off). But I found that by stepping back, and not blindly driving forwards, then looking at the context that the document existed in helped greatly in resolving the issue.</p>
-<p>Somtimes the solution is straightforward and doesn&rsquo;t require such tactics to resolve the issue. Other times, understanding the context around the problem one is attempting to solve can help greatly.</p>
+<p>Sometimes the solution is straightforward and doesn&rsquo;t require such tactics to resolve the issue. Other times, understanding the context around the problem one is attempting to solve can help greatly.</p>
 <p>Sometimes, however, the problem space is so large, or it takes so long to get feedback from the process that alternatives must be entertained.</p>
 <p>It turned out the the <code>dotnet-buildtools-prereqs-docker</code> repo had a <code>Dockerfile</code> of exactly what I was after and the binaries could be built after configuring the docker container the same way.</p>
 <p>It&rsquo;s a useful skill, indeed, to have the perseverence and resourcefulness to not blindly accept what is presented at face value; as often things can be either incorrect or incomplete.</p>
