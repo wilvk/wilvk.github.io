@@ -82,10 +82,10 @@
 
     <h2 id="follow-along-at-home">Follow along at home:</h2>
 <p>The following is based on the docker images and dotnet core application located at the repository <a href="https://github.com/wilvk/dotnet-sos">here</a></p>
-<h2 id="getting-started">Getting started::</h2>
+<h2 id="getting-started">Getting started:</h2>
 <p>To begin with, start up the docker container:</p>
 <pre><code>make llvm
-</code></pre><p>Then when in the container, buiild the solution and start the lldb debugger</p>
+</code></pre><p>Then when in the container, build the solution and start the lldb debugger</p>
 <pre><code>make d-build-debug
 
 make d-llvm-method-breakpoint
@@ -138,7 +138,7 @@ MethodDesc Table
 00007FFF7CE908A0 00007FFF7CF3FF48    JIT console.Program.Main(System.String[])
 00007FFF7CE92690 00007FFF7CF3FF60    JIT console.Program.GetTicksElapsed(Int64)
 </code></pre><p>In the column <code>JIT</code> we can see that our two methods in our application have been JITT-ed at runtime, whereas other methods that are part of this object have not been.</p>
-<h3 id="tracing-an-object-back-to-its-ancestors">tracing an object back to it&rsquo;s ancestors</h3>
+<h2 id="tracing-an-object-back-to-its-ancestors">Tracing an object back to it&rsquo;s ancestors</h2>
 <p>From <code>dumpmt</code>, we can see the value <code>EEClass</code> which is the address of the descriptor for the object <code>console.Program</code>.</p>
 <p>If we then run <code>dumpobj</code> on this address we can see more info about this class.</p>
 <pre><code>(lldb) dumpclass 00007FFF7CF81DC0
@@ -214,7 +214,7 @@ System.Object:
 00007FFF7CE800A0 00007FFF7C48C748   NONE System.Object.Equals(System.Object)
 00007FFF7CE800B8 00007FFF7C48C788   NONE System.Object.GetHashCode()
 
-</code></pre><h3 id="inspecting-other-objects">Inspecting other objects:</h3>
+</code></pre><h3 id="inspecting-other-components">Inspecting other components:</h3>
 <p>From our <code>dumpmt</code> of <code>console.Program</code> earlier, we can use the <code>Module Address</code> to get more details about our application&rsquo;s assembly loaded into memory:</p>
 <pre><code>(lldb) dumpmodule 00007fff7cf3db98
 Name:       /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll
@@ -240,7 +240,9 @@ Name:               /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_deb
 ClassLoader:        0000000000721890
 Module
 00007fff7cf3db98    /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll</p>
-<pre><code></code></pre>
+<pre><code>
+Well, that was fun. I hope you enjoyed following along!
+</code></pre>
 
 </article>
 
