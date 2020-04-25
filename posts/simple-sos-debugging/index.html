@@ -140,7 +140,7 @@ MethodDesc Table
 </code></pre><p>In the column <code>JIT</code> we can see that our two methods in our application have been JITT-ed at runtime, whereas other methods that are part of this object have not been.</p>
 <h2 id="tracing-an-object-back-to-its-ancestors">Tracing an object back to it&rsquo;s ancestors</h2>
 <p>From <code>dumpmt</code>, we can see the value <code>EEClass</code> which is the address of the descriptor for the object <code>console.Program</code>.</p>
-<p>If we then run <code>dumpobj</code> on this address we can see more info about this class.</p>
+<p>If we then run <code>dumpclass</code> on this address we can see more info about this class.</p>
 <pre><code>(lldb) dumpclass 00007FFF7CF81DC0
 Class Name:      console.Program
 mdToken:         0000000002000002
