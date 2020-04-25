@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <copyright>Copyright &amp;copy; 2018 - Willem van Ketwich</copyright>
-    <lastBuildDate>Sat, 18 Apr 2020 14:02:20 +1000</lastBuildDate>
+    <lastBuildDate>Sat, 25 Apr 2020 21:18:10 +1000</lastBuildDate>
     
 	<atom:link href="https://blog.seso.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Simple Sos Debugging</title>
+      <link>https://blog.seso.io/posts/simple-sos-debugging/</link>
+      <pubDate>Sat, 25 Apr 2020 21:18:10 +1000</pubDate>
+      
+      <guid>https://blog.seso.io/posts/simple-sos-debugging/</guid>
+      <description>Follow along at home: The following is based on the docker images and dotnet core application located at the repository here</description>
+    </item>
     
     <item>
       <title>Going Beyond Reading the Docs</title>

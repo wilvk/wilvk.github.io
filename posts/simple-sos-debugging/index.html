@@ -1,0 +1,341 @@
+<!doctype html>
+
+<html lang="en-US">
+
+<head>
+  <title>Will&#39;s Blog</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Willem van Ketwich" />
+  <meta name="generator" content="Hugo 0.69.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>Just a dude that does stuff.. mostly with computers.</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>blog</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/about/">
+                <i class="fa-li fa  fa-lg"></i><span>about</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Simple Sos Debugging</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2020-04-25T21:18:10&#43;10:00">Apr 25, 2020</time>
+        </li>
+        
+        
+
+        
+
+        <li>4 min read</li>
+    </ul>
+</aside>
+    
+
+    <h2 id="follow-along-at-home">Follow along at home:</h2>
+<p>The following is based on the docker images and dotnet core application located at the repository <a href="https://github.com/wilvk/dotnet-sos">here</a></p>
+<h2 id="getting-started">Getting started::</h2>
+<p>To begin with, start up the docker container:</p>
+<pre><code>make llvm
+</code></pre><p>Then when in the container, buiild the solution and start the lldb debugger</p>
+<pre><code>make d-build-debug
+
+make d-llvm-method-breakpoint
+
+</code></pre><p>Once the program has started up, get a list of the clr stack with registers:</p>
+<pre><code>clrstack -r
+</code></pre><p>We will see the <code>Child SP</code> and the <code>IP Call Site</code></p>
+<p>Using the <code>IP Call Site</code>, call <code>ip2md</code> to get the address of the method descriptor for the currently running instruction.</p>
+<pre><code>ip2md 00007FFF7CE92690
+</code></pre><p>This gives us a lot of useful information including the <code>Class</code>, <code>MethodTable</code>, <code>Module</code> and <code>CurrentCodeAddr</code></p>
+<p>e.g.</p>
+<pre><code>(lldb) ip2md 00007FFF7CE92690
+MethodDesc:   00007fff7cf3ff60
+Method Name:          console.Program.GetTicksElapsed(Int64)
+Class:                00007fff7cf81dc0
+MethodTable:          00007fff7cf3ff88
+mdToken:              0000000006000002
+Module:               00007fff7cf3db98
+IsJitted:             yes
+Current CodeAddr:     00007fff7ce92690
+Version History:
+  ILCodeVersion:      0000000000000000
+  ReJIT ID:           0
+  IL Addr:            0000000000000000
+     CodeAddr:           00007fff7ce92690  (MinOptJitted)
+     NativeCodeVersion:  0000000000000000
+Source file:  /work/source/own/test_debug/Program.cs @ 19
+</code></pre><p>Then, if we want to look at all the methods in the object associated with this table, we can dump the method table at the address of <code>MethodTable</code> shown.</p>
+<p>e.g.</p>
+<pre><code>(lldb) dumpmt -MD 00007fff7cf3ff88
+EEClass:         00007FFF7CF81DC0
+Module:          00007FFF7CF3DB98
+Name:            console.Program
+mdToken:         0000000002000002
+File:            /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll
+BaseSize:        0x18
+ComponentSize:   0x0
+DynamicStatics:  false
+ContainsPointers false
+Slots in VTable: 7
+Number of IFaces in IFaceMap: 0
+--------------------------------------
+MethodDesc Table
+           Entry       MethodDesc    JIT Name
+00007FFF7CE80090 00007FFF7C48C728   NONE System.Object.Finalize()
+00007FFF7CE80098 00007FFF7C48C738   NONE System.Object.ToString()
+00007FFF7CE800A0 00007FFF7C48C748   NONE System.Object.Equals(System.Object)
+00007FFF7CE800B8 00007FFF7C48C788   NONE System.Object.GetHashCode()
+00007FFF7CE8BEA0 00007FFF7CF3FF78   NONE console.Program..ctor()
+00007FFF7CE908A0 00007FFF7CF3FF48    JIT console.Program.Main(System.String[])
+00007FFF7CE92690 00007FFF7CF3FF60    JIT console.Program.GetTicksElapsed(Int64)
+</code></pre><p>In the column <code>JIT</code> we can see that our two methods in our application have been JITT-ed at runtime, whereas other methods that are part of this object have not been.</p>
+<h3 id="tracing-an-object-back-to-its-ancestors">tracing an object back to it&rsquo;s ancestors</h3>
+<p>From <code>dumpmt</code>, we can see the value <code>EEClass</code> which is the address of the descriptor for the object <code>console.Program</code>.</p>
+<p>If we then run <code>dumpobj</code> on this address we can see more info about this class.</p>
+<pre><code>(lldb) dumpclass 00007FFF7CF81DC0
+Class Name:      console.Program
+mdToken:         0000000002000002
+File:            /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll
+Parent Class:    00007fff7ce77fe8
+Module:          00007fff7cf3db98
+Method Table:    00007fff7cf3ff88
+Vtable Slots:    4
+Total Method Slots:  5
+Class Attributes:    100000
+NumInstanceFields:   0
+NumStaticFields:     0
+</code></pre><p>We can see the <code>Parent Class</code> address here and <code>Module</code> address. the <code>Method Table</code> is the same as what we just saw.</p>
+<p>Running <code>dumpclass</code> again with the <code>Parent Class</code> address this time, we can see what <code>console.Program</code> is inherited from:</p>
+<pre><code>(lldb) dumpclass 00007fff7ce77fe8
+Class Name:      System.Object
+mdToken:         0000000002000057
+File:            /usr/share/dotnet/shared/Microsoft.NETCore.App/3.1.1/System.Private.CoreLib.dll
+Parent Class:    0000000000000000
+Module:          00007fff7c484020
+Method Table:    00007fff7c48c798
+Vtable Slots:    4
+Total Method Slots:  5
+Class Attributes:    102001
+NumInstanceFields:   0
+NumStaticFields:     0
+</code></pre><p>This shows that <code>parent.Console</code> inherits from <code>System.Object</code>. we can also see that the name of <code>File</code> has changed from our application to <code>System.Private.CoreLib.dll</code>, indicating that it is a dotnet core framework library.</p>
+<p>We can also see that the <code>Parent Class</code> value is <code>0</code> indicating this is the base object of our application (and of the dotnet core framework library).</p>
+<p>If <code>program.Console</code> inherits from <code>System.Object</code>, and our source code only has two methods, namely:</p>
+<ul>
+<li><code>console.Program.Main(System.String[])</code></li>
+<li><code>console.Program.GetTicksElapsed(Int64)</code></li>
+</ul>
+<p>We would expect that the other methods shown earlier must be inherited from <code>System.Object</code>. to verify this, we can run <code>dump -MD</code> with the address of the <code>Method Table</code> shown in order to do so:</p>
+<pre><code>(lldb) dumpmt -MD 00007fff7c48c798
+EEClass:         00007FFF7CE77FE8
+Module:          00007FFF7C484020
+Name:            System.Object
+mdToken:         0000000002000057
+File:            /usr/share/dotnet/shared/Microsoft.NETCore.App/3.1.1/System.Private.CoreLib.dll
+BaseSize:        0x18
+ComponentSize:   0x0
+DynamicStatics:  false
+ContainsPointers false
+Slots in VTable: 9
+Number of IFaces in IFaceMap: 0
+--------------------------------------
+MethodDesc Table
+           Entry       MethodDesc    JIT Name
+00007FFF7CE80090 00007FFF7C48C728   NONE System.Object.Finalize()
+00007FFF7CE80098 00007FFF7C48C738   NONE System.Object.ToString()
+00007FFF7CE800A0 00007FFF7C48C748   NONE System.Object.Equals(System.Object)
+00007FFF7CE800B8 00007FFF7C48C788   NONE System.Object.GetHashCode()
+00007FFF7CE80088 00007FFF7C48C718   NONE System.Object..ctor()
+00007FFF7CE80078 00007FFF7C48C6E8   NONE System.Object.GetType()
+00007FFF7CE80080 00007FFF7C48C700   NONE System.Object.MemberwiseClone()
+00007FFF7CE800A8 00007FFF7C48C758   NONE System.Object.Equals(System.Object, System.Object)
+00007FFF7CE800B0 00007FFF7C48C770   NONE System.Object.ReferenceEquals(System.Object, System.Object)
+</code></pre><p>Looking at the <code>MethodDesc</code> table from the output does infact show the same method names and associated addresses:</p>
+<pre><code>console.Program:
+
+00007FFF7CE80090 00007FFF7C48C728   NONE System.Object.Finalize()
+00007FFF7CE80098 00007FFF7C48C738   NONE System.Object.ToString()
+00007FFF7CE800A0 00007FFF7C48C748   NONE System.Object.Equals(System.Object)
+00007FFF7CE800B8 00007FFF7C48C788   NONE System.Object.GetHashCode()
+
+System.Object:
+
+00007FFF7CE80090 00007FFF7C48C728   NONE System.Object.Finalize()
+00007FFF7CE80098 00007FFF7C48C738   NONE System.Object.ToString()
+00007FFF7CE800A0 00007FFF7C48C748   NONE System.Object.Equals(System.Object)
+00007FFF7CE800B8 00007FFF7C48C788   NONE System.Object.GetHashCode()
+
+</code></pre><h3 id="inspecting-other-objects">Inspecting other objects:</h3>
+<p>From our <code>dumpmt</code> of <code>console.Program</code> earlier, we can use the <code>Module Address</code> to get more details about our application&rsquo;s assembly loaded into memory:</p>
+<pre><code>(lldb) dumpmodule 00007fff7cf3db98
+Name:       /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll
+Attributes: PEFile SupportsUpdateableMethods
+Assembly:   0000000000691510
+PEFile:                  000000000068F7C0
+ModuleId:                00007FFF7CF3E150
+ModuleIndex:             0000000000000001
+LoaderHeap:              0000000000000000
+TypeDefToMethodTableMap: 00007FFF7CF279B0
+TypeRefToMethodTableMap: 00007FFF7CF279C8
+MethodDefToDescMap:      00007FFF7CF27A58
+FieldDefToDescMap:       00007FFF7CF27A78
+MemberRefToDescMap:      0000000000000000
+FileReferencesMap:       00007FFF7CF27A88
+AssemblyReferencesMap:   00007FFF7CF27A90
+MetaData start address:  00007FFFF7E3F2CC (1540 bytes)
+</code></pre><p>Then using the <code>Assembly</code> address, we can dump the assembly details:</p>
+<p>``
+(lldb) dumpassembly 0000000000691510
+Parent Domain:      000000000062d820
+Name:               /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll
+ClassLoader:        0000000000721890
+Module
+00007fff7cf3db98    /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll</p>
+<pre><code></code></pre>
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://blog.seso.io/posts/going-beyond-reading-the-docs/"><i class="fa fa-chevron-circle-left"></i> Going Beyond Reading the Docs</a>
+        </li>
+        
+        
+    </ul>
+</section>
+    
+        <section class="comments-block">
+      <button id="show-comments" style="display: none;"><i class="fa fa-comments-o"></i> Add/View Comments</button>
+</section>
+
+<section id="disqus_thread"></section>
+
+<script>
+      (function () {
+            
+            
+            if (window.location.hostname == "localhost")
+                  return;
+
+            var disqus_loaded = false;
+            var disqus_shortname = 'wilvk-github-io';
+            var disqus_button = document.getElementById("show-comments");
+
+            disqus_button.style.display = "";
+            disqus_button.addEventListener("click", disqus, false);
+
+            function disqus() {
+
+                  if (!disqus_loaded) {
+                        disqus_loaded = true;
+
+                        var e = document.createElement("script");
+                        e.type = "text/javascript";
+                        e.async = true;
+                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
+                        (document.getElementsByTagName("head")[0] ||
+                              document.getElementsByTagName("body")[0])
+                        .appendChild(e);
+
+                        
+                        document.getElementById("show-comments").style.display = "none";
+                  }
+            }
+
+            
+            var hash = window.location.hash.substr(1);
+            if (hash.length > 8) {
+                  if (hash.substring(0, 8) == "comment-") {
+                        disqus();
+                  }
+            }
+
+            
+            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
+                  disqus();
+            }
+      })();
+</script>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright © 2018 - Willem van Ketwich | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://blog.seso.io/js/scripts.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-122351489-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>
