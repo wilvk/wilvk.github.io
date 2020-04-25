@@ -233,16 +233,15 @@ FileReferencesMap:       00007FFF7CF27A88
 AssemblyReferencesMap:   00007FFF7CF27A90
 MetaData start address:  00007FFFF7E3F2CC (1540 bytes)
 </code></pre><p>Then using the <code>Assembly</code> address, we can dump the assembly details:</p>
-<p>``
-(lldb) dumpassembly 0000000000691510
+<pre><code>(lldb) dumpassembly 0000000000691510
 Parent Domain:      000000000062d820
 Name:               /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll
 ClassLoader:        0000000000721890
-Module
-00007fff7cf3db98    /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll</p>
-<pre><code>
-Well, that was fun. I hope you enjoyed following along!
-</code></pre>
+  Module
+  00007fff7cf3db98    /work/source/own/test_debug/bin/Debug/netcoreapp3.1/test_debug.dll
+
+</code></pre><p>Well, that was fun. I hope you enjoyed following along!</p>
+
 
 </article>
 
