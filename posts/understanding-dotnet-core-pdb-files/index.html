@@ -114,7 +114,7 @@
 <p>An abbreviated version of our debug point would be <code>Program.cs:21</code>.</p>
 <p>We then need to determine where in our IL code the same breakpoint would be.</p>
 <p>We start with the <code>.pdb</code> file that is generated when the application is built in Debug mode.</p>
-<p>Using <code>dotnetcore/metadata-tools/src/mdv</code> we can generate an output of all the symbols and mappings in our application.</p>
+<p>Using <code>dotnet/metadata-tools/src/mdv</code> we can generate an output of all the symbols and mappings in our application.</p>
 <h2 id="document">Document</h2>
 <p>Each C# code file is defined in our pdb file as a <code>Document</code>. We know the filename of our source code, so we need to find the matching Document number.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">Document (index: 0x30, size: 24):
@@ -189,7 +189,7 @@
   IL_0018:  ret
 }
 </code></pre></div><h3 id="an-alternative-approach-from-the-pdb-output-to-il">An alternative approach from the pdb output to IL</h3>
-<p><em>An alternative way of cross-referencing between the two would be to check the <code>CustomDebuggingInformation</code> in the pdb output, that gives us the offset directly.
+<p><em>An alternative way of cross-referencing between the two would be to check the <code>CustomDebugInformation</code> in the pdb output, that gives us the offset directly.
 In the PDB output, the method number we found before could then be used to find the offset of our method in the dll metadata.</em></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">CustomDebugInformation (index: 0x37, size: 12):
 ===================================================================================
