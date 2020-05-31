@@ -13,6 +13,16 @@
     
     
     <item>
+      <title>Building Dotnet Diagnostics</title>
+      <link>https://blog.seso.io/posts/building-dotnet-diagnostics/</link>
+      <pubDate>Sun, 31 May 2020 14:18:15 +1000</pubDate>
+      
+      <guid>https://blog.seso.io/posts/building-dotnet-diagnostics/</guid>
+      <description>I&amp;rsquo;m getting an error trying to build dotnet/diagnostics:
+root@85bd9fba8925:/app/diagnostics# dotnet build A compatible installed .NET Core SDK for global.json version [3.</description>
+    </item>
+    
+    <item>
       <title>Understanding Dotnet Core Pdb Files</title>
       <link>https://blog.seso.io/posts/understanding-dotnet-core-pdb-files/</link>
       <pubDate>Sun, 10 May 2020 20:08:21 +1000</pubDate>

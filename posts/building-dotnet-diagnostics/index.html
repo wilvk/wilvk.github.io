@@ -1,0 +1,662 @@
+<!doctype html>
+
+<html lang="en-US">
+
+<head>
+  <title>Will&#39;s Blog</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="The HTML5 Herald" />
+  <meta name="author" content="Willem van Ketwich" />
+  <meta name="generator" content="Hugo 0.69.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+            </h1>
+
+      <ul id="social-media">
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+         
+        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+           
+      </ul>
+      
+      <p><em>Just a dude that does stuff.. mostly with computers.</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/posts/">
+                <i class="fa-li fa  fa-lg"></i><span>blog</span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="" href="https://blog.seso.io/about/">
+                <i class="fa-li fa  fa-lg"></i><span>about</span>
+            </a>
+        </li>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Building Dotnet Diagnostics</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2020-05-31T14:18:15&#43;10:00">May 31, 2020</time>
+        </li>
+        
+        
+
+        
+
+        <li>11 min read</li>
+    </ul>
+</aside>
+    
+
+    <p>I&rsquo;m getting an error trying to build <code>dotnet/diagnostics</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# dotnet build
+A compatible installed .NET Core SDK <span style="color:#66d9ef">for</span> global.json version <span style="color:#f92672">[</span>3.0.100<span style="color:#f92672">]</span> from <span style="color:#f92672">[</span>/app/diagnostics/global.json<span style="color:#f92672">]</span> was not found
+Install the <span style="color:#f92672">[</span>3.0.100<span style="color:#f92672">]</span> .NET Core SDK or update <span style="color:#f92672">[</span>/app/diagnostics/global.json<span style="color:#f92672">]</span> with an installed .NET Core SDK:
+  3.1.200-preview-014999 <span style="color:#f92672">[</span>/app/sdk/.dotnet/sdk<span style="color:#f92672">]</span>
+</code></pre></div><p>Hmmm. ok, let&rsquo;s look at that global.json:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# cat /app/diagnostics/global.json
+<span style="color:#f92672">{</span>
+  <span style="color:#e6db74">&#34;sdk&#34;</span>: <span style="color:#f92672">{</span>
+    <span style="color:#e6db74">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;3.0.100&#34;</span>
+  <span style="color:#f92672">}</span>,
+  <span style="color:#e6db74">&#34;tools&#34;</span>: <span style="color:#f92672">{</span>
+    <span style="color:#e6db74">&#34;dotnet&#34;</span>: <span style="color:#e6db74">&#34;3.0.100&#34;</span>
+  <span style="color:#f92672">}</span>,
+  <span style="color:#e6db74">&#34;msbuild-sdks&#34;</span>: <span style="color:#f92672">{</span>
+    <span style="color:#e6db74">&#34;Microsoft.DotNet.Arcade.Sdk&#34;</span>: <span style="color:#e6db74">&#34;1.0.0-beta.19309.1&#34;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>Ok, so it needs sdk <code>3.0.100</code>. Let&rsquo;s look at our sdk source tag:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk# git branch -vva
+* <span style="color:#f92672">(</span>HEAD detached at v3.1.201<span style="color:#f92672">)</span>                                                       71a6432 Update branding to 3.1.201 servicing <span style="color:#f92672">(</span><span style="color:#75715e">#10782)     master                                                                            77b5b6b [origin/master] Update dependencies from https:/</span>
+/github.com/dotnet/aspnetcore build 20200423.13 <span style="color:#f92672">(</span><span style="color:#75715e">#11404)                                                                                      remotes/origin/HEAD                                                               -&gt; origin/master</span>
+  remotes/origin/ViktorHofer-VSTest-verbosity                                       6b05bc2 Change test assumption to minimum                 remotes/origin/ViktorHofer-vstest-verbosity                                       9c50d39 Change VSTest invocation verbosity to minimal
+  remotes/origin/conflicting-transitive-content-fix                                 e2b610a Fix transitive content conflicts                  remotes/origin/darc-master-10da8ea1-a2de-458e-ba17-131541dfc7db                   64d8c02 Update dependencies from https://github.com/dotn
+et/aspnetcore build 20200423.18
+</code></pre></div><p>Ah, we&rsquo;re on sdk <code>v3.1.201</code>.</p>
+<p>Ok, so what branch is diagnostics on then?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# git branch -vva
+* <span style="color:#f92672">(</span>HEAD detached at 3.1.57502<span style="color:#f92672">)</span>                6767a9a Merge pull request <span style="color:#75715e">#648 from mikem8361/release/stable</span>
+  master                                      197f647 <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Servicing testing fixes <span style="color:#f92672">(</span><span style="color:#75715e">#1061)</span>
+  remotes/origin/ForStable                    b238bd3 Cross dbi <span style="color:#f92672">(</span><span style="color:#75715e">#1036)</span>
+  remotes/origin/HEAD                         -&gt; origin/master
+  remotes/origin/master                       197f647 Servicing testing fixes <span style="color:#f92672">(</span><span style="color:#75715e">#1061)</span>
+  remotes/origin/release/3.0                  0adfc03 Various fixes from master <span style="color:#f92672">(</span><span style="color:#75715e">#554)</span>
+</code></pre></div><p>Strange. So, diagnostics is on <code>3.1.57502</code> but it needs sdk <code>3.0.100</code> to run.</p>
+<p>Ok, so let&rsquo;s look for a tag for sdk <code>3.0.100</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk# git tag
+dev15.0-rc1
+dev15.0-rc2
+dev15.0-rc3
+dev15.0-rc4
+dev15.0.0
+v
+v2.0.2
+v2.0.3
+v2.1.2
+v2.1.200
+v2.1.3
+v2.1.300
+v2.1.300-preview1-62608--07
+v2.1.4
+v2.1.510
+v2.1.607
+v2.2.110
+v2.2.207
+v3.0.100-preview3.19124.1
+v3.0.100-preview7.19354.1
+v3.0.100-preview7.19362.3
+v3.0.100-preview8.19406.1
+v3.0.100-preview9.19426.11
+v3.0.100-rc1.19458.1
+v3.0.100-rc2.19467.3
+v3.0.101
+v3.0.102
+v3.0.103
+v3.0.2
+v3.1.1
+v3.1.100-preview1.19506.1
+v3.1.100-preview2.19528.2
+v3.1.100-preview3.19553.1
+v3.1.100-rtm.19565.4
+v3.1.101
+v3.1.102
+v3.1.103
+v3.1.200
+v3.1.201
+v5.0.100-preview.2.20176.4
+v5.0.100-preview.3.20216.1
+</code></pre></div><p>Hmmm.. where&rsquo;s <code>3.0.100</code>? I guess <code>v3.0.103</code> might have to do. Will this work? Let&rsquo;s check. (And what happened to v4? Too close in numbering to Dotnet Framework v4.5 maybe?)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk# git checkout v3.0.103
+Previous HEAD position was 71a6432... Update branding to 3.1.201 servicing <span style="color:#f92672">(</span><span style="color:#75715e">#10782)</span>
+HEAD is now at 316fbdd... <span style="color:#f92672">[</span>release/3.0.1xx<span style="color:#f92672">]</span> Update dependencies from dotnet/core-setup <span style="color:#f92672">(</span><span style="color:#75715e">#4180)</span>
+
+root@85bd9fba8925:/app/sdk# ./build.sh
+...
+
+...
+  Microsoft.NET.Build.Extensions.Tasks -&gt; /app/sdk/artifacts/bin/Debug/Sdks/Microsoft.NET.Build.Extensions/msbuildExtensions/Microsoft/Microsoft.NET.Build.Extensions/tools/netcoreapp2.1/Microsoft.NET.Build.Extensions.Tasks.dll
+  Microsoft.NET.Build.Extensions.Tasks -&gt; /app/sdk/artifacts/bin/Debug/Sdks/Microsoft.NET.Build.Extensions/msbuildExtensions/Microsoft/Microsoft.NET.Build.Extensions/tools/net472/Microsoft.NET.Build.Extensions.Tasks.dll
+  Microsoft.NET.Build.Extensions.Tasks.UnitTests -&gt; /app/sdk/artifacts/bin/Tests/Microsoft.NET.Build.Extensions.Tasks.UnitTests/Debug/Microsoft.NET.Build.Extensions.Tasks.UnitTests.dll
+
+Build succeeded.
+    <span style="color:#ae81ff">0</span> Warning<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+    <span style="color:#ae81ff">0</span> Error<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+
+Time Elapsed 00:00:34.19
+root@85bd9fba8925:/app/sdk#
+
+</code></pre></div><p>Cool. So It builds. Let&rsquo;s make it the system dotnet sdk.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk# cd .dotnet/
+root@85bd9fba8925:/app/sdk/.dotnet# chmod +x dotnet-install.sh
+root@85bd9fba8925:/app/sdk/.dotnet# ./dotnet-install.sh
+dotnet_install: Warning: Unable to locate zlib. Probable prerequisite missing; install zlib.
+dotnet-install: .NET Core SDK version 3.1.300 is already installed.
+dotnet-install: Adding to current process PATH: <span style="color:#e6db74">`</span>/root/.dotnet<span style="color:#e6db74">`</span>. Note: This change will be visible only when sourcing script.
+dotnet-install: Installation finished successfully.
+</code></pre></div><p>Ok, and what version of dotnet do we have now?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk/.dotnet# dotnet --list-sdks
+3.0.103 <span style="color:#f92672">[</span>/app/sdk/.dotnet/sdk<span style="color:#f92672">]</span>
+3.1.200-preview-014999 <span style="color:#f92672">[</span>/app/sdk/.dotnet/sdk<span style="color:#f92672">]</span>
+</code></pre></div><p>Cool. So it looks like it&rsquo;s listed there now. Great.</p>
+<p>So let&rsquo;s try  building diagnostics again.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# ./build.sh
+  Restore completed in 19.83 ms <span style="color:#66d9ef">for</span> /root/.nuget/packages/microsoft.dotnet.arcade.sdk/1.0.0-beta.19309.1/tools/Tools.proj.
+  Restore completed in 9.25 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.DebugServices/Microsoft.Diagnostics.DebugServices.csproj.
+  Restore completed in 9.72 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/Microsoft.Diagnostics.TestHelpers.csproj.
+  Restore completed in 9.82 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.Tools.RuntimeClient/Microsoft.Diagnostics.Tools.RuntimeClient.
+csproj.
+
+...
+
+ 89%<span style="color:#f92672">]</span> Linking CXX shared library libsos.so
+<span style="color:#f92672">[</span>100%<span style="color:#f92672">]</span> Built target sos
+Install the project...
+-- Install configuration: <span style="color:#e6db74">&#34;DEBUG&#34;</span>
+-- Installing: /app/diagnostics/artifacts/bin/Linux.x64.Debug/./libsosplugin.so
+-- Up-to-date: /app/diagnostics/artifacts/bin/Linux.x64.Debug/./SOS.NETCore.dll
+-- Up-to-date: /app/diagnostics/artifacts/bin/Linux.x64.Debug/./SOS.NETCore.pdb
+-- Up-to-date: /app/diagnostics/artifacts/bin/Linux.x64.Debug/./Microsoft.FileFormats.dll
+-- Up-to-date: /app/diagnostics/artifacts/bin/Linux.x64.Debug/./Microsoft.SymbolStore.dll
+-- Up-to-date: /app/diagnostics/artifacts/bin/Linux.x64.Debug/./System.Reflection.Metadata.dll
+-- Up-to-date: /app/diagnostics/artifacts/bin/Linux.x64.Debug/./System.Collections.Immutable.dll
+-- Installing: /app/diagnostics/artifacts/bin/Linux.x64.Debug/./libsos.so
+-- Up-to-date: /app/diagnostics/artifacts/bin/Linux.x64.Debug/./sosdocsunix.txt
+/app/diagnostics
+Copied SOS to /app/diagnostics/artifacts/bin/dotnet-sos/Debug/netcoreapp2.1/publish/linux-x64
+Copied SOS to /app/diagnostics/artifacts/bin/dotnet-dump/Debug/netcoreapp2.1/publish/linux-x64
+BUILD: Repo sucessfully built.
+BUILD: Product binaries are available at /app/diagnostics/artifacts/bin/Linux.x64.Debug
+</code></pre></div><p>Let&rsquo;s try our dotnet build again.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# dotnet build
+Microsoft <span style="color:#f92672">(</span>R<span style="color:#f92672">)</span> Build Engine version 16.3.2+e481bbf88 <span style="color:#66d9ef">for</span> .NET Core
+Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> Microsoft Corporation. All rights reserved.
+
+MSBUILD : error MSB1011: Specify which project or solution file to use because this folder contains more than one project or solution file.
+</code></pre></div><p>Ok, well that looks better than last time. Let&rsquo;s specify the solution as well this time.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# dotnet build ./diagnostics.sln
+Microsoft <span style="color:#f92672">(</span>R<span style="color:#f92672">)</span> Build Engine version 16.3.2+e481bbf88 <span style="color:#66d9ef">for</span> .NET Core
+Copyright <span style="color:#f92672">(</span>C<span style="color:#f92672">)</span> Microsoft Corporation. All rights reserved.
+
+  Restore completed in 16.26 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/Microsoft.Diagnostics.TestHelpers.csproj.
+  Restore completed in 16.23 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.Tools.RuntimeClient/Microsoft.Diagnostics.Tools.RuntimeClient.csproj.
+  Restore completed in 16.23 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.DebugServices/Microsoft.Diagnostics.DebugServices.csproj.
+  Restore completed in 16.23 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.Repl/Microsoft.Diagnostics.Repl.csproj.
+  Restore completed in 0.79 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/SOS/SOS.Package/SOS.Package.csproj.
+
+  ...
+
+    Microsoft.Diagnostics.Repl -&gt; /app/diagnostics/artifacts/bin/Microsoft.Diagnostics.Repl/Debug/netstandard2.0/Microsoft.Diagnostics.Repl.dll
+  SOS.Hosting -&gt; /app/diagnostics/artifacts/bin/SOS.Hosting/Debug/netstandard2.0/SOS.Hosting.dll
+  dotnet-dump -&gt; /app/diagnostics/artifacts/bin/dotnet-dump/Debug/netcoreapp2.1/dotnet-dump.dll
+  dotnet-counters -&gt; /app/diagnostics/artifacts/bin/dotnet-counters/Debug/netcoreapp2.1/dotnet-counters.dll
+  DotnetCounters.UnitTests -&gt; /app/diagnostics/artifacts/bin/DotnetCounters.UnitTests/Debug/netcoreapp3.0/DotnetCounters.UnitTests.dll
+
+Build succeeded.
+    <span style="color:#ae81ff">0</span> Warning<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+    <span style="color:#ae81ff">0</span> Error<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+
+Time Elapsed 00:00:03.74
+</code></pre></div><p>And I think it&rsquo;s working now. That wasn&rsquo;t too difficult, now, was it?</p>
+<p>Well, let&rsquo;s run our tests, just to be sure.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# ./build.sh --test
+
+  Restore completed in 17.87 ms <span style="color:#66d9ef">for</span> /root/.nuget/packages/microsoft.dotnet.arcade.sdk/1.0.0-beta.19309.1/tools/Tools.proj.
+  Restore completed in 189.66 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.Tools.RuntimeClient/Microsoft.Diagnostics.Tools.RuntimeClien
+t.csproj.
+  Restore completed in 189.81 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.Repl/Microsoft.Diagnostics.Repl.csproj.
+  Restore completed in 189.77 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/Microsoft.Diagnostics.TestHelpers.csproj.
+  Restore completed in 189.6 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.DebugServices/Microsoft.Diagnostics.DebugServices.csproj.
+  Restore completed in 17.88 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/SOS/SOS.Package/SOS.Package.csproj.
+  Restore completed in 22.99 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/SOS/SOS.InstallHelper/SOS.InstallHelper.csproj.
+
+  ...
+
+    Tests succeeded: /app/diagnostics/artifacts/bin/DotnetTrace.UnitTests/Debug/netcoreapp3.0/DotnetTrace.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
+  Tests succeeded: /app/diagnostics/artifacts/bin/DotnetCounters.UnitTests/Debug/netcoreapp3.0/DotnetCounters.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
+  Tests succeeded: /app/diagnostics/artifacts/bin/EventPipe.UnitTests/Debug/netcoreapp3.0/EventPipe.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
+XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
+
+Build FAILED.
+
+XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
+    <span style="color:#ae81ff">0</span> Warning<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+    <span style="color:#ae81ff">1</span> Error<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+
+Time Elapsed 00:00:09.84
+Build failed <span style="color:#f92672">(</span>exit code <span style="color:#e6db74">&#39;1&#39;</span><span style="color:#f92672">)</span>.
+</code></pre></div><p>Hmmm again.. it looks like it needs dotnet sdk v2.0 now. Ok, so let&rsquo;s try building and installing that now.</p>
+<p>Let&rsquo;s use the latest patch version matching 2.0:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk# git checkout v2.0.3
+
+Previous HEAD position was 316fbdd... <span style="color:#f92672">[</span>release/3.0.1xx<span style="color:#f92672">]</span> Update dependencies from dotnet/core-setup <span style="color:#f92672">(</span><span style="color:#75715e">#4180)</span>
+HEAD is now at fc3e52d... Publish the SDK NuGet packages to the Transport Feed <span style="color:#f92672">(</span><span style="color:#75715e">#1687)</span>
+</code></pre></div><p>And build our repository:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk# ./build.sh
+dotnet-install: Calling: machine_has curl
+dotnet-install: Calling: calculate_vars
+dotnet-install: Calling: get_normalized_architecture_from_architecture &lt;auto&gt;
+dotnet-install: Calling: get_machine_architecture
+dotnet-install: Calling: get_normalized_architecture_from_architecture x64
+dotnet-install: normalized_architecture<span style="color:#f92672">=</span>x64
+
+...
+</code></pre></div><p>2 hours later (well not quite), we can install our v2.0 sdk.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk/.dotnet# ./dotnet-install.sh
+
+dotnet_install: Warning: Unable to locate zlib. Probable prerequisite missing; install zlib.
+dotnet-install: .NET Core SDK version 3.1.300 is already installed.
+dotnet-install: Adding to current process PATH: <span style="color:#e6db74">`</span>/root/.dotnet<span style="color:#e6db74">`</span>. Note: This change will be visible only when sourcing script.
+dotnet-install: Installation finished successfully.
+</code></pre></div><p>So let&rsquo;s check it&rsquo;s listed with dotnet:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk/.dotnet# dotnet --list-sdks
+3.0.103 <span style="color:#f92672">[</span>/app/sdk/.dotnet/sdk<span style="color:#f92672">]</span>
+3.1.200-preview-014999 <span style="color:#f92672">[</span>/app/sdk/.dotnet/sdk<span style="color:#f92672">]</span>
+</code></pre></div><p>Well, that&rsquo;s strange. Where is it?</p>
+<p>Let&rsquo;s have a look at our build log for a hint:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">dotnet-install: Extracting zip from https://dotnetcli.azureedge.net/dotnet/Runtime/1.1.2/dotnet-ubuntu.16.04-x64.1.1.2.tar.gz               dotnet-install: Adding to current process PATH: <span style="color:#e6db74">`</span>/app/sdk/.dotnet_cli<span style="color:#e6db74">`</span>. Note: This change will be visible only when sourcing script.
+dotnet-install: Installation finished successfully.
+</code></pre></div><p>Ok, so it looks like it&rsquo;s installed in a different path so the two sdks can be installed side-by-side. Fair enough.</p>
+<p>Let&rsquo;s go to that path and check the version:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk/.dotnet_cli# ./dotnet --version
+2.0.2-vspre-006963
+</code></pre></div><p>Ok, so version <code>v2.0.3</code> of the sdk is built from branch <code>2.0.2-vspre-006963</code>. Maybe this was before pre-release versions were tagged separately.</p>
+<p>So let&rsquo;s try to run our diagnostics tests again.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# ./build.sh --test
+  Restore completed in 29.21 ms <span style="color:#66d9ef">for</span> /root/.nuget/packages/microsoft.dotnet.arcade.sdk/1.0.0-beta.19309.1/tools/Tools.proj.
+  Restore completed in 19.94 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.Tools.RuntimeClient/Microsoft.Diagnostics.Tools.RuntimeClient
+.csproj.
+  Restore completed in 23.06 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.Repl/Microsoft.Diagnostics.Repl.csproj.
+  Restore completed in 25.67 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/Microsoft.Diagnostics.TestHelpers.csproj.
+  Restore completed in 25.33 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/Microsoft.Diagnostics.DebugServices/Microsoft.Diagnostics.DebugServices.csproj.
+  Restore completed in 1.59 ms <span style="color:#66d9ef">for</span> /app/diagnostics/src/SOS/SOS.InstallHelper/SOS.InstallHelper.csproj.
+
+...
+
+  Tests succeeded: /app/diagnostics/artifacts/bin/DotnetCounters.UnitTests/Debug/netcoreapp3.0/DotnetCounters.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
+  Tests succeeded: /app/diagnostics/artifacts/bin/EventPipe.UnitTests/Debug/netcoreapp3.0/EventPipe.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
+XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
+
+Build FAILED.
+
+XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
+    <span style="color:#ae81ff">0</span> Warning<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+    <span style="color:#ae81ff">1</span> Error<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
+
+Time Elapsed 00:00:10.65
+Build failed <span style="color:#f92672">(</span>exit code <span style="color:#e6db74">&#39;1&#39;</span><span style="color:#f92672">)</span>.
+</code></pre></div><p>Hmmm.. still failing for the same reason. It probably doesn&rsquo;t know about sdk v2.0.</p>
+<p>Let&rsquo;s dig a bit deeper into the error log:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# cat /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html
+
+...
+
+
+        00:00.390: <span style="color:#f92672">[</span>40m<span style="color:#f92672">[</span>32minfo<span style="color:#f92672">[</span>39m<span style="color:#f92672">[</span>22m<span style="color:#f92672">[</span>49m: Microsoft.AspNetCore.Routing.EndpointMiddleware<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>
+        00:00.390:       Executing endpoint <span style="color:#e6db74">&#39;/ HTTP: GET&#39;</span>
+        00:00.395: Connecting to pipe SOSRunner.37508.WebApp3
+        Running Process: /app/diagnostics/.dotnet/dotnet /app/diagnostics/artifacts/bin/dotnet-dump/Debug/netcoreapp2.1/publish/dotnet-dump.
+dll collect --process-id <span style="color:#ae81ff">37656</span> --output /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dmp
+        Working Directory:
+        <span style="color:#f92672">{</span>
+            00:00.219: Writing minidump with heap to /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dm
+p
+        00:03.947: Writing minidump with heap to file /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.d
+mp
+        00:03.947: Written <span style="color:#ae81ff">188710912</span> bytes <span style="color:#f92672">(</span><span style="color:#ae81ff">46072</span> pages<span style="color:#f92672">)</span> to core file
+            00:03.550: Complete
+        <span style="color:#f92672">}</span>
+        Exit code: <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span> 00:03.560 elapsed<span style="color:#f92672">)</span>
+        <span style="color:#f92672">}</span>
+        Killing process: 00:03.961: Kill<span style="color:#f92672">()</span> was called
+    <span style="color:#f92672">}</span>                                                                                                                                           Exit code: <span style="color:#ae81ff">137</span> <span style="color:#f92672">(</span> 00:03.975 elapsed<span style="color:#f92672">)</span>
+
+<span style="color:#f92672">}</span>                                                                                                                                           SOSRunner processing SOS.WebApp3
+<span style="color:#f92672">{</span>                                                                                                                                           System.IO.FileNotFoundException: Native debugger path not set or does not exist:
+   at SOSRunner.StartDebugger<span style="color:#f92672">(</span>TestInformation information, DebuggerAction action<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOSRunner.cs:lin
+e <span style="color:#ae81ff">413</span>
+
+...
+
+</code></pre></div><p>It looks like one of the tests is running a process:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">/app/diagnostics/.dotnet/dotnet /app/diagnostics/artifacts/bin/dotnet-dump/Debug/netcoreapp2.1/publish/dotnet-dump.
+dll collect --process-id <span style="color:#ae81ff">37656</span> --output /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dmp
+</code></pre></div><p>So firstly, let&rsquo;s try running that single project&rsquo;s tests:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# cd /app/diagnostics/src/SOS/SOS.UnitTests
+root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# dotnet test
+Test run <span style="color:#66d9ef">for</span> /app/diagnostics/artifacts/bin/SOS.UnitTests/Debug/netcoreapp2.0/SOS.UnitTests.dll<span style="color:#f92672">(</span>.NETCoreApp,Version<span style="color:#f92672">=</span>v2.0<span style="color:#f92672">)</span>
+Microsoft <span style="color:#f92672">(</span>R<span style="color:#f92672">)</span> Test Execution Command Line Tool Version 16.3.0
+Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+
+A total of <span style="color:#ae81ff">1</span> test files matched the specified pattern.
+
+<span style="color:#f92672">[</span>xUnit.net 00:00:00.85<span style="color:#f92672">]</span>     SOS.TaskNestedException<span style="color:#f92672">(</span>config: projectk.sdk.prebuilt.5.0.0-alpha.1.19564.1<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>FAIL<span style="color:#f92672">]</span>
+
+...
+
+  X SOS.LLDBPluginTests<span style="color:#f92672">(</span>config: projectk.sdk.prebuilt.3.0.0<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>3ms<span style="color:#f92672">]</span>
+  Error Message:
+   System.ArgumentException : LLDB_PATH environment variable not set
+  Stack Trace:
+     at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">245</span>
+--- End of stack trace from previous location where exception was thrown ---
+  Standard Output Messages:
+ Starting SOS.LLDBPluginTests
+ <span style="color:#f92672">{</span>
+ System.ArgumentException: LLDB_PATH environment variable not set
+    at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">245</span>
+ <span style="color:#f92672">}</span>
+
+
+                                                                                                                                              X SOS.LLDBPluginTests<span style="color:#f92672">(</span>config: projectk.sdk.prebuilt.2.1.14<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>6ms<span style="color:#f92672">]</span>
+  Error Message:
+   System.ArgumentException : LLDB_PATH environment variable not set
+  Stack Trace:
+     at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">245</span>
+--- End of stack trace from previous location where exception was thrown ---
+  Standard Output Messages:
+ Starting SOS.LLDBPluginTests
+ <span style="color:#f92672">{</span>
+ System.ArgumentException: LLDB_PATH environment variable not set
+    at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">245</span>
+ <span style="color:#f92672">}</span>
+
+
+
+Test Run Failed.
+Total tests: <span style="color:#ae81ff">47</span>
+     Failed: <span style="color:#ae81ff">47</span>
+ Total time: 9.8197 Seconds
+</code></pre></div><p>Ohhh.. everything failed that time.. Hmmm..</p>
+<p>Well, what is the error then?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  Error Message:
+  System.ArgumentException : LLDB_PATH environment variable not set
+ Stack Trace:
+    at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">245</span>
+--- End of stack trace from previous location where exception was thrown ---
+</code></pre></div><p>Ah, it looks like there is a dependency on lldb.</p>
+<p>Let&rsquo;s look at the offending file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# cat -n SOS.cs
+
+...
+
+   <span style="color:#ae81ff">244</span>              // Get lldb path
+   <span style="color:#ae81ff">245</span>              arguments.AppendFormat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;--lldb {0} &#34;</span>, Environment.GetEnvironmentVariable<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;LLDB_PATH&#34;</span><span style="color:#f92672">)</span> ?? throw new ArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;LL
+</span><span style="color:#e6db74">DB_PATH environment variable not set&#34;</span><span style="color:#f92672">))</span>;
+
+...
+
+</code></pre></div><p>Does it just need to be set? Let&rsquo;s try.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">
+root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# export LLDB_PATH
+
+root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# dotnet test                                                                       Test run <span style="color:#66d9ef">for</span> /app/diagnostics/artifacts/bin/SOS.UnitTests/Debug/netcoreapp2.0/SOS.UnitTests.dll<span style="color:#f92672">(</span>.NETCoreApp,Version<span style="color:#f92672">=</span>v2.0<span style="color:#f92672">)</span>                   Microsoft <span style="color:#f92672">(</span>R<span style="color:#f92672">)</span> Test Execution Command Line Tool Version 16.3.0
+Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+
+...
+
+  X SOS.LLDBPluginTests<span style="color:#f92672">(</span>config: projectk.sdk.prebuilt.2.1.14<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>52ms<span style="color:#f92672">]</span>
+  Error Message:
+   System.Exception : Process returned exit code 2, expected <span style="color:#ae81ff">0</span>
+Command Line: /usr/bin/python /app/diagnostics/src/SOS/lldbplugin.tests/test_libsosplugin.py --lldb  --host <span style="color:#e6db74">&#34;/app/diagnostics/.dotnet/dotnet --fx-version 2.1.14 &#34;</span> --plugin /app/diagnostics/artifacts/bin/Linux.x64.Debug/libsosplugin.so --logfiledir /app/diagnostics/artifacts/TestResults/Debug/sos.unittests_2020_05_29_01_35_52_2983/2.1.14 --assembly /app/diagnostics/artifacts/bin/TestDebuggee/Debug/netcoreapp2.1/TestDebuggee.dll
+Working Directory: /app/diagnostics/src/SOS/lldbplugin.tests
+  Stack Trace:
+     at Microsoft.Diagnostics.TestHelpers.ProcessRunner.InternalWaitForExit<span style="color:#f92672">(</span>Task<span style="color:#e6db74">`</span><span style="color:#ae81ff">1</span> startProcessTask, Task stdOutTask, Task stdErrTask<span style="color:#f92672">)</span> in /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/ProcessRunner.cs:line <span style="color:#ae81ff">436</span>
+   at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">286</span>
+--- End of stack trace from previous location where exception was thrown ---
+  Standard Output Messages:
+ Starting SOS.LLDBPluginTests
+ <span style="color:#f92672">{</span>
+     Running Process: /usr/bin/python /app/diagnostics/src/SOS/lldbplugin.tests/test_libsosplugin.py --lldb  --host <span style="color:#e6db74">&#34;/app/diagnostics/.dotnet/dotnet --fx-version 2.1.14 &#34;</span> --plugin /app/diagnostics/artifacts/bin/Linux.x64.Debug/libsosplugin.so --logfiledir /app/diagnostics/artifacts/TestResults/Debug/sos.unittests_2020_05_29_01_35_52_2983/2.1.14 --assembly /app/diagnostics/artifacts/bin/TestDebuggee/Debug/netcoreapp2.1/TestDebuggee.dll
+     Working Directory: /app/diagnostics/src/SOS/lldbplugin.tests
+     Additional Environment Variables: COMPlus_LogFacility<span style="color:#f92672">=</span>0xffffffbf, COMPlus_LogLevel<span style="color:#f92672">=</span>6, COMPlus_StressLog<span style="color:#f92672">=</span>1, COMPlus_StressLogSize<span style="color:#f92672">=</span><span style="color:#ae81ff">65536</span>
+     <span style="color:#f92672">{</span>
+         STDERROR: 00:00.032: usage: test_libsosplugin.py <span style="color:#f92672">[</span>-h<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--lldb LLDB<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--host HOST<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--plugin PLUGIN<span style="color:#f92672">]</span>
+         STDERROR: 00:00.032:                             <span style="color:#f92672">[</span>--logfiledir LOGFILEDIR<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--assembly ASSEMBLY<span style="color:#f92672">]</span>
+         STDERROR: 00:00.032:                             <span style="color:#f92672">[</span>--timeout TIMEOUT<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--regex REGEX<span style="color:#f92672">]</span>
+         STDERROR: 00:00.032:                             <span style="color:#f92672">[</span>--repeat REPEAT<span style="color:#f92672">]</span>
+         STDERROR: 00:00.032:                             <span style="color:#f92672">[</span>unittest_args <span style="color:#f92672">[</span>unittest_args ...<span style="color:#f92672">]]</span>
+         STDERROR: 00:00.032: test_libsosplugin.py: error: argument --lldb: expected one argument
+     <span style="color:#f92672">}</span>
+     Exit code: <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span> 00:00.036 elapsed<span style="color:#f92672">)</span>
+
+ System.Exception: Process returned exit code 2, expected <span style="color:#ae81ff">0</span>
+ Command Line: /usr/bin/python /app/diagnostics/src/SOS/lldbplugin.tests/test_libsosplugin.py --lldb  --host <span style="color:#e6db74">&#34;/app/diagnostics/.dotnet/dotnet --fx-version 2.1.14 &#34;</span> --plugin /app/diagnostics/artifacts/bin/Linux.x64.Debug/libsosplugin.so --logfiledir /app/diagnostics/artifacts/TestResults/Debug/sos.unittests_2020_05_29_01_35_52_2983/2.1.14 --assembly /app/diagnostics/artifacts/bin/TestDebuggee/Debug/netcoreapp2.1/TestDebuggee.dll
+ Working Directory: /app/diagnostics/src/SOS/lldbplugin.tests
+    at Microsoft.Diagnostics.TestHelpers.ProcessRunner.InternalWaitForExit<span style="color:#f92672">(</span>Task<span style="color:#e6db74">`</span><span style="color:#ae81ff">1</span> startProcessTask, Task stdOutTask, Task stdErrTask<span style="color:#f92672">)</span> in /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/ProcessRunner.cs:line <span style="color:#ae81ff">436</span>
+    at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">286</span>
+ <span style="color:#f92672">}</span>
+
+
+
+Test Run Failed.
+Total tests: <span style="color:#ae81ff">47</span>
+     Failed: <span style="color:#ae81ff">47</span>
+ Total time: 9.6904 Seconds
+
+</code></pre></div><p>It does need to be set, but now we get another error later on:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# cat -n /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs
+
+...
+
+  <span style="color:#ae81ff">285</span>              // Wait <span style="color:#66d9ef">for</span> the debuggee to finish
+  <span style="color:#ae81ff">286</span>              await processRunner.WaitForExit<span style="color:#f92672">()</span>;
+</code></pre></div><p>So, this looks like a bit of a dead-end and we should probably install lldb and see if that resolves it. But, what version of lldb should we install? Let&rsquo;s try the default version (lldb-8).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# apt-get update -y <span style="color:#f92672">&amp;&amp;</span> apt-get install -y llvm-8 lldb-8
+Hit:2 http://security.ubuntu.com/ubuntu xenial-security InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu xenial InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu xenial-updates InRelease
+Hit:5 https://apt.kitware.com/ubuntu xenial InRelease
+Hit:6 http://archive.ubuntu.com/ubuntu xenial-backports InRelease
+Hit:1 https://apt.llvm.org/xenial llvm-toolchain-xenial-9 InRelease
+
+
+...
+
+Preparing to unpack .../lldb-8_1%3a8-3~ubuntu16.04.1_amd64.deb ...
+Unpacking lldb-8 <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1<span style="color:#f92672">)</span> ...
+Processing triggers <span style="color:#66d9ef">for</span> libc-bin <span style="color:#f92672">(</span>2.23-0ubuntu11<span style="color:#f92672">)</span> ...
+Setting up libllvm8:amd64 <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1<span style="color:#f92672">)</span> ...
+Setting up liblldb-8 <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1<span style="color:#f92672">)</span> ...
+Setting up llvm-8-runtime <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1<span style="color:#f92672">)</span> ...
+Setting up llvm-8 <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1<span style="color:#f92672">)</span> ...
+Setting up llvm-8-dev <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1<span style="color:#f92672">)</span> ...
+Setting up python-lldb-8 <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1<span style="color:#f92672">)</span> ...
+Setting up lldb-8 <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1<span style="color:#f92672">)</span> ...
+Processing triggers <span style="color:#66d9ef">for</span> libc-bin <span style="color:#f92672">(</span>2.23-0ubuntu11<span style="color:#f92672">)</span> ...
+</code></pre></div><p>Cool. So let&rsquo;s try again:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# export LLDB_PATH<span style="color:#f92672">=</span>/usr/bin/lldb-8                                                  root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# dotnet test
+Test run <span style="color:#66d9ef">for</span> /app/diagnostics/artifacts/bin/SOS.UnitTests/Debug/netcoreapp2.0/SOS.UnitTests.dll<span style="color:#f92672">(</span>.NETCoreApp,Version<span style="color:#f92672">=</span>v2.0<span style="color:#f92672">)</span>
+Microsoft <span style="color:#f92672">(</span>R<span style="color:#f92672">)</span> Test Execution Command Line Tool Version 16.3.0                                                                               Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> Microsoft Corporation.  All rights reserved.
+                                                                                                                                            Starting test execution, please wait...
+                                                                                                                                            A total of <span style="color:#ae81ff">1</span> test files matched the specified pattern.
+                                                                                                                                            <span style="color:#f92672">[</span>xUnit.net 00:05:29.24<span style="color:#f92672">]</span>     SOS.StackAndOtherTests<span style="color:#f92672">(</span>config: projectk.cli.5.0.0-alpha.1.19564.1<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>FAIL<span style="color:#f92672">]</span>
+                                                                                                                                              X SOS.StackAndOtherTests<span style="color:#f92672">(</span>config: projectk.cli.5.0.0-alpha.1.19564.1<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>39s 342ms<span style="color:#f92672">]</span>
+  Error Message:
+   Microsoft.Diagnostics.TestHelpers.TestStepException : The Build Debuggee test step failed.
+Original Error: Process returned exit code 1, expected <span style="color:#ae81ff">0</span>
+Command Line: /app/diagnostics/.dotnet/dotnet restore --configfile /app/diagnostics/artifacts/Debuggees/embedded/SymbolTestApp/NuGet.config
+--packages <span style="color:#e6db74">&#34;/root/.nuget/packages&#34;</span> /p:RuntimeFrameworkVersion<span style="color:#f92672">=</span>3.0.0 /p:BuildProjectFramework<span style="color:#f92672">=</span>netcoreapp3.0 /p:DebugType<span style="color:#f92672">=</span>embedded            Working Directory: /app/diagnostics/artifacts/Debuggees/embedded/SymbolTestApp
+   at Microsoft.Diagnostics.TestHelpers.ProcessRunner.InternalWaitForExit<span style="color:#f92672">(</span>Task<span style="color:#e6db74">`</span><span style="color:#ae81ff">1</span> startProcessTask, Task stdOutTask, Task stdErrTask<span style="color:#f92672">)</span> in /app
+/diagnostics/src/Microsoft.Diagnostics.TestHelpers/ProcessRunner.cs:line <span style="color:#ae81ff">436</span>                                                                   at Microsoft.Diagnostics.TestHelpers.DotNetBuildDebuggeeTestStep.Restore<span style="color:#f92672">(</span>String extraArgs, ITestOutputHelper output<span style="color:#f92672">)</span> in /app/diagnostics/
+src/Microsoft.Diagnostics.TestHelpers/DotNetBuildDebuggeeTestStep.cs:line <span style="color:#ae81ff">208</span>
+
+</code></pre></div><p>.. an hour passes&hellip;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">
+
+ <span style="color:#f92672">}</span>
+ SOSRunner processing SOS.Overflow
+ <span style="color:#f92672">{</span>
+ System.IO.FileNotFoundException: Native debugger path not set or does not exist:
+    at SOSRunner.StartDebugger<span style="color:#f92672">(</span>TestInformation information, DebuggerAction action<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOSRunner.cs:line <span style="color:#ae81ff">413</span>
+
+
+                                                                                                                                            <span style="color:#f92672">[</span>xUnit.net 00:08:44.29<span style="color:#f92672">]</span>     SOS.WebApp <span style="color:#f92672">[</span>FAIL<span style="color:#f92672">]</span>
+                                                                                                                                              X SOS.WebApp <span style="color:#f92672">[</span>1ms<span style="color:#f92672">]</span>
+  Error Message:
+   System.InvalidOperationException : The test method expected <span style="color:#ae81ff">1</span> parameter value, but <span style="color:#ae81ff">0</span> parameter values were provided.
+
+
+Test Run Failed.
+Total tests: <span style="color:#ae81ff">47</span>
+     Passed: <span style="color:#ae81ff">41</span>
+     Failed: <span style="color:#ae81ff">6</span>
+ Total time: 16.5891 Minutes
+
+</code></pre></div><p>Ok, so only 6 out of 47 failed this time. That&rsquo;s some progress.</p>
+<p>But why did the 6 fail? I&rsquo;ll look at that in the next blog post.</p>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="https://blog.seso.io/posts/understanding-dotnet-core-pdb-files/"><i class="fa fa-chevron-circle-left"></i> Understanding Dotnet Core Pdb Files</a>
+        </li>
+        
+        
+    </ul>
+</section>
+    
+        <section class="comments-block">
+      <button id="show-comments" style="display: none;"><i class="fa fa-comments-o"></i> Add/View Comments</button>
+</section>
+
+<section id="disqus_thread"></section>
+
+<script>
+      (function () {
+            
+            
+            if (window.location.hostname == "localhost")
+                  return;
+
+            var disqus_loaded = false;
+            var disqus_shortname = 'wilvk-github-io';
+            var disqus_button = document.getElementById("show-comments");
+
+            disqus_button.style.display = "";
+            disqus_button.addEventListener("click", disqus, false);
+
+            function disqus() {
+
+                  if (!disqus_loaded) {
+                        disqus_loaded = true;
+
+                        var e = document.createElement("script");
+                        e.type = "text/javascript";
+                        e.async = true;
+                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
+                        (document.getElementsByTagName("head")[0] ||
+                              document.getElementsByTagName("body")[0])
+                        .appendChild(e);
+
+                        
+                        document.getElementById("show-comments").style.display = "none";
+                  }
+            }
+
+            
+            var hash = window.location.hash.substr(1);
+            if (hash.length > 8) {
+                  if (hash.substring(0, 8) == "comment-") {
+                        disqus();
+                  }
+            }
+
+            
+            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
+                  disqus();
+            }
+      })();
+</script>
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6>Copyright © 2018 - Willem van Ketwich | 
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+    </footer>
+</div>
+<script src="https://blog.seso.io/js/scripts.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-122351489-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>
