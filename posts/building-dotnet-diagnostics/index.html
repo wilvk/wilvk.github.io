@@ -100,11 +100,19 @@ Install the <span style="color:#f92672">[</span>3.0.100<span style="color:#f9267
 <span style="color:#f92672">}</span>
 </code></pre></div><p>Ok, so it needs sdk <code>3.0.100</code>. Let&rsquo;s look at our sdk source tag:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk# git branch -vva
-* <span style="color:#f92672">(</span>HEAD detached at v3.1.201<span style="color:#f92672">)</span>                                                       71a6432 Update branding to 3.1.201 servicing <span style="color:#f92672">(</span><span style="color:#75715e">#10782)     master                                                                            77b5b6b [origin/master] Update dependencies from https:/</span>
-/github.com/dotnet/aspnetcore build 20200423.13 <span style="color:#f92672">(</span><span style="color:#75715e">#11404)                                                                                      remotes/origin/HEAD                                                               -&gt; origin/master</span>
-  remotes/origin/ViktorHofer-VSTest-verbosity                                       6b05bc2 Change test assumption to minimum                 remotes/origin/ViktorHofer-vstest-verbosity                                       9c50d39 Change VSTest invocation verbosity to minimal
-  remotes/origin/conflicting-transitive-content-fix                                 e2b610a Fix transitive content conflicts                  remotes/origin/darc-master-10da8ea1-a2de-458e-ba17-131541dfc7db                   64d8c02 Update dependencies from https://github.com/dotn
-et/aspnetcore build 20200423.18
+  * <span style="color:#f92672">(</span>HEAD detached at v3.1.201<span style="color:#f92672">)</span>
+      71a6432 Update branding to 3.1.201 servicing <span style="color:#f92672">(</span><span style="color:#75715e">#10782)</span>
+  master
+      77b5b6b <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Update dependencies from https://github.com/dotnet/aspnetcore build 20200423.13 <span style="color:#f92672">(</span><span style="color:#75715e">#11404)</span>
+  remotes/origin/HEAD -&gt; origin/master
+  remotes/origin/ViktorHofer-VSTest-verbosity
+      6b05bc2 Change test assumption to minimum
+  remotes/origin/ViktorHofer-vstest-verbosity
+      9c50d39 Change VSTest invocation verbosity to minimal
+  remotes/origin/conflicting-transitive-content-fix
+      e2b610a Fix transitive content conflicts
+  remotes/origin/darc-master-10da8ea1-a2de-458e-ba17-131541dfc7db
+      64d8c02 Update dependencies from https://github.com/dotnet/aspnetcore build 20200423.18
 </code></pre></div><p>Ah, we&rsquo;re on sdk <code>v3.1.201</code>.</p>
 <p>Ok, so what branch is diagnostics on then?</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics# git branch -vva
