@@ -92,19 +92,13 @@
 <p>This can become quite tedious if you are doing many changes and want to keep synchronised between the local source path and the Vim plugin.</p>
 <h2 id="referencing-a-local-repo-and-creating-a-git-remote-for-pushing-to">Referencing a local repo and creating a git remote for pushing to</h2>
 <p>An alternative approach I have found is, after creating your plugin&rsquo;s repository, to:</p>
-<ul>
-<li>Clone the plugin repository to your source path as you normally would:</li>
-</ul>
+<p>Clone the plugin repository to your source path as you normally would:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd ~/source/wilvk
 $ git clone https://github.com/wilvk/NERDTreeWindowResizer
-</code></pre></div><ul>
-<li>Then, make a symbolic link to your plugin source code in the <code>~/.vim/bundle</code> path.</li>
-</ul>
+</code></pre></div><p>Then, make a symbolic link to your plugin source code in the <code>~/.vim/bundle</code> path.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd ~/.vim/bundle
 $ ln -s ~/source/wilvk/NERDTreeWindowResizer ~/.vim/bundle/NERDTreeWindowResizer
-</code></pre></div><ul>
-<li>Back in the plugin source path, we need to make changes to our local repository remotes:</li>
-</ul>
+</code></pre></div><p>Back in the plugin source path, we need to make changes to our local repository remotes:</p>
 <p>Firstly, we change to our source code path and see what our current remotes are with <code>git remote -v</code>:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd ~/source/wilvk/NERDTreeWindowResizer
 $ git remote -v
