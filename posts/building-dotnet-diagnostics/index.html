@@ -158,7 +158,8 @@ v3.1.200
 v3.1.201
 v5.0.100-preview.2.20176.4
 v5.0.100-preview.3.20216.1
-</code></pre></div><p>Hmmm.. where&rsquo;s <code>3.0.100</code>? I guess <code>v3.0.103</code> might have to do. Will this work? Let&rsquo;s check. (And what happened to v4? Too close in numbering to Dotnet Framework v4.5 maybe?)</p>
+</code></pre></div><p>Hmmm.. where&rsquo;s <code>3.0.100</code>? I guess <code>v3.0.103</code> might have to do. Will this work? Let&rsquo;s check.</p>
+<p>(And what happened to v4? Too close in numbering to Dotnet Framework v4.5 maybe?)</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/sdk# git checkout v3.0.103
 Previous HEAD position was 71a6432... Update branding to 3.1.201 servicing <span style="color:#f92672">(</span><span style="color:#75715e">#10782)</span>
 HEAD is now at 316fbdd... <span style="color:#f92672">[</span>release/3.0.1xx<span style="color:#f92672">]</span> Update dependencies from dotnet/core-setup <span style="color:#f92672">(</span><span style="color:#75715e">#4180)</span>
@@ -267,11 +268,13 @@ t.csproj.
     Tests succeeded: /app/diagnostics/artifacts/bin/DotnetTrace.UnitTests/Debug/netcoreapp3.0/DotnetTrace.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
   Tests succeeded: /app/diagnostics/artifacts/bin/DotnetCounters.UnitTests/Debug/netcoreapp3.0/DotnetCounters.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
   Tests succeeded: /app/diagnostics/artifacts/bin/EventPipe.UnitTests/Debug/netcoreapp3.0/EventPipe.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
-XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
+XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> ...
+  <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
 
 Build FAILED.
 
-XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
+XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html ...
+  <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
     <span style="color:#ae81ff">0</span> Warning<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
     <span style="color:#ae81ff">1</span> Error<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
 
@@ -306,7 +309,8 @@ dotnet-install: Installation finished successfully.
 3.1.200-preview-014999 <span style="color:#f92672">[</span>/app/sdk/.dotnet/sdk<span style="color:#f92672">]</span>
 </code></pre></div><p>Well, that&rsquo;s strange. Where is it?</p>
 <p>Let&rsquo;s have a look at our build log for a hint:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">dotnet-install: Extracting zip from https://dotnetcli.azureedge.net/dotnet/Runtime/1.1.2/dotnet-ubuntu.16.04-x64.1.1.2.tar.gz               dotnet-install: Adding to current process PATH: <span style="color:#e6db74">`</span>/app/sdk/.dotnet_cli<span style="color:#e6db74">`</span>. Note: This change will be visible only when sourcing script.
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">dotnet-install: Extracting zip from https://dotnetcli.azureedge.net/dotnet/Runtime/1.1.2/dotnet-ubuntu.16.04-x64.1.1.2.tar.gz
+dotnet-install: Adding to current process PATH: <span style="color:#e6db74">`</span>/app/sdk/.dotnet_cli<span style="color:#e6db74">`</span>. Note: This change will be visible only when sourcing script.
 dotnet-install: Installation finished successfully.
 </code></pre></div><p>Ok, so it looks like it&rsquo;s installed in a different path so the two sdks can be installed side-by-side. Fair enough.</p>
 <p>Let&rsquo;s go to that path and check the version:</p>
@@ -327,11 +331,13 @@ dotnet-install: Installation finished successfully.
 
   Tests succeeded: /app/diagnostics/artifacts/bin/DotnetCounters.UnitTests/Debug/netcoreapp3.0/DotnetCounters.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
   Tests succeeded: /app/diagnostics/artifacts/bin/EventPipe.UnitTests/Debug/netcoreapp3.0/EventPipe.UnitTests.dll <span style="color:#f92672">[</span>netcoreapp3.0|x64<span style="color:#f92672">]</span>
-XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
+XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> ...
+  <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
 
 Build FAILED.
 
-XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
+XUnit : error : Tests failed: /app/diagnostics/artifacts/TestResults/Debug/SOS.UnitTests_netcoreapp2.0_x64.html <span style="color:#f92672">[</span>netcoreapp2.0|x64<span style="color:#f92672">]</span>
+  <span style="color:#f92672">[</span>/app/diagnostics/src/SOS/SOS.UnitTests/SOS.UnitTests.csproj<span style="color:#f92672">]</span>
     <span style="color:#ae81ff">0</span> Warning<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
     <span style="color:#ae81ff">1</span> Error<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>
 
@@ -343,36 +349,35 @@ Build failed <span style="color:#f92672">(</span>exit code <span style="color:#e
 
 ...
 
-
         00:00.390: <span style="color:#f92672">[</span>40m<span style="color:#f92672">[</span>32minfo<span style="color:#f92672">[</span>39m<span style="color:#f92672">[</span>22m<span style="color:#f92672">[</span>49m: Microsoft.AspNetCore.Routing.EndpointMiddleware<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>
         00:00.390:       Executing endpoint <span style="color:#e6db74">&#39;/ HTTP: GET&#39;</span>
         00:00.395: Connecting to pipe SOSRunner.37508.WebApp3
-        Running Process: /app/diagnostics/.dotnet/dotnet /app/diagnostics/artifacts/bin/dotnet-dump/Debug/netcoreapp2.1/publish/dotnet-dump.
-dll collect --process-id <span style="color:#ae81ff">37656</span> --output /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dmp
+        Running Process: /app/diagnostics/.dotnet/dotnet /app/diagnostics/artifacts/bin/dotnet-dump/Debug/netcoreapp2.1/publish/dotnet-dump.dll ...
+           collect --process-id <span style="color:#ae81ff">37656</span> --output /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dmp
         Working Directory:
         <span style="color:#f92672">{</span>
-            00:00.219: Writing minidump with heap to /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dm
-p
-        00:03.947: Writing minidump with heap to file /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.d
-mp
+            00:00.219: Writing minidump with heap to /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dmp
+        00:03.947: Writing minidump with heap to file /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dmp
         00:03.947: Written <span style="color:#ae81ff">188710912</span> bytes <span style="color:#f92672">(</span><span style="color:#ae81ff">46072</span> pages<span style="color:#f92672">)</span> to core file
             00:03.550: Complete
         <span style="color:#f92672">}</span>
         Exit code: <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span> 00:03.560 elapsed<span style="color:#f92672">)</span>
         <span style="color:#f92672">}</span>
         Killing process: 00:03.961: Kill<span style="color:#f92672">()</span> was called
-    <span style="color:#f92672">}</span>                                                                                                                                           Exit code: <span style="color:#ae81ff">137</span> <span style="color:#f92672">(</span> 00:03.975 elapsed<span style="color:#f92672">)</span>
+    <span style="color:#f92672">}</span>
+    Exit code: <span style="color:#ae81ff">137</span> <span style="color:#f92672">(</span> 00:03.975 elapsed<span style="color:#f92672">)</span>
 
-<span style="color:#f92672">}</span>                                                                                                                                           SOSRunner processing SOS.WebApp3
-<span style="color:#f92672">{</span>                                                                                                                                           System.IO.FileNotFoundException: Native debugger path not set or does not exist:
-   at SOSRunner.StartDebugger<span style="color:#f92672">(</span>TestInformation information, DebuggerAction action<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOSRunner.cs:lin
-e <span style="color:#ae81ff">413</span>
+<span style="color:#f92672">}</span>
+   SOSRunner processing SOS.WebApp3
+<span style="color:#f92672">{</span>
+   System.IO.FileNotFoundException: Native debugger path not set or does not exist:
+   at SOSRunner.StartDebugger<span style="color:#f92672">(</span>TestInformation information, DebuggerAction action<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOSRunner.cs:line <span style="color:#ae81ff">413</span>
 
 ...
 
 </code></pre></div><p>It looks like one of the tests is running a process:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">/app/diagnostics/.dotnet/dotnet /app/diagnostics/artifacts/bin/dotnet-dump/Debug/netcoreapp2.1/publish/dotnet-dump.
-dll collect --process-id <span style="color:#ae81ff">37656</span> --output /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dmp
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">/app/diagnostics/.dotnet/dotnet /app/diagnostics/artifacts/bin/dotnet-dump/Debug/netcoreapp2.1/publish/dotnet-dump.dll ...
+collect --process-id <span style="color:#ae81ff">37656</span> --output /app/diagnostics/artifacts/tmp/Debug/dumps/ProjectK/3.0.0/netcoreapp3.0/WebApp3.Heap.dmp
 </code></pre></div><p>So firstly, let&rsquo;s try running that single project&rsquo;s tests:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# cd /app/diagnostics/src/SOS/SOS.UnitTests
 root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# dotnet test
@@ -401,8 +406,7 @@ A total of <span style="color:#ae81ff">1</span> test files matched the specified
     at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">245</span>
  <span style="color:#f92672">}</span>
 
-
-                                                                                                                                              X SOS.LLDBPluginTests<span style="color:#f92672">(</span>config: projectk.sdk.prebuilt.2.1.14<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>6ms<span style="color:#f92672">]</span>
+X SOS.LLDBPluginTests<span style="color:#f92672">(</span>config: projectk.sdk.prebuilt.2.1.14<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>6ms<span style="color:#f92672">]</span>
   Error Message:
    System.ArgumentException : LLDB_PATH environment variable not set
   Stack Trace:
@@ -435,8 +439,8 @@ Total tests: <span style="color:#ae81ff">47</span>
 ...
 
    <span style="color:#ae81ff">244</span>              // Get lldb path
-   <span style="color:#ae81ff">245</span>              arguments.AppendFormat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;--lldb {0} &#34;</span>, Environment.GetEnvironmentVariable<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;LLDB_PATH&#34;</span><span style="color:#f92672">)</span> ?? throw new ArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;LL
-</span><span style="color:#e6db74">DB_PATH environment variable not set&#34;</span><span style="color:#f92672">))</span>;
+   <span style="color:#ae81ff">245</span>              arguments.AppendFormat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;--lldb {0} &#34;</span>, Environment.GetEnvironmentVariable<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;LLDB_PATH&#34;</span><span style="color:#f92672">)</span> ?? ...
+       throw new ArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;LLDB_PATH environment variable not set&#34;</span><span style="color:#f92672">))</span>;
 
 ...
 
@@ -444,7 +448,9 @@ Total tests: <span style="color:#ae81ff">47</span>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">
 root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# export LLDB_PATH
 
-root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# dotnet test                                                                       Test run <span style="color:#66d9ef">for</span> /app/diagnostics/artifacts/bin/SOS.UnitTests/Debug/netcoreapp2.0/SOS.UnitTests.dll<span style="color:#f92672">(</span>.NETCoreApp,Version<span style="color:#f92672">=</span>v2.0<span style="color:#f92672">)</span>                   Microsoft <span style="color:#f92672">(</span>R<span style="color:#f92672">)</span> Test Execution Command Line Tool Version 16.3.0
+root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# dotnet test
+Test run <span style="color:#66d9ef">for</span> /app/diagnostics/artifacts/bin/SOS.UnitTests/Debug/netcoreapp2.0/SOS.UnitTests.dll<span style="color:#f92672">(</span>.NETCoreApp,Version<span style="color:#f92672">=</span>v2.0<span style="color:#f92672">)</span>
+Microsoft <span style="color:#f92672">(</span>R<span style="color:#f92672">)</span> Test Execution Command Line Tool Version 16.3.0
 Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> Microsoft Corporation.  All rights reserved.
 
 Starting test execution, please wait...
@@ -454,16 +460,23 @@ Starting test execution, please wait...
   X SOS.LLDBPluginTests<span style="color:#f92672">(</span>config: projectk.sdk.prebuilt.2.1.14<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>52ms<span style="color:#f92672">]</span>
   Error Message:
    System.Exception : Process returned exit code 2, expected <span style="color:#ae81ff">0</span>
-Command Line: /usr/bin/python /app/diagnostics/src/SOS/lldbplugin.tests/test_libsosplugin.py --lldb  --host <span style="color:#e6db74">&#34;/app/diagnostics/.dotnet/dotnet --fx-version 2.1.14 &#34;</span> --plugin /app/diagnostics/artifacts/bin/Linux.x64.Debug/libsosplugin.so --logfiledir /app/diagnostics/artifacts/TestResults/Debug/sos.unittests_2020_05_29_01_35_52_2983/2.1.14 --assembly /app/diagnostics/artifacts/bin/TestDebuggee/Debug/netcoreapp2.1/TestDebuggee.dll
+Command Line: /usr/bin/python /app/diagnostics/src/SOS/lldbplugin.tests/test_libsosplugin.py --lldb
+--host <span style="color:#e6db74">&#34;/app/diagnostics/.dotnet/dotnet --fx-version 2.1.14 &#34;</span> --plugin /app/diagnostics/artifacts/bin/Linux.x64.Debug/libsosplugin.so
+--logfiledir /app/diagnostics/artifacts/TestResults/Debug/sos.unittests_2020_05_29_01_35_52_2983/2.1.14
+--assembly /app/diagnostics/artifacts/bin/TestDebuggee/Debug/netcoreapp2.1/TestDebuggee.dll
 Working Directory: /app/diagnostics/src/SOS/lldbplugin.tests
   Stack Trace:
-     at Microsoft.Diagnostics.TestHelpers.ProcessRunner.InternalWaitForExit<span style="color:#f92672">(</span>Task<span style="color:#e6db74">`</span><span style="color:#ae81ff">1</span> startProcessTask, Task stdOutTask, Task stdErrTask<span style="color:#f92672">)</span> in /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/ProcessRunner.cs:line <span style="color:#ae81ff">436</span>
+     at Microsoft.Diagnostics.TestHelpers.ProcessRunner.InternalWaitForExit<span style="color:#f92672">(</span>Task<span style="color:#e6db74">`</span><span style="color:#ae81ff">1</span> startProcessTask, Task stdOutTask, Task stdErrTask<span style="color:#f92672">)</span> in
+     /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/ProcessRunner.cs:line <span style="color:#ae81ff">436</span>
    at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">286</span>
 --- End of stack trace from previous location where exception was thrown ---
   Standard Output Messages:
  Starting SOS.LLDBPluginTests
  <span style="color:#f92672">{</span>
-     Running Process: /usr/bin/python /app/diagnostics/src/SOS/lldbplugin.tests/test_libsosplugin.py --lldb  --host <span style="color:#e6db74">&#34;/app/diagnostics/.dotnet/dotnet --fx-version 2.1.14 &#34;</span> --plugin /app/diagnostics/artifacts/bin/Linux.x64.Debug/libsosplugin.so --logfiledir /app/diagnostics/artifacts/TestResults/Debug/sos.unittests_2020_05_29_01_35_52_2983/2.1.14 --assembly /app/diagnostics/artifacts/bin/TestDebuggee/Debug/netcoreapp2.1/TestDebuggee.dll
+     Running Process: /usr/bin/python /app/diagnostics/src/SOS/lldbplugin.tests/test_libsosplugin.py --lldb
+     --host <span style="color:#e6db74">&#34;/app/diagnostics/.dotnet/dotnet --fx-version 2.1.14 &#34;</span> --plugin /app/diagnostics/artifacts/bin/Linux.x64.Debug/libsosplugin.so
+     --logfiledir /app/diagnostics/artifacts/TestResults/Debug/sos.unittests_2020_05_29_01_35_52_2983/2.1.14 --assembly
+     /app/diagnostics/artifacts/bin/TestDebuggee/Debug/netcoreapp2.1/TestDebuggee.dll
      Working Directory: /app/diagnostics/src/SOS/lldbplugin.tests
      Additional Environment Variables: COMPlus_LogFacility<span style="color:#f92672">=</span>0xffffffbf, COMPlus_LogLevel<span style="color:#f92672">=</span>6, COMPlus_StressLog<span style="color:#f92672">=</span>1, COMPlus_StressLogSize<span style="color:#f92672">=</span><span style="color:#ae81ff">65536</span>
      <span style="color:#f92672">{</span>
@@ -477,9 +490,13 @@ Working Directory: /app/diagnostics/src/SOS/lldbplugin.tests
      Exit code: <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span> 00:00.036 elapsed<span style="color:#f92672">)</span>
 
  System.Exception: Process returned exit code 2, expected <span style="color:#ae81ff">0</span>
- Command Line: /usr/bin/python /app/diagnostics/src/SOS/lldbplugin.tests/test_libsosplugin.py --lldb  --host <span style="color:#e6db74">&#34;/app/diagnostics/.dotnet/dotnet --fx-version 2.1.14 &#34;</span> --plugin /app/diagnostics/artifacts/bin/Linux.x64.Debug/libsosplugin.so --logfiledir /app/diagnostics/artifacts/TestResults/Debug/sos.unittests_2020_05_29_01_35_52_2983/2.1.14 --assembly /app/diagnostics/artifacts/bin/TestDebuggee/Debug/netcoreapp2.1/TestDebuggee.dll
+ Command Line: /usr/bin/python /app/diagnostics/src/SOS/lldbplugin.tests/test_libsosplugin.py --lldb
+ --host <span style="color:#e6db74">&#34;/app/diagnostics/.dotnet/dotnet --fx-version 2.1.14 &#34;</span> --plugin /app/diagnostics/artifacts/bin/Linux.x64.Debug/libsosplugin.so --logfiledir
+ /app/diagnostics/artifacts/TestResults/Debug/sos.unittests_2020_05_29_01_35_52_2983/2.1.14 --assembly
+ /app/diagnostics/artifacts/bin/TestDebuggee/Debug/netcoreapp2.1/TestDebuggee.dll
  Working Directory: /app/diagnostics/src/SOS/lldbplugin.tests
-    at Microsoft.Diagnostics.TestHelpers.ProcessRunner.InternalWaitForExit<span style="color:#f92672">(</span>Task<span style="color:#e6db74">`</span><span style="color:#ae81ff">1</span> startProcessTask, Task stdOutTask, Task stdErrTask<span style="color:#f92672">)</span> in /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/ProcessRunner.cs:line <span style="color:#ae81ff">436</span>
+    at Microsoft.Diagnostics.TestHelpers.ProcessRunner.InternalWaitForExit<span style="color:#f92672">(</span>Task<span style="color:#e6db74">`</span><span style="color:#ae81ff">1</span> startProcessTask, Task stdOutTask, Task stdErrTask<span style="color:#f92672">)</span>
+    in /app/diagnostics/src/Microsoft.Diagnostics.TestHelpers/ProcessRunner.cs:line <span style="color:#ae81ff">436</span>
     at SOS.LLDBPluginTests<span style="color:#f92672">(</span>TestConfiguration config<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOS.cs:line <span style="color:#ae81ff">286</span>
  <span style="color:#f92672">}</span>
 
@@ -497,7 +514,8 @@ Total tests: <span style="color:#ae81ff">47</span>
 
   <span style="color:#ae81ff">285</span>              // Wait <span style="color:#66d9ef">for</span> the debuggee to finish
   <span style="color:#ae81ff">286</span>              await processRunner.WaitForExit<span style="color:#f92672">()</span>;
-</code></pre></div><p>So, this looks like a bit of a dead-end and we should probably install lldb and see if that resolves it. But, what version of lldb should we install? Let&rsquo;s try the default version (lldb-8).</p>
+</code></pre></div><p>So, this looks like a bit of a dead-end and we should probably install lldb and see if that resolves it.</p>
+<p>But, what version of lldb should we install? Let&rsquo;s try the default version (lldb-8).</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# apt-get update -y <span style="color:#f92672">&amp;&amp;</span> apt-get install -y llvm-8 lldb-8
 Hit:2 http://security.ubuntu.com/ubuntu xenial-security InRelease
 Hit:3 http://archive.ubuntu.com/ubuntu xenial InRelease
@@ -521,20 +539,24 @@ Setting up python-lldb-8 <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1
 Setting up lldb-8 <span style="color:#f92672">(</span>1:8-3~ubuntu16.04.1<span style="color:#f92672">)</span> ...
 Processing triggers <span style="color:#66d9ef">for</span> libc-bin <span style="color:#f92672">(</span>2.23-0ubuntu11<span style="color:#f92672">)</span> ...
 </code></pre></div><p>Cool. So let&rsquo;s try again:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# export LLDB_PATH<span style="color:#f92672">=</span>/usr/bin/lldb-8                                                  root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# dotnet test
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# export LLDB_PATH<span style="color:#f92672">=</span>/usr/bin/lldb-8
+root@85bd9fba8925:/app/diagnostics/src/SOS/SOS.UnitTests# dotnet test
 Test run <span style="color:#66d9ef">for</span> /app/diagnostics/artifacts/bin/SOS.UnitTests/Debug/netcoreapp2.0/SOS.UnitTests.dll<span style="color:#f92672">(</span>.NETCoreApp,Version<span style="color:#f92672">=</span>v2.0<span style="color:#f92672">)</span>
-Microsoft <span style="color:#f92672">(</span>R<span style="color:#f92672">)</span> Test Execution Command Line Tool Version 16.3.0                                                                               Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> Microsoft Corporation.  All rights reserved.
-                                                                                                                                            Starting test execution, please wait...
-                                                                                                                                            A total of <span style="color:#ae81ff">1</span> test files matched the specified pattern.
-                                                                                                                                            <span style="color:#f92672">[</span>xUnit.net 00:05:29.24<span style="color:#f92672">]</span>     SOS.StackAndOtherTests<span style="color:#f92672">(</span>config: projectk.cli.5.0.0-alpha.1.19564.1<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>FAIL<span style="color:#f92672">]</span>
-                                                                                                                                              X SOS.StackAndOtherTests<span style="color:#f92672">(</span>config: projectk.cli.5.0.0-alpha.1.19564.1<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>39s 342ms<span style="color:#f92672">]</span>
+Microsoft <span style="color:#f92672">(</span>R<span style="color:#f92672">)</span> Test Execution Command Line Tool Version 16.3.0
+Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please waitA total of <span style="color:#ae81ff">1</span> test files matched the specified pattern<span style="color:#f92672">[</span>xUnit.net 00:05:29.24<span style="color:#f92672">]</span>
+  SOS.StackAndOtherTests<span style="color:#f92672">(</span>config: projectk.cli.5.0.0-alpha.1.19564.1<span style="color:#f92672">)</span>
+  <span style="color:#f92672">[</span>FAIL X SOS.StackAndOtherTests<span style="color:#f92672">(</span>config: projectk.cli.5.0.0-alpha.1.19564.1<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>39s 342ms<span style="color:#f92672">]</span>
   Error Message:
    Microsoft.Diagnostics.TestHelpers.TestStepException : The Build Debuggee test step failed.
 Original Error: Process returned exit code 1, expected <span style="color:#ae81ff">0</span>
 Command Line: /app/diagnostics/.dotnet/dotnet restore --configfile /app/diagnostics/artifacts/Debuggees/embedded/SymbolTestApp/NuGet.config
---packages <span style="color:#e6db74">&#34;/root/.nuget/packages&#34;</span> /p:RuntimeFrameworkVersion<span style="color:#f92672">=</span>3.0.0 /p:BuildProjectFramework<span style="color:#f92672">=</span>netcoreapp3.0 /p:DebugType<span style="color:#f92672">=</span>embedded            Working Directory: /app/diagnostics/artifacts/Debuggees/embedded/SymbolTestApp
+--packages <span style="color:#e6db74">&#34;/root/.nuget/packages&#34;</span> /p:RuntimeFrameworkVersion<span style="color:#f92672">=</span>3.0.0 /p:BuildProjectFramework<span style="color:#f92672">=</span>netcoreapp3.0 /p:DebugType<span style="color:#f92672">=</span>embedded
+Working Directory: /app/diagnostics/artifacts/Debuggees/embedded/SymbolTestApp
    at Microsoft.Diagnostics.TestHelpers.ProcessRunner.InternalWaitForExit<span style="color:#f92672">(</span>Task<span style="color:#e6db74">`</span><span style="color:#ae81ff">1</span> startProcessTask, Task stdOutTask, Task stdErrTask<span style="color:#f92672">)</span> in /app
-/diagnostics/src/Microsoft.Diagnostics.TestHelpers/ProcessRunner.cs:line <span style="color:#ae81ff">436</span>                                                                   at Microsoft.Diagnostics.TestHelpers.DotNetBuildDebuggeeTestStep.Restore<span style="color:#f92672">(</span>String extraArgs, ITestOutputHelper output<span style="color:#f92672">)</span> in /app/diagnostics/
+/diagnostics/src/Microsoft.Diagnostics.TestHelpers/ProcessRunner.cs:line <span style="color:#ae81ff">436</span>
+at Microsoft.Diagnostics.TestHelpers.DotNetBuildDebuggeeTestStep.Restore<span style="color:#f92672">(</span>String extraArgs, ITestOutputHelper output<span style="color:#f92672">)</span> in /app/diagnostics/
 src/Microsoft.Diagnostics.TestHelpers/DotNetBuildDebuggeeTestStep.cs:line <span style="color:#ae81ff">208</span>
 
 </code></pre></div><p>.. an hour passes&hellip;</p>
@@ -546,9 +568,7 @@ src/Microsoft.Diagnostics.TestHelpers/DotNetBuildDebuggeeTestStep.cs:line <span 
  System.IO.FileNotFoundException: Native debugger path not set or does not exist:
     at SOSRunner.StartDebugger<span style="color:#f92672">(</span>TestInformation information, DebuggerAction action<span style="color:#f92672">)</span> in /app/diagnostics/src/SOS/SOS.UnitTests/SOSRunner.cs:line <span style="color:#ae81ff">413</span>
 
-
-                                                                                                                                            <span style="color:#f92672">[</span>xUnit.net 00:08:44.29<span style="color:#f92672">]</span>     SOS.WebApp <span style="color:#f92672">[</span>FAIL<span style="color:#f92672">]</span>
-                                                                                                                                              X SOS.WebApp <span style="color:#f92672">[</span>1ms<span style="color:#f92672">]</span>
+<span style="color:#f92672">[</span>xUnit.net 00:08:44.29<span style="color:#f92672">]</span>     SOS.WebApp <span style="color:#f92672">[</span>FAIL X SOS.WebApp <span style="color:#f92672">[</span>1ms<span style="color:#f92672">]</span>
   Error Message:
    System.InvalidOperationException : The test method expected <span style="color:#ae81ff">1</span> parameter value, but <span style="color:#ae81ff">0</span> parameter values were provided.
 
@@ -560,7 +580,7 @@ Total tests: <span style="color:#ae81ff">47</span>
  Total time: 16.5891 Minutes
 
 </code></pre></div><p>Ok, so only 6 out of 47 failed this time. That&rsquo;s some progress.</p>
-<p>But why did the 6 fail? I&rsquo;ll look at that in the next blog post.</p>
+<p>But why did the 6 fail? We&rsquo;ll look at that in the another blog post.</p>
 
 
 </article>
