@@ -13,6 +13,16 @@
     
     
     <item>
+      <title>Vim Plugin Development Workflows</title>
+      <link>https://blog.seso.io/posts/vim-plugin-development-workflows/</link>
+      <pubDate>Wed, 03 Jun 2020 22:36:37 +1000</pubDate>
+      
+      <guid>https://blog.seso.io/posts/vim-plugin-development-workflows/</guid>
+      <description>I use a Vim Plugin Manager called Vundle to install and update all my Vim plugins.
+When developing a new plugin with Vim, it is useful to be able to develop locally, test the changes in Vim and be able to push the changes to a Git repository.</description>
+    </item>
+    
+    <item>
       <title>Building Dotnet Diagnostics</title>
       <link>https://blog.seso.io/posts/building-dotnet-diagnostics/</link>
       <pubDate>Sun, 31 May 2020 14:18:15 +1000</pubDate>
