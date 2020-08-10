@@ -51,15 +51,6 @@ root@85bd9fba8925:/app/diagnostics# dotnet build A compatible installed .NET Cor
     </item>
     
     <item>
-      <title>Going Beyond Reading the Docs</title>
-      <link>https://blog.seso.io/posts/going-beyond-reading-the-docs/</link>
-      <pubDate>Sat, 18 Apr 2020 14:02:20 +1000</pubDate>
-      
-      <guid>https://blog.seso.io/posts/going-beyond-reading-the-docs/</guid>
-      <description>Starting at the start This is something I&amp;rsquo;ve always done, but it became more apparent to me recently while attempting to build the latest source code for the dotnet core v5.</description>
-    </item>
-    
-    <item>
       <title>Troubleshooting a Vim dotnet Plugin</title>
       <link>https://blog.seso.io/posts/troubleshooting-a-dotnet-vim-plugin/</link>
       <pubDate>Sun, 16 Feb 2020 17:34:02 +1100</pubDate>
