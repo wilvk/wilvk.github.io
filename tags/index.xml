@@ -2,14 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Will&#39;s Blog</title>
-    <link>https://blog.seso.io/tags/</link>
+    <link>http://me.wvk.au/tags/</link>
     <description>Recent content in Tags on Will&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
     <copyright>Copyright &amp;copy; 2018 - Willem van Ketwich</copyright>
-    
-	<atom:link href="https://blog.seso.io/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="http://me.wvk.au/tags/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
