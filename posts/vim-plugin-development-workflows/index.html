@@ -7,28 +7,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="The HTML5 Herald" />
-  <meta name="author" content="Willem van Ketwich" />
-  <meta name="generator" content="Hugo 0.74.3" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <meta name="author" content="Willem van Ketwich" /><meta name="generator" content="Hugo 0.123.8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
-  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
-</head>
+  <link rel="stylesheet" type="text/css" href="http://me.wvk.au/css/styles.css" /></head>
 
 <body>
   <div id="container">
     <header>
       <h1>
-                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+                <a href="http://me.wvk.au/">Will&rsquo;s Blog</a>
             </h1>
 
       <ul id="social-media">
         
-        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+        
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://github.com/wilvk"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
            
       </ul>
       
@@ -41,13 +41,13 @@
     <ul>
         
         <li>
-            <a class="" href="https://blog.seso.io/posts/">
+            <a class="" href="http://me.wvk.au/posts/">
                 <i class="fa-li fa  fa-lg"></i><span>blog</span>
             </a>
         </li>
         
         <li>
-            <a class="" href="https://blog.seso.io/about/">
+            <a class="" href="http://me.wvk.au/about/">
                 <i class="fa-li fa  fa-lg"></i><span>about</span>
             </a>
         </li>
@@ -71,13 +71,13 @@
             <time class="post-date" datetime="2020-06-03T22:36:37&#43;10:00">Jun 3, 2020</time>
         </li>
         
-        
 
         
 
-        <li>3 min read</li>
+        <li>3 minutes read</li>
     </ul>
 </aside>
+
     
 
     <p>I use a Vim Plugin Manager called <a href="https://github.com/VundleVim/Vundle.vim">Vundle</a> to install and update all my Vim plugins.</p>
@@ -85,61 +85,61 @@
 <h2 id="pushing-to-a-remote-repo-and-refreshing-the-local-plugin">Pushing to a remote repo and refreshing the local plugin</h2>
 <p>A naïve approach to this is to create a Git repository for your plugin, add it as a Vundle plugin in your <code>.vimrc</code> file and do development in a separate copy of the repository.</p>
 <p>e.g.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">    <span style="color:#a6e22e">Plugin</span> <span style="color:#e6db74">&#39;wilvk/NERDTreeWindowResizer&#39;</span><span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><p>This approach has the additional overhead of having to:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span>    <span style="color:#a6e22e">Plugin</span> <span style="color:#e6db74">&#39;wilvk/NERDTreeWindowResizer&#39;</span>
+</span></span></code></pre></div><p>This approach has the additional overhead of having to:</p>
 <p>Commit and push changes from the local source folder (e.g. <code>~/source/wilvk/&lt;plugin_name&gt;</code></p>
 <p>Re-install or update the plugin in the <code>~/.vim/bundle/&lt;plugin_name&gt;</code> path via the Vim command <code>:PluginInstall</code> or <code>:PluginUpdate</code> commands.</p>
 <p>This can become quite tedious if you are doing many changes and want to keep synchronised between the local source path and the Vim plugin.</p>
 <h2 id="referencing-a-local-repo-and-creating-a-git-remote-for-pushing-to">Referencing a local repo and creating a git remote for pushing to</h2>
 <p>An alternative approach I have found is, after creating your plugin&rsquo;s repository, to:</p>
 <p>Clone the plugin repository to your source path as you normally would:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd ~/source/wilvk
-$ git clone https://github.com/wilvk/NERDTreeWindowResizer
-</code></pre></div><p>Then, make a symbolic link to your plugin source code in the <code>~/.vim/bundle</code> path.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd ~/.vim/bundle
-$ ln -s ~/source/wilvk/NERDTreeWindowResizer ~/.vim/bundle/NERDTreeWindowResizer
-</code></pre></div><p>Back in the plugin source path, we need to make changes to our local repository remotes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cd ~/source/wilvk
+</span></span><span style="display:flex;"><span>$ git clone https://github.com/wilvk/NERDTreeWindowResizer
+</span></span></code></pre></div><p>Then, make a symbolic link to your plugin source code in the <code>~/.vim/bundle</code> path.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cd ~/.vim/bundle
+</span></span><span style="display:flex;"><span>$ ln -s ~/source/wilvk/NERDTreeWindowResizer ~/.vim/bundle/NERDTreeWindowResizer
+</span></span></code></pre></div><p>Back in the plugin source path, we need to make changes to our local repository remotes:</p>
 <p>Firstly, we change to our source code path and see what our current remotes are with <code>git remote -v</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ cd ~/source/wilvk/NERDTreeWindowResizer
-$ git remote -v
-origin  https://github.com/wilvk/NERDTreeWindowResizer <span style="color:#f92672">(</span>fetch<span style="color:#f92672">)</span>
-origin  https://github.com/wilvk/NERDTreeWindowResizer <span style="color:#f92672">(</span>push<span style="color:#f92672">)</span>
-</code></pre></div><p>We then set the <code>origin</code> to a local path in the <code>~/.vim/bundle</code> path.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git remote set-url origin file:///Users/willvk/.vim/bundle/NERDTreeWindowResize
-</code></pre></div><p>And create an <code>upstream</code> remote as our remote Git repository.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git remote add upstream https://github.com/wilvk/NERDTreeWindowResizer
-</code></pre></div><p>We can verify the remotes are set correctly by running <code>git remote -v</code> again.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git remote -v
-origin  file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer <span style="color:#f92672">(</span>fetch<span style="color:#f92672">)</span>
-origin  file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer <span style="color:#f92672">(</span>push<span style="color:#f92672">)</span>
-upstream        https://github.com/wilvk/NERDTreeWindowResizer <span style="color:#f92672">(</span>fetch<span style="color:#f92672">)</span>
-upstream        https://github.com/wilvk/NERDTreeWindowResizer <span style="color:#f92672">(</span>push<span style="color:#f92672">)</span>
-</code></pre></div><p>In our <code>.vimrc</code> file, we can add the plugin with a <code>Plugin</code> call, and reference the local repository:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#a6e22e">call</span> <span style="color:#a6e22e">vundle</span>#<span style="color:#a6e22e">begin</span>()<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  ...<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">Plugin</span> <span style="color:#e6db74">&#39;file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer&#39;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  ...<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">call</span> <span style="color:#a6e22e">vundle</span>#<span style="color:#a6e22e">end</span>()<span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><p>Then finally, in Vim, run <code>:PluginInstall</code> to make sure it is installed correctly.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cd ~/source/wilvk/NERDTreeWindowResizer
+</span></span><span style="display:flex;"><span>$ git remote -v
+</span></span><span style="display:flex;"><span>origin  https://github.com/wilvk/NERDTreeWindowResizer <span style="color:#f92672">(</span>fetch<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>origin  https://github.com/wilvk/NERDTreeWindowResizer <span style="color:#f92672">(</span>push<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>We then set the <code>origin</code> to a local path in the <code>~/.vim/bundle</code> path.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git remote set-url origin file:///Users/willvk/.vim/bundle/NERDTreeWindowResize
+</span></span></code></pre></div><p>And create an <code>upstream</code> remote as our remote Git repository.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git remote add upstream https://github.com/wilvk/NERDTreeWindowResizer
+</span></span></code></pre></div><p>We can verify the remotes are set correctly by running <code>git remote -v</code> again.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git remote -v
+</span></span><span style="display:flex;"><span>origin  file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer <span style="color:#f92672">(</span>fetch<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>origin  file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer <span style="color:#f92672">(</span>push<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>upstream        https://github.com/wilvk/NERDTreeWindowResizer <span style="color:#f92672">(</span>fetch<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>upstream        https://github.com/wilvk/NERDTreeWindowResizer <span style="color:#f92672">(</span>push<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>In our <code>.vimrc</code> file, we can add the plugin with a <code>Plugin</code> call, and reference the local repository:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#a6e22e">call</span> <span style="color:#a6e22e">vundle</span>#<span style="color:#a6e22e">begin</span>()
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Plugin</span> <span style="color:#e6db74">&#39;file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer&#39;</span>
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">call</span> <span style="color:#a6e22e">vundle</span>#<span style="color:#a6e22e">end</span>()
+</span></span></code></pre></div><p>Then finally, in Vim, run <code>:PluginInstall</code> to make sure it is installed correctly.</p>
 <p>Now, when you make changes to your local plugin&rsquo;s source, the changes will reflect instantly in Vim.
 To push changes to the remote Git repository, you should now push with <code>git push upstream</code> as the <code>origin</code> remote is being used to keep Vundle in sync (which will always be in sync now as it is a local file repository).</p>
 <h2 id="errors">Errors</h2>
 <p>If you get an error like the following when starting Vim:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">Error detected <span style="color:#66d9ef">while</span> processing <span style="color:#66d9ef">function</span> vundle#config#bundle<span style="color:#f92672">[</span>2<span style="color:#f92672">]</span>..&lt;SNR&gt;7_check_bundle_name:
-line    2:
-Vundle error: Name collision <span style="color:#66d9ef">for</span> Plugin file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer.
-Plugin wilvk/NERDTreeWindowResizer previously used the name <span style="color:#e6db74">&#34;NERDTreeWindowResizer&#34;</span>.
-Skipping Plugin file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer.
-Press ENTER or type command to <span style="color:#66d9ef">continue</span>
-</code></pre></div><p>Make sure you have removed any previous reference to your plugin in your <code>.vimrc</code> file.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Error detected <span style="color:#66d9ef">while</span> processing <span style="color:#66d9ef">function</span> vundle#config#bundle<span style="color:#f92672">[</span>2<span style="color:#f92672">]</span>..&lt;SNR&gt;7_check_bundle_name:
+</span></span><span style="display:flex;"><span>line    2:
+</span></span><span style="display:flex;"><span>Vundle error: Name collision <span style="color:#66d9ef">for</span> Plugin file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer.
+</span></span><span style="display:flex;"><span>Plugin wilvk/NERDTreeWindowResizer previously used the name <span style="color:#e6db74">&#34;NERDTreeWindowResizer&#34;</span>.
+</span></span><span style="display:flex;"><span>Skipping Plugin file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer.
+</span></span><span style="display:flex;"><span>Press ENTER or type command to <span style="color:#66d9ef">continue</span>
+</span></span></code></pre></div><p>Make sure you have removed any previous reference to your plugin in your <code>.vimrc</code> file.</p>
 <p>e.g.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#a6e22e">call</span> <span style="color:#a6e22e">vundle</span>#<span style="color:#a6e22e">begin</span>()<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  ...<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">Plugin</span> <span style="color:#e6db74">&#39;wilvk/NERDTreeWindowResizer&#39;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">Plugin</span> <span style="color:#e6db74">&#39;file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer&#39;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  ...<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">call</span> <span style="color:#a6e22e">vundle</span>#<span style="color:#a6e22e">end</span>()<span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><p>In the above <code>.vimrc</code>, the first call to <code>Plugin</code> should be removed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#a6e22e">call</span> <span style="color:#a6e22e">vundle</span>#<span style="color:#a6e22e">begin</span>()
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Plugin</span> <span style="color:#e6db74">&#39;wilvk/NERDTreeWindowResizer&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Plugin</span> <span style="color:#e6db74">&#39;file:///Users/willvk/.vim/bundle/NERDTreeWindowResizer&#39;</span>
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">call</span> <span style="color:#a6e22e">vundle</span>#<span style="color:#a6e22e">end</span>()
+</span></span></code></pre></div><p>In the above <code>.vimrc</code>, the first call to <code>Plugin</code> should be removed.</p>
 <p>And that&rsquo;s it! Happy Vimming!</p>
 
 
@@ -150,7 +150,7 @@ Press ENTER or type command to <span style="color:#66d9ef">continue</span>
     <ul>
         
         <li>
-            <a href="https://blog.seso.io/posts/building-dotnet-diagnostics/"><i class="fa fa-chevron-circle-left"></i> Building Dotnet Diagnostics</a>
+            <a href="http://me.wvk.au/posts/building-dotnet-diagnostics/"><i class="fa fa-chevron-circle-left"></i> Building Dotnet Diagnostics</a>
         </li>
         
         
@@ -217,15 +217,15 @@ Press ENTER or type command to <span style="color:#66d9ef">continue</span>
 
 </main>
     <footer>
-        <h6>Copyright © 2018 - Willem van Ketwich | 
+        <h6>Copyright © 2018 - Willem van Ketwich |
             Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+            <a href="http://me.wvk.au/index.xml">Subscribe</a></h6>
     </footer>
 </div>
-<script src="https://blog.seso.io/js/scripts.js"></script>
+<script src="http://me.wvk.au/js/scripts.js"></script>
 
 
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;

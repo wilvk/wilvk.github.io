@@ -7,28 +7,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="The HTML5 Herald" />
-  <meta name="author" content="Willem van Ketwich" />
-  <meta name="generator" content="Hugo 0.74.3" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <meta name="author" content="Willem van Ketwich" /><meta name="generator" content="Hugo 0.123.8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
-  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
-</head>
+  <link rel="stylesheet" type="text/css" href="http://me.wvk.au/css/styles.css" /></head>
 
 <body>
   <div id="container">
     <header>
       <h1>
-                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+                <a href="http://me.wvk.au/">Will&rsquo;s Blog</a>
             </h1>
 
       <ul id="social-media">
         
-        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+        
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://github.com/wilvk"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
            
       </ul>
       
@@ -41,13 +41,13 @@
     <ul>
         
         <li>
-            <a class="" href="https://blog.seso.io/posts/">
+            <a class="" href="http://me.wvk.au/posts/">
                 <i class="fa-li fa  fa-lg"></i><span>blog</span>
             </a>
         </li>
         
         <li>
-            <a class="" href="https://blog.seso.io/about/">
+            <a class="" href="http://me.wvk.au/about/">
                 <i class="fa-li fa  fa-lg"></i><span>about</span>
             </a>
         </li>
@@ -71,13 +71,13 @@
             <time class="post-date" datetime="2018-08-31T19:04:23&#43;10:00">Aug 31, 2018</time>
         </li>
         
-        
 
         
 
-        <li>5 min read</li>
+        <li>5 minutes read</li>
     </ul>
 </aside>
+
     
 
     <p>I wanted to put together some notes on how to set up a <a href="https://pages.github.com/">Github Pages</a> blog using the <a href="https://gohugo.io/">Hugo</a> static pages publishing application as when I went through this process myself, I found it less than intuitive.</p>
@@ -101,20 +101,20 @@
 <p>We can see from the diagram that the build clones the <code>wilvk/wilvk.github.io</code> repository inside the <code>wilvk/blog-hugo</code> repository to the <code>./public</code> path. It then builds the full Hugo site into the <code>./public</code> path and pushes the changes back to the <code>wilvk/wilvk.github.io</code> repository.</p>
 <h1 id="an-automated-process">An automated process</h1>
 <p>I place the following script in the base of the <code>wilvk/blog-hugo</code> repository and run it to push the changes to the site:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
-</span><span style="color:#75715e"></span>
-set -x
-
-rm -rf ./public
-git clone https://github.com/wilvk/wilvk.github.io public
-hugo
-cd ./public
-git add .
-git commit -m <span style="color:#e6db74">&#34;build release&#34;</span>
-git push --set-upstream origin master
-cd ..
-rm -rf ./public
-</code></pre></div><p>The <code>set -x</code> allows me to see any errors that may occur during the build process. Using different themes or various settings can cause Hugo to fail the build process and not push new changes to the static website repository <code>wilvk.github.io</code>. Showing the full output enables inspection of this process for any errors.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>set -x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>rm -rf ./public
+</span></span><span style="display:flex;"><span>git clone https://github.com/wilvk/wilvk.github.io public
+</span></span><span style="display:flex;"><span>hugo
+</span></span><span style="display:flex;"><span>cd ./public
+</span></span><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#e6db74">&#34;build release&#34;</span>
+</span></span><span style="display:flex;"><span>git push --set-upstream origin master
+</span></span><span style="display:flex;"><span>cd ..
+</span></span><span style="display:flex;"><span>rm -rf ./public
+</span></span></code></pre></div><p>The <code>set -x</code> allows me to see any errors that may occur during the build process. Using different themes or various settings can cause Hugo to fail the build process and not push new changes to the static website repository <code>wilvk.github.io</code>. Showing the full output enables inspection of this process for any errors.</p>
 <p>Hugo can also be run with verbose output with <code>hugo --verbose</code>, or even <code>hugo --debug</code> for greater levels of detail in the build process if required.</p>
 <p>The static site is built to the path <code>./public</code> and so the first thing the script does is delete the <code>./public</code> path.</p>
 <p>Then the <code>wilvk/wilvk.github.io</code> repository is cloned into the base of the <code>blog-hugo</code> repository.</p>
@@ -126,11 +126,11 @@ rm -rf ./public
 <p>Hugo also has support for <a href="https://disqus.com/">Disqus</a> so that users can comment on your blogs and you don&rsquo;t have to store the comments in an application - allowing your website to remain stateless.</p>
 <p>Google Analytics is free from Google and Disqus is also a free service. With IDs from both these services, you can turn your Github Pages into a proper blog.</p>
 <p>The following is how I have set up my <code>config.toml</code> file:</p>
-<pre><code>baseurl = &quot;https://blog.seso.io&quot;
-title = &quot;Will's Blog&quot;
-copyright = &quot;Copyright &amp;copy; 2018 - Willem van Ketwich&quot;
+<pre tabindex="0"><code>baseurl = &#34;https://blog.seso.io&#34;
+title = &#34;Will&#39;s Blog&#34;
+copyright = &#34;Copyright &amp;copy; 2018 - Willem van Ketwich&#34;
 canonifyurls = true
-theme = &quot;kiera&quot;
+theme = &#34;kiera&#34;
 
 ## kiera theme settings
 paginate = 3
@@ -139,33 +139,33 @@ enableEmoji = true
 pygmentsCodeFences = true
 
 ## Hugo Built-in Features
-disqusShortname = &quot;wilvk-github-io&quot;
-googleAnalytics = &quot;UA-122351489-2&quot;
+disqusShortname = &#34;wilvk-github-io&#34;
+googleAnalytics = &#34;UA-122351489-2&#34;
 enableRobotsTXT = true
 
 builddrafts = false
-languageCode = &quot;en-US&quot;
+languageCode = &#34;en-US&#34;
 
 [author]
-    name = &quot;Willem van Ketwich&quot;
-    github = &quot;wilvk&quot;
-    linkedin = &quot;willvk&quot;
-    twitter = &quot;wilvk&quot;
+    name = &#34;Willem van Ketwich&#34;
+    github = &#34;wilvk&#34;
+    linkedin = &#34;willvk&#34;
+    twitter = &#34;wilvk&#34;
 
 [params]
-    tagline = &quot;Just a dude that does stuff.. mostly with computers.&quot;
+    tagline = &#34;Just a dude that does stuff.. mostly with computers.&#34;
 
 ## Main Menu
 [[menu.main]]
-    name = &quot;blog&quot;
+    name = &#34;blog&#34;
     weight = 10
-    identifier = &quot;blog&quot;
-    url = &quot;/posts/&quot;
+    identifier = &#34;blog&#34;
+    url = &#34;/posts/&#34;
 [[menu.main]]
-    name = &quot;about&quot;
-    identifier = &quot;about&quot;
+    name = &#34;about&#34;
+    identifier = &#34;about&#34;
     weight = 20
-    url = &quot;/about/&quot;
+    url = &#34;/about/&#34;
 </code></pre><p>I&rsquo;ll just point out a few things about the config file above.</p>
 <ul>
 <li>Your Google Analytics ID will go in the variable <code>googleAnalytics</code>.</li>
@@ -192,12 +192,12 @@ languageCode = &quot;en-US&quot;
     <ul>
         
         <li>
-            <a href="https://blog.seso.io/posts/creating-a-fibonacci-generator-in-assembly/"><i class="fa fa-chevron-circle-left"></i> Creating a Fibonacci Generator in Assembly</a>
+            <a href="http://me.wvk.au/posts/creating-a-fibonacci-generator-in-assembly/"><i class="fa fa-chevron-circle-left"></i> Creating a Fibonacci Generator in Assembly</a>
         </li>
         
         
         <li>
-            <a href="https://blog.seso.io/posts/gdb-on-macos/">Gdb on MacOS <i class="fa fa-chevron-circle-right"></i> </a>
+            <a href="http://me.wvk.au/posts/gdb-on-macos/">Gdb on MacOS <i class="fa fa-chevron-circle-right"></i> </a>
         </li>
         
     </ul>
@@ -263,15 +263,15 @@ languageCode = &quot;en-US&quot;
 
 </main>
     <footer>
-        <h6>Copyright © 2018 - Willem van Ketwich | 
+        <h6>Copyright © 2018 - Willem van Ketwich |
             Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+            <a href="http://me.wvk.au/index.xml">Subscribe</a></h6>
     </footer>
 </div>
-<script src="https://blog.seso.io/js/scripts.js"></script>
+<script src="http://me.wvk.au/js/scripts.js"></script>
 
 
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;

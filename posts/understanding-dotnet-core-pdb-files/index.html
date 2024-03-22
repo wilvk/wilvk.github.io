@@ -7,28 +7,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="The HTML5 Herald" />
-  <meta name="author" content="Willem van Ketwich" />
-  <meta name="generator" content="Hugo 0.74.3" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <meta name="author" content="Willem van Ketwich" /><meta name="generator" content="Hugo 0.123.8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
-  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
-</head>
+  <link rel="stylesheet" type="text/css" href="http://me.wvk.au/css/styles.css" /></head>
 
 <body>
   <div id="container">
     <header>
       <h1>
-                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+                <a href="http://me.wvk.au/">Will&rsquo;s Blog</a>
             </h1>
 
       <ul id="social-media">
         
-        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+        
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://github.com/wilvk"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
            
       </ul>
       
@@ -41,13 +41,13 @@
     <ul>
         
         <li>
-            <a class="" href="https://blog.seso.io/posts/">
+            <a class="" href="http://me.wvk.au/posts/">
                 <i class="fa-li fa  fa-lg"></i><span>blog</span>
             </a>
         </li>
         
         <li>
-            <a class="" href="https://blog.seso.io/about/">
+            <a class="" href="http://me.wvk.au/about/">
                 <i class="fa-li fa  fa-lg"></i><span>about</span>
             </a>
         </li>
@@ -71,13 +71,13 @@
             <time class="post-date" datetime="2020-05-10T20:08:21&#43;10:00">May 10, 2020</time>
         </li>
         
-        
 
         
 
-        <li>6 min read</li>
+        <li>6 minutes read</li>
     </ul>
 </aside>
+
     
 
     <p>The following documents how to inspect pdb symbols and metadata with the dotnet core metadata visualizer, which is part of the <a href="https://github.com/dotnet/metadata-tools">metadata-tools</a>. I&rsquo;m running this for a sample app I wrote for debugging in SOS, called <code>test_debug</code>. The source for it is available in my <a href="https://github.com/wilvk/dotnet-sos/tree/master/source/own/test_debug">dotnet-sos testing repo</a>.</p>
@@ -85,46 +85,46 @@
 <h2 id="understanding-a-breakpoint">understanding a breakpoint</h2>
 <p>The goal of this investigation is to determine how to set a breakpoint in our source code. To do this we need to know the IL code associated with a line of code in our application.</p>
 <p>The following is the source code from our app:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">using</span> System;
- <span style="color:#ae81ff">2</span>
- <span style="color:#ae81ff">3</span> <span style="color:#66d9ef">namespace</span> console
- <span style="color:#ae81ff">4</span> {
- <span style="color:#ae81ff">5</span>   <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Program</span>
- <span style="color:#ae81ff">6</span>   {
- <span style="color:#ae81ff">7</span>     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Main(<span style="color:#66d9ef">string</span>[] args)
- <span style="color:#ae81ff">8</span>     {
- <span style="color:#ae81ff">9</span>       <span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>)
-<span style="color:#ae81ff">10</span>       {
-<span style="color:#ae81ff">11</span>         <span style="color:#66d9ef">var</span> lastTicks = DateTime.Now.Ticks;
-<span style="color:#ae81ff">12</span>         System.Threading.Thread.Sleep(<span style="color:#ae81ff">2000</span>);
-<span style="color:#ae81ff">13</span>         <span style="color:#66d9ef">var</span> ticksElapsed = GetTicksElapsed(lastTicks);
-<span style="color:#ae81ff">14</span>         Console.WriteLine(<span style="color:#e6db74">&#34;ticks elapsed: &#34;</span> + ticksElapsed.ToString());
-<span style="color:#ae81ff">15</span>       }
-<span style="color:#ae81ff">16</span>     }
-<span style="color:#ae81ff">17</span>
-<span style="color:#ae81ff">18</span>     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">long</span> GetTicksElapsed(<span style="color:#66d9ef">long</span> lastTicks)
-<span style="color:#ae81ff">19</span>     {
-<span style="color:#ae81ff">20</span>       <span style="color:#66d9ef">var</span> currentTicks = DateTime.Now.Ticks;
-<span style="color:#ae81ff">21</span>       <span style="color:#66d9ef">var</span> delta = currentTicks - lastTicks;
-<span style="color:#ae81ff">22</span>       <span style="color:#66d9ef">return</span> delta;
-<span style="color:#ae81ff">23</span>     }
-<span style="color:#ae81ff">24</span>   }
-<span style="color:#ae81ff">25</span> }
-</code></pre></div><p>Let&rsquo;s suppose we are interested in line 21, in the method <code>GetTicksElapsed</code>, where we are subtracting <code>lastTicks</code> from <code>currentTicke</code> in order to determine the time delta. This is in the test application as the file <code>Program.cs</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">using</span> System;
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">3</span> <span style="color:#66d9ef">namespace</span> console
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">4</span> {
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">5</span>   <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Program</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">6</span>   {
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">7</span>     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Main(<span style="color:#66d9ef">string</span>[] args)
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">8</span>     {
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">9</span>       <span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">10</span>       {
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">11</span>         <span style="color:#66d9ef">var</span> lastTicks = DateTime.Now.Ticks;
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">12</span>         System.Threading.Thread.Sleep(<span style="color:#ae81ff">2000</span>);
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">13</span>         <span style="color:#66d9ef">var</span> ticksElapsed = GetTicksElapsed(lastTicks);
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">14</span>         Console.WriteLine(<span style="color:#e6db74">&#34;ticks elapsed: &#34;</span> + ticksElapsed.ToString());
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">15</span>       }
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">16</span>     }
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">17</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">18</span>     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">long</span> GetTicksElapsed(<span style="color:#66d9ef">long</span> lastTicks)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">19</span>     {
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">20</span>       <span style="color:#66d9ef">var</span> currentTicks = DateTime.Now.Ticks;
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">21</span>       <span style="color:#66d9ef">var</span> delta = currentTicks - lastTicks;
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">22</span>       <span style="color:#66d9ef">return</span> delta;
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">23</span>     }
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">24</span>   }
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">25</span> }
+</span></span></code></pre></div><p>Let&rsquo;s suppose we are interested in line 21, in the method <code>GetTicksElapsed</code>, where we are subtracting <code>lastTicks</code> from <code>currentTicke</code> in order to determine the time delta. This is in the test application as the file <code>Program.cs</code>.</p>
 <p>An abbreviated version of our debug point would be <code>Program.cs:21</code>.</p>
 <p>We then need to determine where in our IL code the same breakpoint would be.</p>
 <p>We start with the <code>.pdb</code> file that is generated when the application is built in Debug mode.</p>
 <p>Using <code>dotnet/metadata-tools/src/mdv</code> we can generate an output of all the symbols and mappings in our application.</p>
 <h2 id="document">Document</h2>
 <p>Each C# code file is defined in our pdb file as a <code>Document</code>. We know the filename of our source code, so we need to find the matching Document number.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">Document (index: 0x30, size: 24):
-=====================================================================================================================================================================================================================================================================
-   Name                                                                                                                            Language  HashAlgorithm  Hash
-=====================================================================================================================================================================================================================================================================
-1: &#39;/Users/willvk/source/github/wilvk/dotnet-sos/source/own/test_debug/Program.cs&#39; (#51)                                           C# (#2)   SHA-256 (#1)   0A-ED-B2-A4-21-42-46-17-C2-58-03-22-8C-DA-2B-62-0F-85-91-72-23-43-99-61-C7-7B-7B-BF-86-E7-AF-DD (#5e)
-2: &#39;/Users/willvk/source/github/wilvk/dotnet-sos/source/own/test_debug/obj/Debug/netcoreapp3.1/test_debug.AssemblyInfo.cs&#39; (#10b)  C# (#2)   SHA-256 (#1)   DA-07-44-CB-7E-8D-B7-0E-E4-75-FC-77-4E-37-78-C0-DE-D4-C6-9B-AC-6F-79-BE-AF-3E-E5-71-25-75-79-A8 (#11f)
-3: &#39;/var/folders/04/0cmzblh51t717k__bn1jq8qm0000gn/T/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs&#39; (#19f)                        C# (#2)   SHA-256 (#1)   C0-05-EF-EB-23-4B-50-D8-1B-2F-23-F9-D3-7E-84-53-8C-0F-C2-14-FD-9D-65-22-8C-46-AA-DB-54-2F-5A-88 (#1ae)
-</code></pre></div><p>Looking at the <code>Document</code> section we can see that document <code>1:</code> is for the file <code>.../Program.cs</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>Document (index: 0x30, size: 24):
+</span></span><span style="display:flex;"><span>=====================================================================================================================================================================================================================================================================
+</span></span><span style="display:flex;"><span>   Name                                                                                                                            Language  HashAlgorithm  Hash
+</span></span><span style="display:flex;"><span>=====================================================================================================================================================================================================================================================================
+</span></span><span style="display:flex;"><span>1: &#39;/Users/willvk/source/github/wilvk/dotnet-sos/source/own/test_debug/Program.cs&#39; (#51)                                           C# (#2)   SHA-256 (#1)   0A-ED-B2-A4-21-42-46-17-C2-58-03-22-8C-DA-2B-62-0F-85-91-72-23-43-99-61-C7-7B-7B-BF-86-E7-AF-DD (#5e)
+</span></span><span style="display:flex;"><span>2: &#39;/Users/willvk/source/github/wilvk/dotnet-sos/source/own/test_debug/obj/Debug/netcoreapp3.1/test_debug.AssemblyInfo.cs&#39; (#10b)  C# (#2)   SHA-256 (#1)   DA-07-44-CB-7E-8D-B7-0E-E4-75-FC-77-4E-37-78-C0-DE-D4-C6-9B-AC-6F-79-BE-AF-3E-E5-71-25-75-79-A8 (#11f)
+</span></span><span style="display:flex;"><span>3: &#39;/var/folders/04/0cmzblh51t717k__bn1jq8qm0000gn/T/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs&#39; (#19f)                        C# (#2)   SHA-256 (#1)   C0-05-EF-EB-23-4B-50-D8-1B-2F-23-F9-D3-7E-84-53-8C-0F-C2-14-FD-9D-65-22-8C-46-AA-DB-54-2F-5A-88 (#1ae)
+</span></span></code></pre></div><p>Looking at the <code>Document</code> section we can see that document <code>1:</code> is for the file <code>.../Program.cs</code>.</p>
 <p>Using our document number, we can then use the sequence points to determine what our IL instruction is that refers to our line of code. Sequence points are essentially a mapping between sections in our C# code text and the IL representation of that code.</p>
 <p>There are two approaches we can take from here:</p>
 <ul>
@@ -134,80 +134,80 @@
 <p>As the former is more error-prone and complex, we&rsquo;ll opt for the latter approach - scanning.</p>
 <p>Using the <code>MethodDebugInformation</code> secion, we can scan it for all methods that are for Document #1 and that have a sequence point for line 21.</p>
 <p>We find that method <code>#2</code> has a sequence point for line <code>21</code> and Document <code>#1</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">2: #b5
-{
-  Locals: 0x11000002 (StandAloneSig)
-  Document: #1
-
-  IL_0000: (19, 5) - (19, 6)
-  IL_0001: (20, 7) - (20, 45)
-  IL_000F: (21, 7) - (21, 44)
-  IL_0013: (22, 7) - (22, 20)
-  IL_0017: (23, 5) - (23, 6)
-}
-</code></pre></div><p>The line that indicates it is for line 21 is:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">  IL_000F: (21, 7) - (21, 44)
-</code></pre></div><p>This shows us a few things:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>2: #b5
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  Locals: 0x11000002 (StandAloneSig)
+</span></span><span style="display:flex;"><span>  Document: #1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  IL_0000: (19, 5) - (19, 6)
+</span></span><span style="display:flex;"><span>  IL_0001: (20, 7) - (20, 45)
+</span></span><span style="display:flex;"><span>  IL_000F: (21, 7) - (21, 44)
+</span></span><span style="display:flex;"><span>  IL_0013: (22, 7) - (22, 20)
+</span></span><span style="display:flex;"><span>  IL_0017: (23, 5) - (23, 6)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The line that indicates it is for line 21 is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>  IL_000F: (21, 7) - (21, 44)
+</span></span></code></pre></div><p>This shows us a few things:</p>
 <p>Method <code>#2</code> has a sequence point between line 21, column 7 and line 21, column 44.</p>
 <p>If we look at line 21 again, this matches up with the length of the code in the line:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#ae81ff">21</span>       <span style="color:#66d9ef">var</span> delta = currentTicks - lastTicks;
-         ^                                   ^
-     col <span style="color:#ae81ff">7</span>                               col <span style="color:#ae81ff">44</span>
-</code></pre></div><p>The value <code>#b5</code> refers to the location in the PDB blob where the sequence points are stored.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#ae81ff">21</span>       <span style="color:#66d9ef">var</span> delta = currentTicks - lastTicks;
+</span></span><span style="display:flex;"><span>         ^                                   ^
+</span></span><span style="display:flex;"><span>     col <span style="color:#ae81ff">7</span>                               col <span style="color:#ae81ff">44</span>
+</span></span></code></pre></div><p>The value <code>#b5</code> refers to the location in the PDB blob where the sequence points are stored.</p>
 <p>The sequence points are in our pdb <code>#Blob</code> output and can be seen as:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">  b5 (SequencePoints): 02-00-00-01-13-05-01-00-26-02-04-0E-00-25-02-00-04-00-0D-02-00-04-00-01-02-7D
-</code></pre></div><p>The IL sequence point mappings above also tell us the IL offset in this method for line 21 is <code>IL_000F</code>. And as the next IL offest is <code>IL_0013</code>, we can determine that line 21 includes the IL code between <code>IL_000F</code> and <code>IL_0012</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>  b5 (SequencePoints): 02-00-00-01-13-05-01-00-26-02-04-0E-00-25-02-00-04-00-0D-02-00-04-00-01-02-7D
+</span></span></code></pre></div><p>The IL sequence point mappings above also tell us the IL offset in this method for line 21 is <code>IL_000F</code>. And as the next IL offest is <code>IL_0013</code>, we can determine that line 21 includes the IL code between <code>IL_000F</code> and <code>IL_0012</code>.</p>
 <h2 id="finding-the-actual-il-for-our-line-of-code">Finding the actual IL for our line of code.</h2>
 <p>Using the method number <code>2</code>, we can find the corresponding method number in the dll metadata generated by <code>metadata-tools</code> for our application.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">Method (0x06, 0x1C):
-=========================================================================================================================================================================================================================================================
-   Name                     Signature              RVA         Parameters             GenericParameters  Attributes                                                                ImplAttributes  ImportAttributes  ImportName  ImportModule
-=========================================================================================================================================================================================================================================================
-1: &#39;Main&#39; (#1e4)            void (string[]) (#4b)  0x00002050  0x08000001-0x08000001  nil                0x00000091 (PrivateScope, Private, Static, HideBySig)                     0               0                 nil         nil (ModuleRef)
-2: &#39;GetTicksElapsed&#39; (#28)  int64 (int64) (#51)    0x0000209C  0x08000002-0x08000002  nil                0x00000091 (PrivateScope, Private, Static, HideBySig)                     0               0                 nil         nil (ModuleRef)
-3: &#39;.ctor&#39; (#201)           void () (#6)           0x000020C1  nil                    nil                0x00001886 (PrivateScope, Public, HideBySig, SpecialName, RTSpecialName)  0               0                 nil         nil (ModuleRef)
-</code></pre></div><p>This tells us that method <code>#2</code> is called <code>GetTicksElapsed</code> and we can find the IL code for it by reference to <code>#28</code>. Looking further down where the <code>Method</code> IL is shows us the IL code we are after.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">Method &#39;GetTicksElapsed&#39; (#28) (0x06000002)
-  Locals: int64, int64, typeref#d, int64 (#3a)
-{
-  // Code size       25 (0x19)
-  .maxstack  2
-  IL_0000:  nop
-  IL_0001:  call       0x0A00000B
-  IL_0006:  stloc.2
-  IL_0007:  ldloca.s   V_2
-  IL_0009:  call       0x0A00000C
-  IL_000e:  stloc.0
-  IL_000f:  ldloc.0
-  IL_0010:  ldarg.0
-  IL_0011:  sub
-  IL_0012:  stloc.1
-  IL_0013:  ldloc.1
-  IL_0014:  stloc.3
-  IL_0015:  br.s       IL_0017
-  IL_0017:  ldloc.3
-  IL_0018:  ret
-}
-</code></pre></div><h3 id="an-alternative-approach-from-the-pdb-output-to-il">An alternative approach from the pdb output to IL</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>Method (0x06, 0x1C):
+</span></span><span style="display:flex;"><span>=========================================================================================================================================================================================================================================================
+</span></span><span style="display:flex;"><span>   Name                     Signature              RVA         Parameters             GenericParameters  Attributes                                                                ImplAttributes  ImportAttributes  ImportName  ImportModule
+</span></span><span style="display:flex;"><span>=========================================================================================================================================================================================================================================================
+</span></span><span style="display:flex;"><span>1: &#39;Main&#39; (#1e4)            void (string[]) (#4b)  0x00002050  0x08000001-0x08000001  nil                0x00000091 (PrivateScope, Private, Static, HideBySig)                     0               0                 nil         nil (ModuleRef)
+</span></span><span style="display:flex;"><span>2: &#39;GetTicksElapsed&#39; (#28)  int64 (int64) (#51)    0x0000209C  0x08000002-0x08000002  nil                0x00000091 (PrivateScope, Private, Static, HideBySig)                     0               0                 nil         nil (ModuleRef)
+</span></span><span style="display:flex;"><span>3: &#39;.ctor&#39; (#201)           void () (#6)           0x000020C1  nil                    nil                0x00001886 (PrivateScope, Public, HideBySig, SpecialName, RTSpecialName)  0               0                 nil         nil (ModuleRef)
+</span></span></code></pre></div><p>This tells us that method <code>#2</code> is called <code>GetTicksElapsed</code> and we can find the IL code for it by reference to <code>#28</code>. Looking further down where the <code>Method</code> IL is shows us the IL code we are after.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>Method &#39;GetTicksElapsed&#39; (#28) (0x06000002)
+</span></span><span style="display:flex;"><span>  Locals: int64, int64, typeref#d, int64 (#3a)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  // Code size       25 (0x19)
+</span></span><span style="display:flex;"><span>  .maxstack  2
+</span></span><span style="display:flex;"><span>  IL_0000:  nop
+</span></span><span style="display:flex;"><span>  IL_0001:  call       0x0A00000B
+</span></span><span style="display:flex;"><span>  IL_0006:  stloc.2
+</span></span><span style="display:flex;"><span>  IL_0007:  ldloca.s   V_2
+</span></span><span style="display:flex;"><span>  IL_0009:  call       0x0A00000C
+</span></span><span style="display:flex;"><span>  IL_000e:  stloc.0
+</span></span><span style="display:flex;"><span>  IL_000f:  ldloc.0
+</span></span><span style="display:flex;"><span>  IL_0010:  ldarg.0
+</span></span><span style="display:flex;"><span>  IL_0011:  sub
+</span></span><span style="display:flex;"><span>  IL_0012:  stloc.1
+</span></span><span style="display:flex;"><span>  IL_0013:  ldloc.1
+</span></span><span style="display:flex;"><span>  IL_0014:  stloc.3
+</span></span><span style="display:flex;"><span>  IL_0015:  br.s       IL_0017
+</span></span><span style="display:flex;"><span>  IL_0017:  ldloc.3
+</span></span><span style="display:flex;"><span>  IL_0018:  ret
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="an-alternative-approach-from-the-pdb-output-to-il">An alternative approach from the pdb output to IL</h3>
 <p><em>An alternative way of cross-referencing between the two would be to check the <code>CustomDebugInformation</code> in the pdb output, that gives us the offset directly.
 In the PDB output, the method number we found before could then be used to find the offset of our method in the dll metadata.</em></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">CustomDebugInformation (index: 0x37, size: 12):
-===================================================================================
-   Parent                  Kind                     Value
-===================================================================================
-1: 0x06000001 (MethodDef)  EnC Local Slot Map (#3)  01-2A-01-80-83-00-02-09 (#ac)
-2: 0x06000002 (MethodDef)  EnC Local Slot Map (#3)  01-0D-01-3A-00-16-01 (#d0)
-</code></pre></div><p><em>This tells us that our offset for method <code>#2</code> is as address offest <code>0x06000002</code>.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>CustomDebugInformation (index: 0x37, size: 12):
+</span></span><span style="display:flex;"><span>===================================================================================
+</span></span><span style="display:flex;"><span>   Parent                  Kind                     Value
+</span></span><span style="display:flex;"><span>===================================================================================
+</span></span><span style="display:flex;"><span>1: 0x06000001 (MethodDef)  EnC Local Slot Map (#3)  01-2A-01-80-83-00-02-09 (#ac)
+</span></span><span style="display:flex;"><span>2: 0x06000002 (MethodDef)  EnC Local Slot Map (#3)  01-0D-01-3A-00-16-01 (#d0)
+</span></span></code></pre></div><p><em>This tells us that our offset for method <code>#2</code> is as address offest <code>0x06000002</code>.
 Then, in our generated dll output, we can find the method that has an address offset of <code>0x06000002</code> to find our IL code.</em></p>
 <h2 id="interpreting-the-il">Interpreting the IL</h2>
 <p>Our sequence points earlier showed us that the IL was between <code>IL_000F</code> and <code>IL_0012</code>. Inspecting the specific section of IL:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">  IL_000f:  ldloc.0
-  IL_0010:  ldarg.0
-  IL_0011:  sub
-  IL_0012:  stloc.1
-</code></pre></div><p>Then looking at our line of code again:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#ae81ff">21</span>       <span style="color:#66d9ef">var</span> delta = currentTicks - lastTicks;
-</code></pre></div><p>We could almost guess at what the IL is doing:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>  IL_000f:  ldloc.0
+</span></span><span style="display:flex;"><span>  IL_0010:  ldarg.0
+</span></span><span style="display:flex;"><span>  IL_0011:  sub
+</span></span><span style="display:flex;"><span>  IL_0012:  stloc.1
+</span></span></code></pre></div><p>Then looking at our line of code again:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#ae81ff">21</span>       <span style="color:#66d9ef">var</span> delta = currentTicks - lastTicks;
+</span></span></code></pre></div><p>We could almost guess at what the IL is doing:</p>
 <ul>
 <li>loading the value at location 0 for an operation</li>
 <li>loading argument 0 from the method for an operation</li>
@@ -225,12 +225,12 @@ Then, in our generated dll output, we can find the method that has an address of
     <ul>
         
         <li>
-            <a href="https://blog.seso.io/posts/simple-sos-debugging/"><i class="fa fa-chevron-circle-left"></i> Simple Sos Debugging</a>
+            <a href="http://me.wvk.au/posts/simple-sos-debugging/"><i class="fa fa-chevron-circle-left"></i> Simple Sos Debugging</a>
         </li>
         
         
         <li>
-            <a href="https://blog.seso.io/posts/building-dotnet-diagnostics/">Building Dotnet Diagnostics <i class="fa fa-chevron-circle-right"></i> </a>
+            <a href="http://me.wvk.au/posts/building-dotnet-diagnostics/">Building Dotnet Diagnostics <i class="fa fa-chevron-circle-right"></i> </a>
         </li>
         
     </ul>
@@ -296,15 +296,15 @@ Then, in our generated dll output, we can find the method that has an address of
 
 </main>
     <footer>
-        <h6>Copyright © 2018 - Willem van Ketwich | 
+        <h6>Copyright © 2018 - Willem van Ketwich |
             Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+            <a href="http://me.wvk.au/index.xml">Subscribe</a></h6>
     </footer>
 </div>
-<script src="https://blog.seso.io/js/scripts.js"></script>
+<script src="http://me.wvk.au/js/scripts.js"></script>
 
 
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;

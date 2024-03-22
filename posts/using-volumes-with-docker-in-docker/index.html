@@ -7,28 +7,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="The HTML5 Herald" />
-  <meta name="author" content="Willem van Ketwich" />
-  <meta name="generator" content="Hugo 0.74.3" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <meta name="author" content="Willem van Ketwich" /><meta name="generator" content="Hugo 0.123.8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
-  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
-</head>
+  <link rel="stylesheet" type="text/css" href="http://me.wvk.au/css/styles.css" /></head>
 
 <body>
   <div id="container">
     <header>
       <h1>
-                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+                <a href="http://me.wvk.au/">Will&rsquo;s Blog</a>
             </h1>
 
       <ul id="social-media">
         
-        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+        
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://github.com/wilvk"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
            
       </ul>
       
@@ -41,13 +41,13 @@
     <ul>
         
         <li>
-            <a class="" href="https://blog.seso.io/posts/">
+            <a class="" href="http://me.wvk.au/posts/">
                 <i class="fa-li fa  fa-lg"></i><span>blog</span>
             </a>
         </li>
         
         <li>
-            <a class="" href="https://blog.seso.io/about/">
+            <a class="" href="http://me.wvk.au/about/">
                 <i class="fa-li fa  fa-lg"></i><span>about</span>
             </a>
         </li>
@@ -71,68 +71,68 @@
             <time class="post-date" datetime="2019-12-27T20:26:22&#43;11:00">Dec 27, 2019</time>
         </li>
         
-        
 
         
 
-        <li>3 min read</li>
+        <li>3 minutes read</li>
     </ul>
 </aside>
+
     
 
     <p>Docker in Docker (DIND) is a way of accessing a docker container within another docker container. It is commonly used in CI/CD pipelines as it allows the build server to be run in a docker container and allows the build pipeline that is run on the build server to also be run in a docker container.</p>
 <p>The usual way this is done is to link the docker socket from the host to the build server container.</p>
 <p>For example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker run -it -d -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock jenkins-docker
-</code></pre></div><p>Where <code>/var/run/docker.sock</code> is the socket on the host.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -it -d -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock jenkins-docker
+</span></span></code></pre></div><p>Where <code>/var/run/docker.sock</code> is the socket on the host.</p>
 <p>A major downside of this approach is that the socket used inside the container does not have access to the same filesystem that the host has. This limits the volumes that can be mounted inside the docker container for the build process to only those from the host. The result is that any volumes that need to be mounted to the inner container need to be mounted to the build server container (e.g. jenkins-docker) first.</p>
 <p>This can be quite cumbersome in a build pipeline when the user creating and running the build does not have control over mounts of the build server.</p>
 <p>The workaround I have found is to create a volume inside the build server container as part of the build pipeline, copy the required files into the volume, then attach the volume to the container that is doing the build.</p>
 <p>I will illustrate with an example from <a href="https://github.com/tide-org/tide">https://github.com/tide-org/tide</a> that runs on Shippable inside a build server container using DIND:</p>
 <h3 id="the-steps-to-implement-this-are">The steps to implement this are:</h3>
 <p>There was a requirement for another repository in the build process, so this was cloned into the workspace.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone https://github.com/tide-org/tide-plugins $SHIPPABLE_BUILD_DIR/plugins
-</code></pre></div><p>A temporary volume <code>temp-shippable-volume</code> is created to hold the application inside the DIND container:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker volume create temp-shippable-volume
-</code></pre></div><p>A temporary container is then created to mount the <code>temp-shippable-volume</code> volume to:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker container create --name temp-shippable-container -v temp-shippable-volume:/app busybox
-</code></pre></div><p>The required files from the workspace are then copied into the <code>temp-shippable-volume</code> volume:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker cp $SHIPPABLE_BUILD_DIR temp-shippable-container:/app
-</code></pre></div><p>The temp container is then removed:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker rm temp-shippable-container
-</code></pre></div><p>A listing of volumes in the container verifies the <code>temp-shippable-volume</code> is present:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker volume ls
-</code></pre></div><p>An image is created and tagged from the Docker file:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker build -t shippable-python - &lt; tests/docker/Dockerfile
-</code></pre></div><p>The docker image build in the previous step is run with the <code>temp-shippable-volume</code> mounted to the correct location <code>(-v)</code>.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/tide-org/tide-plugins $SHIPPABLE_BUILD_DIR/plugins
+</span></span></code></pre></div><p>A temporary volume <code>temp-shippable-volume</code> is created to hold the application inside the DIND container:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker volume create temp-shippable-volume
+</span></span></code></pre></div><p>A temporary container is then created to mount the <code>temp-shippable-volume</code> volume to:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker container create --name temp-shippable-container -v temp-shippable-volume:/app busybox
+</span></span></code></pre></div><p>The required files from the workspace are then copied into the <code>temp-shippable-volume</code> volume:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker cp $SHIPPABLE_BUILD_DIR temp-shippable-container:/app
+</span></span></code></pre></div><p>The temp container is then removed:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker rm temp-shippable-container
+</span></span></code></pre></div><p>A listing of volumes in the container verifies the <code>temp-shippable-volume</code> is present:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker volume ls
+</span></span></code></pre></div><p>An image is created and tagged from the Docker file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker build -t shippable-python - &lt; tests/docker/Dockerfile
+</span></span></code></pre></div><p>The docker image build in the previous step is run with the <code>temp-shippable-volume</code> mounted to the correct location <code>(-v)</code>.
 An environment variable is set for the tests <code>(-e)</code>.
 The working directory is set inside the build container <code>(-w)</code> and;
 A command line is run inside the DIND container <code>(sh -c &quot;...&quot;)</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker run --rm <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -v temp-shippable-volume:/work <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -e PYTHONPATH<span style="color:#f92672">=</span>/work/tide <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  -w /work/tide <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>  shippable-python sh -c <span style="color:#e6db74">&#34;cd /work/tide/tests/scripts &amp;&amp; ./run-python-tests&#34;</span>
-</code></pre></div><p>The temp-shippable-volume is then removed from the build server to prevent it being used again:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker volume rm temp-shippable-volume
-</code></pre></div><p>The full steps of the shippable.yaml were:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">build</span>:
-  <span style="color:#66d9ef">ci</span>:
-    - git clone https://github.com/tide-org/tide-plugins $SHIPPABLE_BUILD_DIR/plugins
-    - docker volume create temp-shippable-volume
-    - docker container create --name temp-shippable-container -v temp-shippable-volume:/app busybox
-    - docker cp $SHIPPABLE_BUILD_DIR temp-shippable-container:/app
-    - docker rm temp-shippable-container
-    - docker volume ls
-    - docker build -t shippable-python - &lt; tests/docker/Dockerfile
-    - &gt;<span style="color:#e6db74">-
-</span><span style="color:#e6db74">        docker run --rm \</span>
-          -v temp-shippable-volume:/work \
-          -e PYTHONPATH=/work/tide \
-          -w /work/tide \
-          shippable-python sh -c <span style="color:#e6db74">&#34;cd /work/tide/tests/scripts &amp;&amp; ./run-python-tests&#34;</span> \
-    - docker volume rm temp-shippable-volume
-</code></pre></div><p>This took me a few hours to figure out so I decided to write it up in the hope it helps someone else avoid this time-sink.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run --rm <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -v temp-shippable-volume:/work <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -e PYTHONPATH<span style="color:#f92672">=</span>/work/tide <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -w /work/tide <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  shippable-python sh -c <span style="color:#e6db74">&#34;cd /work/tide/tests/scripts &amp;&amp; ./run-python-tests&#34;</span>
+</span></span></code></pre></div><p>The temp-shippable-volume is then removed from the build server to prevent it being used again:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker volume rm temp-shippable-volume
+</span></span></code></pre></div><p>The full steps of the shippable.yaml were:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">build</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ci</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">git clone https://github.com/tide-org/tide-plugins $SHIPPABLE_BUILD_DIR/plugins</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">docker volume create temp-shippable-volume</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">docker container create --name temp-shippable-container -v temp-shippable-volume:/app busybox</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">docker cp $SHIPPABLE_BUILD_DIR temp-shippable-container:/app</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">docker rm temp-shippable-container</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">docker volume ls</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">docker build -t shippable-python - &lt; tests/docker/Dockerfile</span>
+</span></span><span style="display:flex;"><span>    - &gt;-<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        docker run --rm \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          -v temp-shippable-volume:/work \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          -e PYTHONPATH=/work/tide \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          -w /work/tide \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">          shippable-python sh -c &#34;cd /work/tide/tests/scripts &amp;&amp; ./run-python-tests&#34; \</span>        
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">docker volume rm temp-shippable-volume</span>
+</span></span></code></pre></div><p>This took me a few hours to figure out so I decided to write it up in the hope it helps someone else avoid this time-sink.</p>
 
 
 </article>
@@ -142,12 +142,12 @@ A command line is run inside the DIND container <code>(sh -c &quot;...&quot;)</c
     <ul>
         
         <li>
-            <a href="https://blog.seso.io/posts/python-hex-strings/"><i class="fa fa-chevron-circle-left"></i> Using Python for hex, strings, bytes and integers</a>
+            <a href="http://me.wvk.au/posts/python-hex-strings/"><i class="fa fa-chevron-circle-left"></i> Using Python for hex, strings, bytes and integers</a>
         </li>
         
         
         <li>
-            <a href="https://blog.seso.io/posts/troubleshooting-a-dotnet-vim-plugin/">Troubleshooting a Vim dotnet Plugin <i class="fa fa-chevron-circle-right"></i> </a>
+            <a href="http://me.wvk.au/posts/troubleshooting-a-dotnet-vim-plugin/">Troubleshooting a Vim dotnet Plugin <i class="fa fa-chevron-circle-right"></i> </a>
         </li>
         
     </ul>
@@ -213,15 +213,15 @@ A command line is run inside the DIND container <code>(sh -c &quot;...&quot;)</c
 
 </main>
     <footer>
-        <h6>Copyright © 2018 - Willem van Ketwich | 
+        <h6>Copyright © 2018 - Willem van Ketwich |
             Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+            <a href="http://me.wvk.au/index.xml">Subscribe</a></h6>
     </footer>
 </div>
-<script src="https://blog.seso.io/js/scripts.js"></script>
+<script src="http://me.wvk.au/js/scripts.js"></script>
 
 
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;

@@ -7,28 +7,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="The HTML5 Herald" />
-  <meta name="author" content="Willem van Ketwich" />
-  <meta name="generator" content="Hugo 0.74.3" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <meta name="author" content="Willem van Ketwich" /><meta name="generator" content="Hugo 0.123.8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
-  <link rel="stylesheet" type="text/css" href="https://blog.seso.io/css/styles.css" />
-</head>
+  <link rel="stylesheet" type="text/css" href="http://me.wvk.au/css/styles.css" /></head>
 
 <body>
   <div id="container">
     <header>
       <h1>
-                <a href="https://blog.seso.io/">Will&rsquo;s Blog</a>
+                <a href="http://me.wvk.au/">Will&rsquo;s Blog</a>
             </h1>
 
       <ul id="social-media">
         
-        <li><a href="https://twitter.com/wilvk"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+        
+        
+        <li><a href="https://twitter.com/wilvk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://www.linkedin.com/in/willvk"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://www.linkedin.com/in/willvk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
          
-        <li><a href="https://github.com/wilvk"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a></li>
+        <li><a href="https://github.com/wilvk"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
            
       </ul>
       
@@ -41,13 +41,13 @@
     <ul>
         
         <li>
-            <a class="" href="https://blog.seso.io/posts/">
+            <a class="" href="http://me.wvk.au/posts/">
                 <i class="fa-li fa  fa-lg"></i><span>blog</span>
             </a>
         </li>
         
         <li>
-            <a class="" href="https://blog.seso.io/about/">
+            <a class="" href="http://me.wvk.au/about/">
                 <i class="fa-li fa  fa-lg"></i><span>about</span>
             </a>
         </li>
@@ -71,13 +71,13 @@
             <time class="post-date" datetime="2019-10-10T21:27:52&#43;11:00">Oct 10, 2019</time>
         </li>
         
-        
 
         
 
-        <li>6 min read</li>
+        <li>6 minutes read</li>
     </ul>
 </aside>
+
     
 
     <p>I&rsquo;ve taken an interest recently in cryptography, strings, signing strings and using prime numbers for cryptography. I had to keep searching online for the best way to do a transform of my data for:</p>
@@ -91,91 +91,91 @@
 <p>In the case I was looking at, I would have a signature (say from a cookie) that was both base64 encoded and url quoted. This is done so that the binary representation can be sent across the wire (internet) without too much fuss.</p>
 <p>I&rsquo;d start by unquoting the url encoding on the string (to remove, for example the <code>%2D</code> type characters).</p>
 <p>Going into the Python REPL and doing something like the following:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> parse<span style="color:#f92672">.</span>unquote(<span style="color:#e6db74">&#34;AAA%2DBBB&#34;</span>)
-<span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
-</code></pre></div><p>&hellip; returns a string. We can tell as there are single quotes around the result - with nothing else.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> parse<span style="color:#f92672">.</span>unquote(<span style="color:#e6db74">&#34;AAA%2DBBB&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
+</span></span></code></pre></div><p>&hellip; returns a string. We can tell as there are single quotes around the result - with nothing else.</p>
 <p>What if we wanted to base64 encode this string (&lsquo;AAA-BBB&rsquo;)?</p>
 <p>Trying the following fails:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> base64
-<span style="color:#f92672">&gt;&gt;&gt;</span> base64<span style="color:#f92672">.</span>b64encode(<span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
-Traceback (most recent call last):
-  File <span style="color:#e6db74">&#34;&lt;stdin&gt;&#34;</span>, line <span style="color:#ae81ff">1</span>, <span style="color:#f92672">in</span> <span style="color:#f92672">&lt;</span>module<span style="color:#f92672">&gt;</span>
-  File <span style="color:#e6db74">&#34;/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/base64.py&#34;</span>, line <span style="color:#ae81ff">58</span>, <span style="color:#f92672">in</span> b64encode
-    encoded <span style="color:#f92672">=</span> binascii<span style="color:#f92672">.</span>b2a_base64(s, newline<span style="color:#f92672">=</span>False)
-<span style="color:#a6e22e">TypeError</span>: a bytes<span style="color:#f92672">-</span>like object <span style="color:#f92672">is</span> required, <span style="color:#f92672">not</span> <span style="color:#e6db74">&#39;str&#39;</span>
-<span style="color:#f92672">&gt;&gt;&gt;</span>
-</code></pre></div><p>The reason being that the <code>b64encode</code> method expects a byte array to be present.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> base64
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> base64<span style="color:#f92672">.</span>b64encode(<span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
+</span></span><span style="display:flex;"><span>Traceback (most recent call last):
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;&lt;stdin&gt;&#34;</span>, line <span style="color:#ae81ff">1</span>, <span style="color:#f92672">in</span> <span style="color:#f92672">&lt;</span>module<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#e6db74">&#34;/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/base64.py&#34;</span>, line <span style="color:#ae81ff">58</span>, <span style="color:#f92672">in</span> b64encode
+</span></span><span style="display:flex;"><span>    encoded <span style="color:#f92672">=</span> binascii<span style="color:#f92672">.</span>b2a_base64(s, newline<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">TypeError</span>: a bytes<span style="color:#f92672">-</span>like object <span style="color:#f92672">is</span> required, <span style="color:#f92672">not</span> <span style="color:#e6db74">&#39;str&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span>
+</span></span></code></pre></div><p>The reason being that the <code>b64encode</code> method expects a byte array to be present.</p>
 <p>There are several ways to achieve this.</p>
 <p>The easiest is to put a <code>b</code> out the front of our string to tell the interpreter that this string should be used as an array of bytes, like so:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> base64<span style="color:#f92672">.</span>b64encode(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
-<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;QUFBLUJCQg==&#39;</span>
-</code></pre></div><p>Notice that the result is also an array of bytes, with the <code>b</code> at the front of the string.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> base64<span style="color:#f92672">.</span>b64encode(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;QUFBLUJCQg==&#39;</span>
+</span></span></code></pre></div><p>Notice that the result is also an array of bytes, with the <code>b</code> at the front of the string.</p>
 <p>To confirm this, we can get the type of the result and display it&rsquo;s name:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> test <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64encode(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
-<span style="color:#f92672">&gt;&gt;&gt;</span> type(test)<span style="color:#f92672">.</span>__name__
-<span style="color:#e6db74">&#39;bytes&#39;</span>
-</code></pre></div><p>Using the <code>b</code> at the start is ok if we are using a string that has been hard-coded; but in most instances we would need to convert a string to a byte array programatically.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> test <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64encode(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> type(test)<span style="color:#f92672">.</span>__name__
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;bytes&#39;</span>
+</span></span></code></pre></div><p>Using the <code>b</code> at the start is ok if we are using a string that has been hard-coded; but in most instances we would need to convert a string to a byte array programatically.</p>
 <p>For this, there is the <code>.encode()</code> string method. As an example, consider the following:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> test_string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
-<span style="color:#f92672">&gt;&gt;&gt;</span> test_bytes <span style="color:#f92672">=</span> test_string<span style="color:#f92672">.</span>encode()
-<span style="color:#f92672">&gt;&gt;&gt;</span> base64<span style="color:#f92672">.</span>b64encode(test_bytes)
-<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;QUFBLUJCQg==&#39;</span>
-</code></pre></div><p>That works as expected. Great. But&hellip; <em>what if we need to convert back from a byte array to a string?</em> &hellip;I hear you ask. Well, it turns out there&rsquo;s an accompanying <code>.decode()</code> string method just for that case.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> test_bytes <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;QUFBLUJCQg==&#39;</span>
-<span style="color:#f92672">&gt;&gt;&gt;</span> test_string <span style="color:#f92672">=</span> test_bytes<span style="color:#f92672">.</span>decode()
-<span style="color:#f92672">&gt;&gt;&gt;</span> type(test_string)<span style="color:#f92672">.</span>__name__
-<span style="color:#e6db74">&#39;str&#39;</span>
-</code></pre></div><p>So now we&rsquo;re brushed-up on strings and bytes, let&rsquo;s delve into strings and byte arrays of hex values. This is where it gets a bit trickier.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> test_string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> test_bytes <span style="color:#f92672">=</span> test_string<span style="color:#f92672">.</span>encode()
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> base64<span style="color:#f92672">.</span>b64encode(test_bytes)
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;QUFBLUJCQg==&#39;</span>
+</span></span></code></pre></div><p>That works as expected. Great. But&hellip; <em>what if we need to convert back from a byte array to a string?</em> &hellip;I hear you ask. Well, it turns out there&rsquo;s an accompanying <code>.decode()</code> string method just for that case.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> test_bytes <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;QUFBLUJCQg==&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> test_string <span style="color:#f92672">=</span> test_bytes<span style="color:#f92672">.</span>decode()
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> type(test_string)<span style="color:#f92672">.</span>__name__
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;str&#39;</span>
+</span></span></code></pre></div><p>So now we&rsquo;re brushed-up on strings and bytes, let&rsquo;s delve into strings and byte arrays of hex values. This is where it gets a bit trickier.</p>
 <p>If we start again with our original string <code>AAA-BBB</code> and we want to convert that to it&rsquo;s hexadecimal representation, it turns out there are a few ways to do this.</p>
 <p>The simplest way is to call <code>.encode()</code> on the string, and then <code>.hex()</code> on the byte array. The result is a string of hexadecimal values.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> test_string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
-<span style="color:#f92672">&gt;&gt;&gt;</span> hex_string <span style="color:#f92672">=</span> test_string<span style="color:#f92672">.</span>encode()<span style="color:#f92672">.</span>hex()
-<span style="color:#f92672">&gt;&gt;&gt;</span> type(hex_string)<span style="color:#f92672">.</span>__name__
-<span style="color:#e6db74">&#39;str&#39;</span>
-<span style="color:#f92672">&gt;&gt;&gt;</span> hex_string
-<span style="color:#e6db74">&#39;4141412d424242&#39;</span>
-</code></pre></div><p>We can see here <code>41</code> repeated and <code>42</code> repeated as the ASCII values <code>A</code> and <code>B</code> respectively, with a <code>2d</code> in the middle, the hyphen (-). I find the hex-string representation of a string of bytes very useful for working with. Given the string is not too long, it is useful for inspecting and understanding any patterns in the bytes you are working with. When working with forms of cryptography that depend on numbers (and most does to some extent), this is especially useful.</p>
-<p>Another way to get a hex-string is to iterate all the characters of the string, convert them to ordinals then convert them to hex strings then remove all the <code>0x</code>'s at the start and join them back together:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(hex(ord(c))[<span style="color:#ae81ff">2</span>:] <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> <span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
-<span style="color:#e6db74">&#39;4141412d424242&#39;</span>
-</code></pre></div><p>or as:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(<span style="color:#e6db74">&#34;{:x}&#34;</span><span style="color:#f92672">.</span>format(ord(c)) <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> <span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
-<span style="color:#e6db74">&#39;4141412d424242&#39;</span>
-</code></pre></div><p>This approach is less neat but more explicit of what is happening.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> test_string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> hex_string <span style="color:#f92672">=</span> test_string<span style="color:#f92672">.</span>encode()<span style="color:#f92672">.</span>hex()
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> type(hex_string)<span style="color:#f92672">.</span>__name__
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;str&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> hex_string
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;4141412d424242&#39;</span>
+</span></span></code></pre></div><p>We can see here <code>41</code> repeated and <code>42</code> repeated as the ASCII values <code>A</code> and <code>B</code> respectively, with a <code>2d</code> in the middle, the hyphen (-). I find the hex-string representation of a string of bytes very useful for working with. Given the string is not too long, it is useful for inspecting and understanding any patterns in the bytes you are working with. When working with forms of cryptography that depend on numbers (and most does to some extent), this is especially useful.</p>
+<p>Another way to get a hex-string is to iterate all the characters of the string, convert them to ordinals then convert them to hex strings then remove all the <code>0x</code>&rsquo;s at the start and join them back together:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(hex(ord(c))[<span style="color:#ae81ff">2</span>:] <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> <span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;4141412d424242&#39;</span>
+</span></span></code></pre></div><p>or as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{:x}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(ord(c)) <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> <span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;4141412d424242&#39;</span>
+</span></span></code></pre></div><p>This approach is less neat but more explicit of what is happening.</p>
 <p>There is also a helper module in Python 3 called <code>hexlify</code> that takes a byte array and converts this to a string array:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> binascii
-<span style="color:#f92672">&gt;&gt;&gt;</span> binascii<span style="color:#f92672">.</span>hexlify(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
-<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;4141412d424242&#39;</span>
-<span style="color:#f92672">&gt;&gt;&gt;</span> binascii<span style="color:#f92672">.</span>hexlify(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)<span style="color:#f92672">.</span>decode()
-<span style="color:#e6db74">&#39;4141412d424242&#39;</span>
-</code></pre></div><p>and it&rsquo;s compliment <code>unhexlify</code>, which takes a string, not a byte array, and outputs a byte array.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> binascii<span style="color:#f92672">.</span>unhexlify(<span style="color:#e6db74">&#39;4141412d424242&#39;</span>)
-<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
-<span style="color:#f92672">&gt;&gt;&gt;</span> binascii<span style="color:#f92672">.</span>unhexlify(<span style="color:#e6db74">&#39;4141412d424242&#39;</span>)<span style="color:#f92672">.</span>decode()
-<span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
-</code></pre></div><p>If we want to go the other way, and convert a hex-string or byte array to its string representation there are also many ways to do this. I&rsquo;ll quickly go through these ways:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> binascii
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> binascii<span style="color:#f92672">.</span>hexlify(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;4141412d424242&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> binascii<span style="color:#f92672">.</span>hexlify(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>)<span style="color:#f92672">.</span>decode()
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;4141412d424242&#39;</span>
+</span></span></code></pre></div><p>and it&rsquo;s compliment <code>unhexlify</code>, which takes a string, not a byte array, and outputs a byte array.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> binascii<span style="color:#f92672">.</span>unhexlify(<span style="color:#e6db74">&#39;4141412d424242&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> binascii<span style="color:#f92672">.</span>unhexlify(<span style="color:#e6db74">&#39;4141412d424242&#39;</span>)<span style="color:#f92672">.</span>decode()
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;AAA-BBB&#39;</span>
+</span></span></code></pre></div><p>If we want to go the other way, and convert a hex-string or byte array to its string representation there are also many ways to do this. I&rsquo;ll quickly go through these ways:</p>
 <p>given a hex string:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">hex_string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;1234ABCD&#39;</span>
-byte_array <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;1234ABCD&#39;</span>
-</code></pre></div><p>From a byte array to string, we can use <code>byte_array.decode()</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>hex_string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;1234ABCD&#39;</span>
+</span></span><span style="display:flex;"><span>byte_array <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;1234ABCD&#39;</span>
+</span></span></code></pre></div><p>From a byte array to string, we can use <code>byte_array.decode()</code></p>
 <p>From a string of hex to a byte array of characters, we can use <code>bytes.fromhex(hex_string)</code></p>
 <p>From a string of hex to a string of characters, we can use <code>bytes.fromhex(hex_string).decode()</code></p>
 <p>Note that the last <code>.decode()</code> will fail as there are bytes that cannot be converted back to a character representation.</p>
 <p>A string representation of a series of hex values may not be printable, and may not even convert neatly to an encoding such a <code>utf-8</code>. In many cases, this is not an issue as the string is a binary representation of something else anyway and is not dissimilar to a fixed-length array of characters without a null-terminator - but I digress. This is partly why base64 is commonly used across the wire.</p>
 <h2 id="conversion-between-hex-and-integers-for-calculation-of-long-numbers">Conversion between hex and integers for calculation of long numbers.</h2>
 <p>As a final step, we may want to use this hex string representation as an integer value. This is probably the most straightforwad step, where we just cast our string to an <code>int()</code> and define that it is of base <code>16</code>, for example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> int(<span style="color:#e6db74">&#39;4141412d424242&#39;</span>, <span style="color:#ae81ff">16</span>)
-<span style="color:#ae81ff">18367621674189378</span>
-</code></pre></div><h2 id="number-base-conversions">Number base conversions</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> int(<span style="color:#e6db74">&#39;4141412d424242&#39;</span>, <span style="color:#ae81ff">16</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">18367621674189378</span>
+</span></span></code></pre></div><h2 id="number-base-conversions">Number base conversions</h2>
 <p>Numbers in Python can be represented many ways. A standard number in Python uses a base of <code>10</code>, such that <code>10</code> is the number ten. Putting a <code>0x</code> out the front makes that number now a hex number, like shown below. If we have a hexadecimal value as a string that we want to convert to a decimal, we can use the <code>int('hex', 16)</code> approach below.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> int(<span style="color:#e6db74">&#39;A&#39;</span>, <span style="color:#ae81ff">16</span>)
-<span style="color:#ae81ff">10</span>
-<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#ae81ff">0x10</span>
-<span style="color:#ae81ff">16</span>
-</code></pre></div><h2 id="hex-characters-in-a-string-in-a-byte-array-etc">Hex characters in a string, in a byte array, etc.</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> int(<span style="color:#e6db74">&#39;A&#39;</span>, <span style="color:#ae81ff">16</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#ae81ff">0x10</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">16</span>
+</span></span></code></pre></div><h2 id="hex-characters-in-a-string-in-a-byte-array-etc">Hex characters in a string, in a byte array, etc.</h2>
 <p>Values in a string can also be represented by their hexadecimal equivalent by escaping the value with <code>\x</code>, as shown.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"> string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\x4a\x82\xfd\xfe\xff\x00</span><span style="color:#e6db74">&#39;</span>
-</code></pre></div><p>There is a continuum of data types when handling data between a website and it&rsquo;s use and analysis:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span> string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\x4a\x82\xfd\xfe\xff\x00</span><span style="color:#e6db74">&#39;</span>
+</span></span></code></pre></div><p>There is a continuum of data types when handling data between a website and it&rsquo;s use and analysis:</p>
 <h2 id="decoding">Decoding:</h2>
 <ul>
 <li>url-encoded, base 64 encoded string</li>
@@ -208,12 +208,12 @@ byte_array <span style="color:#f92672">=</span> <span style="color:#e6db74">b</s
     <ul>
         
         <li>
-            <a href="https://blog.seso.io/posts/common-ide-keyboard-shortcuts/"><i class="fa fa-chevron-circle-left"></i> Common IDE Keyboard Shortcuts</a>
+            <a href="http://me.wvk.au/posts/common-ide-keyboard-shortcuts/"><i class="fa fa-chevron-circle-left"></i> Common IDE Keyboard Shortcuts</a>
         </li>
         
         
         <li>
-            <a href="https://blog.seso.io/posts/using-volumes-with-docker-in-docker/">Using Volumes With Docker in Docker <i class="fa fa-chevron-circle-right"></i> </a>
+            <a href="http://me.wvk.au/posts/using-volumes-with-docker-in-docker/">Using Volumes With Docker in Docker <i class="fa fa-chevron-circle-right"></i> </a>
         </li>
         
     </ul>
@@ -279,15 +279,15 @@ byte_array <span style="color:#f92672">=</span> <span style="color:#e6db74">b</s
 
 </main>
     <footer>
-        <h6>Copyright © 2018 - Willem van Ketwich | 
+        <h6>Copyright © 2018 - Willem van Ketwich |
             Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="https://blog.seso.ioindex.xml">Subscribe</a></h6>
+            <a href="http://me.wvk.au/index.xml">Subscribe</a></h6>
     </footer>
 </div>
-<script src="https://blog.seso.io/js/scripts.js"></script>
+<script src="http://me.wvk.au/js/scripts.js"></script>
 
 
-<script type="application/javascript">
+<script>
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
