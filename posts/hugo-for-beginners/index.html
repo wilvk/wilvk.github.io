@@ -1,86 +1,251 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
 
-<html lang="en-US">
-
-<head>
-  <title>Will&#39;s Blog</title>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="The HTML5 Herald" />
-  <meta name="author" content="Willem van Ketwich" /><meta name="generator" content="Hugo 0.123.8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
-  <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
-  <link rel="stylesheet" type="text/css" href="http://me.wvk.au/css/styles.css" /></head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-<body>
-  <div id="container">
-    <header>
-      <h1>
-                <a href="http://me.wvk.au/">Will&rsquo;s Blog</a>
-            </h1>
+ 
 
-      <ul id="social-media">
+
+      <title>Hugo for Beginners - </title>
+
+  <meta name="description" content="I wanted to put together some notes on how to set up a Github Pages blog using the Hugo static pages publishing application as when I went through this process myself, I found it less than intuitive.">
+  <meta name="author" content="Willem van Ketwich"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Will\u0027s Blog",
+    
+    "url": "http:\/\/me.wvk.au\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "http:\/\/me.wvk.au\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "http:\/\/me.wvk.au\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "http:\/\/me.wvk.au\/posts\/hugo-for-beginners\/",
+          "name": "Hugo for beginners"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Willem van Ketwich"
+  },
+  "headline": "Hugo for Beginners",
+  "description" : "I wanted to put together some notes on how to set up a Github Pages blog using the Hugo static pages publishing application as when I went through this process myself, I found it less than intuitive.",
+  "inLanguage" : "en",
+  "wordCount":  939 ,
+  "datePublished" : "2018-08-31T19:04:23",
+  "dateModified" : "2018-08-31T19:04:23",
+  "image" : "http:\/\/me.wvk.au\/",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "http:\/\/me.wvk.au\/posts\/hugo-for-beginners\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "http:\/\/me.wvk.au\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "http:\/\/me.wvk.au\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="Hugo for Beginners" />
+<meta property="og:description" content="I wanted to put together some notes on how to set up a Github Pages blog using the Hugo static pages publishing application as when I went through this process myself, I found it less than intuitive.">
+<meta property="og:url" content="http://me.wvk.au/posts/hugo-for-beginners/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Will&#39;s Blog" />
+
+  <meta name="twitter:title" content="Hugo for Beginners" />
+  <meta name="twitter:description" content="I wanted to put together some notes on how to set up a Github Pages blog using the Hugo static pages publishing application as when I went through this process myself, I found it less than intuitive.">
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@wilvk" />
+  <meta name="twitter:creator" content="@wilvk" />
+  <meta name="generator" content="Hugo 0.124.1">
+  <link rel="alternate" href="http://me.wvk.au/index.xml" type="application/rss+xml" title="Will&#39;s Blog"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css" integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"><link rel="stylesheet" href="http://me.wvk.au/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="http://me.wvk.au/css/syntax.css" /><link rel="stylesheet" href="http://me.wvk.au/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-122351489-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://me.wvk.au/">Will&#39;s Blog</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
         
+          
+            <li>
+              <a title="blog" href="http://me.wvk.au/posts/">blog</a>
+            </li>
+          
         
+          
+            <li>
+              <a title="about" href="http://me.wvk.au/about/">about</a>
+            </li>
+          
         
-        <li><a href="https://twitter.com/wilvk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-         
-        <li><a href="https://www.linkedin.com/in/willvk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-         
-        <li><a href="https://github.com/wilvk"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
-           
+
+        
+
+        
       </ul>
-      
-      <p><em>Just a dude that does stuff.. mostly with computers.</em></p>
-      
-    </header>
+    </div>
 
     
-<nav>
-    <ul>
-        
-        <li>
-            <a class="" href="http://me.wvk.au/posts/">
-                <i class="fa-li fa  fa-lg"></i><span>blog</span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="" href="http://me.wvk.au/about/">
-                <i class="fa-li fa  fa-lg"></i><span>about</span>
-            </a>
-        </li>
-        
-    </ul>
+
+  </div>
 </nav>
 
-    <main>
 
 
-
-
-<article>
-
-    <h1>Hugo for Beginners</h1>
-
-    
-        <aside>
-    <ul>
-        <li>
-            <time class="post-date" datetime="2018-08-31T19:04:23&#43;10:00">Aug 31, 2018</time>
-        </li>
-        
-
-        
-
-        <li>5 minutes read</li>
-    </ul>
-</aside>
 
     
 
-    <p>I wanted to put together some notes on how to set up a <a href="https://pages.github.com/">Github Pages</a> blog using the <a href="https://gohugo.io/">Hugo</a> static pages publishing application as when I went through this process myself, I found it less than intuitive.</p>
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>Hugo for Beginners</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>I wanted to put together some notes on how to set up a <a href="https://pages.github.com/">Github Pages</a> blog using the <a href="https://gohugo.io/">Hugo</a> static pages publishing application as when I went through this process myself, I found it less than intuitive.</p>
 <p>Github Pages is a great way to spin up a personal blog, product page or any other type of site that doesn&rsquo;t require stateful application logic to be involved.</p>
 <p>The defacto static page generator is considered to be Jekyll, which is a versatile, and extensible framework. However, being a fan of Golang I decided to go with the more gopher-friendly option, Hugo.</p>
 <h1 id="using-github-pages">Using Github Pages</h1>
@@ -97,7 +262,7 @@
 <p>If you have your own domain name, this can be integrated into Github Pages by going to the Settings section of the repository.</p>
 <h1 id="an-overview">An overview</h1>
 <p>The way I set up my blog was to have one repository for the static pages to be delivered by Github Pages, and another for generating the static pages using Hugo. I have a script for generating the site and pushing the changes to the Github Pages site so I don&rsquo;t have to do this manually every time.</p>
-<p><img src="https://blog.seso.io/img/hugo_blog.svg" alt="hugo build diagram"></p>
+<p><img src="http://me.wvk.au/img/hugo_blog.svg" alt="hugo build diagram"></p>
 <p>We can see from the diagram that the build clones the <code>wilvk/wilvk.github.io</code> repository inside the <code>wilvk/blog-hugo</code> repository to the <code>./public</code> path. It then builds the full Hugo site into the <code>./public</code> path and pushes the changes back to the <code>wilvk/wilvk.github.io</code> repository.</p>
 <h1 id="an-automated-process">An automated process</h1>
 <p>I place the following script in the base of the <code>wilvk/blog-hugo</code> repository and run it to push the changes to the site:</p>
@@ -126,7 +291,7 @@
 <p>Hugo also has support for <a href="https://disqus.com/">Disqus</a> so that users can comment on your blogs and you don&rsquo;t have to store the comments in an application - allowing your website to remain stateless.</p>
 <p>Google Analytics is free from Google and Disqus is also a free service. With IDs from both these services, you can turn your Github Pages into a proper blog.</p>
 <p>The following is how I have set up my <code>config.toml</code> file:</p>
-<pre tabindex="0"><code>baseurl = &#34;https://blog.seso.io&#34;
+<pre tabindex="0"><code>baseurl = &#34;http://me.wvk.au&#34;
 title = &#34;Will&#39;s Blog&#34;
 copyright = &#34;Copyright &amp;copy; 2018 - Willem van Ketwich&#34;
 canonifyurls = true
@@ -185,104 +350,117 @@ languageCode = &#34;en-US&#34;
 <p>Happy blogging!</p>
 
 
-</article>
-
-
-<section class="post-nav">
-    <ul>
         
-        <li>
-            <a href="http://me.wvk.au/posts/creating-a-fibonacci-generator-in-assembly/"><i class="fa fa-chevron-circle-left"></i> Creating a Fibonacci Generator in Assembly</a>
-        </li>
+
         
+
         
-        <li>
-            <a href="http://me.wvk.au/posts/gdb-on-macos/">Gdb on MacOS <i class="fa fa-chevron-circle-right"></i> </a>
-        </li>
-        
-    </ul>
-</section>
-    
-        <section class="comments-block">
-      <button id="show-comments" style="display: none;"><i class="fa fa-comments-o"></i> Add/View Comments</button>
-</section>
+      </article>
 
-<section id="disqus_thread"></section>
-
-<script>
-      (function () {
-            
-            
-            if (window.location.hostname == "localhost")
-                  return;
-
-            var disqus_loaded = false;
-            var disqus_shortname = 'wilvk-github-io';
-            var disqus_button = document.getElementById("show-comments");
-
-            disqus_button.style.display = "";
-            disqus_button.addEventListener("click", disqus, false);
-
-            function disqus() {
-
-                  if (!disqus_loaded) {
-                        disqus_loaded = true;
-
-                        var e = document.createElement("script");
-                        e.type = "text/javascript";
-                        e.async = true;
-                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
-                        (document.getElementsByTagName("head")[0] ||
-                              document.getElementsByTagName("body")[0])
-                        .appendChild(e);
-
-                        
-                        document.getElementById("show-comments").style.display = "none";
-                  }
-            }
-
-            
-            var hash = window.location.hash.substr(1);
-            if (hash.length > 8) {
-                  if (hash.substring(0, 8) == "comment-") {
-                        disqus();
-                  }
-            }
-
-            
-            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
-                  disqus();
-            }
-      })();
-</script>
-    
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="http://me.wvk.au/posts/creating-a-fibonacci-generator-in-assembly/" data-toggle="tooltip" data-placement="top" title="Creating a Fibonacci Generator in Assembly">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="http://me.wvk.au/posts/gdb-on-macos/" data-toggle="tooltip" data-placement="top" title="Gdb on MacOS">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
 
 
+      
 
-
-
-</main>
-    <footer>
-        <h6>Copyright © 2018 - Willem van Ketwich |
-            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="http://me.wvk.au/index.xml">Subscribe</a></h6>
-    </footer>
+    </div>
+  </div>
 </div>
-<script src="http://me.wvk.au/js/scripts.js"></script>
+
+      
+<footer>
+  <div class="container">
+    
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+		
+		  <a href="https://github.com/wilvk" title="GitHub">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://twitter.com/wilvk" title="Twitter">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://linkedin.com/in/willvk" title="LinkedIn">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Willem van Ketwich
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2020
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="http://me.wvk.au/">Will&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.124.1</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js" integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha384-w5y/xIeYixWvfM+A1cEbmHPURnvyqmVg5eVENruEdDjcyRLUSNej7512JQGspFUr" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+<script src="http://me.wvk.au/js/main.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="http://me.wvk.au/js/load-photoswipe.js"></script>
 
 
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-122351489-2', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 
-</body>
 
+
+
+
+
+    
+  </body>
 </html>
+

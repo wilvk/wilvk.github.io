@@ -1,91 +1,256 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
 
-<html lang="en-US">
-
-<head>
-  <title>Will&#39;s Blog</title>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="The HTML5 Herald" />
-  <meta name="author" content="Willem van Ketwich" /><meta name="generator" content="Hugo 0.123.8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
-  <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
-  <link rel="stylesheet" type="text/css" href="http://me.wvk.au/css/styles.css" /></head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-<body>
-  <div id="container">
-    <header>
-      <h1>
-                <a href="http://me.wvk.au/">Will&rsquo;s Blog</a>
-            </h1>
+ 
 
-      <ul id="social-media">
+
+      <title>Gdb on MacOS - </title>
+
+  <meta name="description" content="GDB, or the GNU Debugger has been around for years. It was first written by Richard Stallman in 1986 and has a long heritage on Unix, Linux and other Operating Systems.">
+  <meta name="author" content="Willem van Ketwich"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Will\u0027s Blog",
+    
+    "url": "http:\/\/me.wvk.au\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "http:\/\/me.wvk.au\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "http:\/\/me.wvk.au\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "http:\/\/me.wvk.au\/posts\/gdb-on-macos\/",
+          "name": "Gdb on MAC os"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Willem van Ketwich"
+  },
+  "headline": "Gdb on MacOS",
+  "description" : "GDB, or the GNU Debugger has been around for years. It was first written by Richard Stallman in 1986 and has a long heritage on Unix, Linux and other Operating Systems.",
+  "inLanguage" : "en",
+  "wordCount":  446 ,
+  "datePublished" : "2019-06-29T17:22:07",
+  "dateModified" : "2019-06-29T17:22:07",
+  "image" : "http:\/\/me.wvk.au\/",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "http:\/\/me.wvk.au\/posts\/gdb-on-macos\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "http:\/\/me.wvk.au\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "http:\/\/me.wvk.au\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="Gdb on MacOS" />
+<meta property="og:description" content="GDB, or the GNU Debugger has been around for years. It was first written by Richard Stallman in 1986 and has a long heritage on Unix, Linux and other Operating Systems.">
+<meta property="og:url" content="http://me.wvk.au/posts/gdb-on-macos/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Will&#39;s Blog" />
+
+  <meta name="twitter:title" content="Gdb on MacOS" />
+  <meta name="twitter:description" content="GDB, or the GNU Debugger has been around for years. It was first written by Richard Stallman in 1986 and has a long heritage on Unix, Linux and other Operating Systems.">
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@wilvk" />
+  <meta name="twitter:creator" content="@wilvk" />
+  <meta name="generator" content="Hugo 0.124.1">
+  <link rel="alternate" href="http://me.wvk.au/index.xml" type="application/rss+xml" title="Will&#39;s Blog"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css" integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous"><link rel="stylesheet" href="http://me.wvk.au/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="http://me.wvk.au/css/syntax.css" /><link rel="stylesheet" href="http://me.wvk.au/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-122351489-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://me.wvk.au/">Will&#39;s Blog</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
         
+          
+            <li>
+              <a title="blog" href="http://me.wvk.au/posts/">blog</a>
+            </li>
+          
         
+          
+            <li>
+              <a title="about" href="http://me.wvk.au/about/">about</a>
+            </li>
+          
         
-        <li><a href="https://twitter.com/wilvk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-         
-        <li><a href="https://www.linkedin.com/in/willvk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-         
-        <li><a href="https://github.com/wilvk"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
-           
+
+        
+
+        
       </ul>
-      
-      <p><em>Just a dude that does stuff.. mostly with computers.</em></p>
-      
-    </header>
+    </div>
 
     
-<nav>
-    <ul>
-        
-        <li>
-            <a class="" href="http://me.wvk.au/posts/">
-                <i class="fa-li fa  fa-lg"></i><span>blog</span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="" href="http://me.wvk.au/about/">
-                <i class="fa-li fa  fa-lg"></i><span>about</span>
-            </a>
-        </li>
-        
-    </ul>
+
+  </div>
 </nav>
 
-    <main>
 
 
-
-
-<article>
-
-    <h1>Gdb on MacOS</h1>
-
-    
-        <aside>
-    <ul>
-        <li>
-            <time class="post-date" datetime="2019-06-29T17:22:07&#43;10:00">Jun 29, 2019</time>
-        </li>
-        
-
-        
-
-        <li>3 minutes read</li>
-    </ul>
-</aside>
 
     
 
-    <p>GDB, or the GNU Debugger has been around for years. It was first written by Richard Stallman in 1986 and has a long heritage on Unix, Linux and other Operating Systems. I’ve started using it recently for debugging applications in assembly from my MacBook Pro.</p>
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>Gdb on MacOS</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>GDB, or the GNU Debugger has been around for years. It was first written by Richard Stallman in 1986 and has a long heritage on Unix, Linux and other Operating Systems. I’ve started using it recently for debugging applications in assembly from my MacBook Pro.</p>
 <p>I wanted to be able to debug both local MacOS binary applications as well as remotely debug Linux applications in Docker containers. This is not as simple as it seems as the format of binaries used on MacOS and Linux are different - MacOS uses the MachO binary format and Linux uses the ELF binary format. This on its own isn’t a problem, but it turns out that different versions of GDB are needed to interpret the different binary formats.</p>
 <p>Adding to the confusion, Apple has been moving away from GDB for low-level debugging on MacOS in favour of LLVM, where since Mac OS X version 10.4 (Maverick) applications like Eclipse which rely on GDB started to fail.</p>
 <h1 id="my-use-cases">My Use-Cases</h1>
 <p>I essentially have 2 use-cases I need to be able to debug for:</p>
-<p><img src="https://blog.seso.io/img/gdb.drawio.png" alt="gdb use cases"></p>
+<p><img src="http://me.wvk.au/img/gdb.drawio.png" alt="gdb use cases"></p>
 <h1 id="installing-gdb-to-debug-macho-binaries-locally">Installing GDB to debug MachO binaries locally:</h1>
 <p>There are some great instructions on how to do this <a href="https://www.ics.uci.edu/~pattis/common/handouts/macmingweclipse/allexperimental/mac-gdb-install.html">here</a>, that go through the code-signing process required when installing gdb from brew.</p>
 <p>In addition, since GDB vesion 8.2 in conjunction with MacOS X Mojave 10.14, the GDB libraries have not been kept up to date on MacOS, and so further instructions, with a specific brew formula for installing a patched version of GDB have been necessary to get this to work. Take a look <a href="https://stackoverflow.com/a/53586598/512965">here</a> and <a href="https://raw.githubusercontent.com/timotheecour/homebrew-timutil/master/gdb_tim.rb">here</a> for instructions on this.</p>
@@ -101,104 +266,117 @@
 </code></pre><p>I hope this is useful to someone out there who was as lost as I was encountering this.</p>
 
 
-</article>
-
-
-<section class="post-nav">
-    <ul>
         
-        <li>
-            <a href="http://me.wvk.au/posts/hugo-for-beginners/"><i class="fa fa-chevron-circle-left"></i> Hugo for Beginners</a>
-        </li>
+
         
+
         
-        <li>
-            <a href="http://me.wvk.au/posts/common-ide-keyboard-shortcuts/">Common IDE Keyboard Shortcuts <i class="fa fa-chevron-circle-right"></i> </a>
-        </li>
-        
-    </ul>
-</section>
-    
-        <section class="comments-block">
-      <button id="show-comments" style="display: none;"><i class="fa fa-comments-o"></i> Add/View Comments</button>
-</section>
+      </article>
 
-<section id="disqus_thread"></section>
-
-<script>
-      (function () {
-            
-            
-            if (window.location.hostname == "localhost")
-                  return;
-
-            var disqus_loaded = false;
-            var disqus_shortname = 'wilvk-github-io';
-            var disqus_button = document.getElementById("show-comments");
-
-            disqus_button.style.display = "";
-            disqus_button.addEventListener("click", disqus, false);
-
-            function disqus() {
-
-                  if (!disqus_loaded) {
-                        disqus_loaded = true;
-
-                        var e = document.createElement("script");
-                        e.type = "text/javascript";
-                        e.async = true;
-                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
-                        (document.getElementsByTagName("head")[0] ||
-                              document.getElementsByTagName("body")[0])
-                        .appendChild(e);
-
-                        
-                        document.getElementById("show-comments").style.display = "none";
-                  }
-            }
-
-            
-            var hash = window.location.hash.substr(1);
-            if (hash.length > 8) {
-                  if (hash.substring(0, 8) == "comment-") {
-                        disqus();
-                  }
-            }
-
-            
-            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
-                  disqus();
-            }
-      })();
-</script>
-    
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="http://me.wvk.au/posts/hugo-for-beginners/" data-toggle="tooltip" data-placement="top" title="Hugo for Beginners">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="http://me.wvk.au/posts/common-ide-keyboard-shortcuts/" data-toggle="tooltip" data-placement="top" title="Common IDE Keyboard Shortcuts">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
 
 
+      
 
-
-
-</main>
-    <footer>
-        <h6>Copyright © 2018 - Willem van Ketwich |
-            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="http://me.wvk.au/index.xml">Subscribe</a></h6>
-    </footer>
+    </div>
+  </div>
 </div>
-<script src="http://me.wvk.au/js/scripts.js"></script>
+
+      
+<footer>
+  <div class="container">
+    
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+		
+		  <a href="https://github.com/wilvk" title="GitHub">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://twitter.com/wilvk" title="Twitter">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+		
+		  <a href="https://linkedin.com/in/willvk" title="LinkedIn">
+		
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Willem van Ketwich
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2020
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="http://me.wvk.au/">Will&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.124.1</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js" integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha384-w5y/xIeYixWvfM+A1cEbmHPURnvyqmVg5eVENruEdDjcyRLUSNej7512JQGspFUr" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+<script src="http://me.wvk.au/js/main.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="http://me.wvk.au/js/load-photoswipe.js"></script>
 
 
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-122351489-2', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 
-</body>
 
+
+
+
+
+    
+  </body>
 </html>
+
