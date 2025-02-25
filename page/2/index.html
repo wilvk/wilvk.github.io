@@ -8,8 +8,7 @@
 
 
 <title>Will&#39;s Blog</title>
-
-<meta name="author" content="Willem van Ketwich"><script type="application/ld+json">
+<script type="application/ld+json">
 {
     "@context": "http://schema.org",
     "@type": "WebSite",
@@ -39,7 +38,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="http://me.wvk.au/favicon/favicon-16x16.png">
 
 
-<meta name="generator" content="Hugo 0.124.1">
+<meta name="generator" content="Hugo 0.144.1">
 <link rel="alternate" href="http://me.wvk.au/index.xml" type="application/rss+xml" title="Will&#39;s Blog">
 <script src="http://me.wvk.au/js/dark-mode.js"></script><link rel="stylesheet" href="http://me.wvk.au/style.min.css">
 
@@ -47,18 +46,6 @@
 
 
 
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-122351489-2', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
 
 
   </head>
@@ -183,7 +170,7 @@ if (!doNotTrack) {
 
                 <div class="post-entry">
                     
-                    I wanted to put together some notes on how to set up a Github Pages blog using the Hugo static pages publishing application as when I went through this process myself, I found it less than intuitive.
+                    <p>I wanted to put together some notes on how to set up a <a href="https://pages.github.com/">Github Pages</a> blog using the <a href="https://gohugo.io/">Hugo</a> static pages publishing application as when I went through this process myself, I found it less than intuitive.</p>
                     
                 </div>
 
@@ -231,7 +218,67 @@ if (!doNotTrack) {
 
                 <div class="post-entry">
                     
-                    Contents Intro Following along at home A beginning Some starting knowledge Overview of the implementation Beginning the implementation Building binary files from assembly files The structure of a GAS assembly file Sections Comments Instructions and opcodes The application entry-point and labels Compiling our code Reading from the process arguments and converting to a numeric value Debugging with GDB Getting the length of our argument on the command line Making things easier to understand using function calls Converting a string to a number Some new functions Zeroing registers Register sizes and layout Processing the string The actual Fibonacci algorithm Creating the stack space for our array The Fibonacci logic in assembly Setting up our variables Array memory allocation Variable initialisation Indexed memory Running the loop to completion Calculating the sequence Printing our result Doing things the hard way Conclusion From here to there Intro Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland.
+                    <h1 id="contents">Contents</h1>
+<ul>
+<li><a href="#intro">Intro</a>
+<ul>
+<li><a href="#following-along-at-home">Following along at home</a></li>
+<li><a href="#a-beginning">A beginning</a></li>
+<li><a href="#some-starting-knowledge">Some starting knowledge</a></li>
+<li><a href="#overview-of-the-implementation">Overview of the implementation</a></li>
+</ul>
+</li>
+<li><a href="#beginning-the-implementation">Beginning the implementation</a>
+<ul>
+<li><a href="#building-binary-files-from-assembly-files">Building binary files from assembly files</a></li>
+<li><a href="#the-structure-of-a-gas-assembly-file">The structure of a GAS assembly file</a></li>
+<li><a href="#sections">Sections</a></li>
+<li><a href="#comments">Comments</a></li>
+<li><a href="#instructions-and-opcodes">Instructions and opcodes</a></li>
+<li><a href="#the-application-entry--point-and-labels">The application entry-point and labels</a></li>
+<li><a href="#compiling-our-code">Compiling our code</a></li>
+<li><a href="#reading-from-the-process-arguments-and-converting-to-a-numeric-value">Reading from the process arguments and converting to a numeric value</a></li>
+<li><a href="#debugging-with-gdb">Debugging with GDB</a></li>
+</ul>
+</li>
+<li><a href="#getting-the-length-of-our-argument-on-the-command-line">Getting the length of our argument on the command line</a>
+<ul>
+<li><a href="#making-things-easier-to-understand-using-function-calls">Making things easier to understand using function calls</a></li>
+</ul>
+</li>
+<li><a href="#converting-a-string-to-a-number">Converting a string to a number</a>
+<ul>
+<li><a href="#some-new-functions">Some new functions</a></li>
+<li><a href="#zeroing-registers">Zeroing registers</a></li>
+<li><a href="#register-sizes-and-layout">Register sizes and layout</a></li>
+<li><a href="#processing-the-string">Processing the string</a></li>
+</ul>
+</li>
+<li><a href="#the-actual-fibonacci-algorithm">The actual Fibonacci algorithm</a>
+<ul>
+<li><a href="#creating-the-stack-space-for-our-array">Creating the stack space for our array</a></li>
+<li><a href="#the-fibonacci-logic-in-assembly">The Fibonacci logic in assembly</a></li>
+<li><a href="#setting-up-our-variables">Setting up our variables</a></li>
+<li><a href="#array-memory-allocation">Array memory allocation</a></li>
+<li><a href="#variable-initialisation">Variable initialisation</a></li>
+<li><a href="#indexed-memory">Indexed memory</a></li>
+<li><a href="#running-the-loop-to-completion">Running the loop to completion</a></li>
+<li><a href="#calculating-the-sequence">Calculating the sequence</a></li>
+</ul>
+</li>
+<li><a href="#printing-our-result">Printing our result</a>
+<ul>
+<li><a href="#doing-things-the-hard-way">Doing things the hard way</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a>
+<ul>
+<li><a href="#from-here-to-there">From here to there</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="intro">Intro</h1>
+<p>Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland. I thought I&rsquo;d write a simple ASM application to compute Fibonacci to a given number of iterations.</p>
                     
                 </div>
 
@@ -279,7 +326,8 @@ if (!doNotTrack) {
 
                 <div class="post-entry">
                     
-                    Welcome to my new blog site. This is just a placeholder until I have some content to post here. It won&rsquo;t be long&hellip; :tick-tock:
+                    <h1 id="welcome-to-my-new-blog-site">Welcome to my new blog site.</h1>
+<p>This is just a placeholder until I have some content to post here. It won&rsquo;t be long&hellip; :tick-tock:</p>
                     
                 </div>
 
@@ -348,27 +396,6 @@ if (!doNotTrack) {
           class="list-inline list-group list-group-horizontal text-center footer-links d-flex justify-content-center flex-row">
 
           
-          <li>
-            <a href="https://github.com/wilvk" title="GitHub" target="_blank">
-              <span class="mx-2">
-                <i class="bi bi-github"></i>
-              </span>
-            </a>
-          </li>
-          <li>
-            <a href="https://twitter.com/wilvk" title="Twitter" target="_blank">
-              <span class="mx-2">
-                <i class="bi bi-twitter"></i>
-              </span>
-            </a>
-          </li>
-          <li>
-            <a href="https://linkedin.com/in/willvk" title="LinkedIn" target="_blank">
-              <span class="mx-2">
-                <i class="bi bi-linkedin"></i>
-              </span>
-            </a>
-          </li>
           
         </ul>
       </div>
@@ -377,10 +404,6 @@ if (!doNotTrack) {
     <div class="row">
       <div class="col-md-12">
         <p class="credits copyright text-muted">
-          
-          
-          Willem van Ketwich
-          
           
 
           &nbsp;&bull;&nbsp;&copy;

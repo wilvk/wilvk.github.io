@@ -8,9 +8,68 @@
 
 
 <title>Creating a Fibonacci Generator in Assembly - Will&#39;s Blog</title>
-<meta name="description" content="Contents Intro Following along at home A beginning Some starting knowledge Overview of the implementation Beginning the implementation Building binary files from assembly files The structure of a GAS assembly file Sections Comments Instructions and opcodes The application entry-point and labels Compiling our code Reading from the process arguments and converting to a numeric value Debugging with GDB Getting the length of our argument on the command line Making things easier to understand using function calls Converting a string to a number Some new functions Zeroing registers Register sizes and layout Processing the string The actual Fibonacci algorithm Creating the stack space for our array The Fibonacci logic in assembly Setting up our variables Array memory allocation Variable initialisation Indexed memory Running the loop to completion Calculating the sequence Printing our result Doing things the hard way Conclusion From here to there Intro Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland.">
+<meta name="description" content="Contents
 
-<meta name="author" content="Willem van Ketwich"><script type="application/ld+json">
+Intro
+
+Following along at home
+A beginning
+Some starting knowledge
+Overview of the implementation
+
+
+Beginning the implementation
+
+Building binary files from assembly files
+The structure of a GAS assembly file
+Sections
+Comments
+Instructions and opcodes
+The application entry-point and labels
+Compiling our code
+Reading from the process arguments and converting to a numeric value
+Debugging with GDB
+
+
+Getting the length of our argument on the command line
+
+Making things easier to understand using function calls
+
+
+Converting a string to a number
+
+Some new functions
+Zeroing registers
+Register sizes and layout
+Processing the string
+
+
+The actual Fibonacci algorithm
+
+Creating the stack space for our array
+The Fibonacci logic in assembly
+Setting up our variables
+Array memory allocation
+Variable initialisation
+Indexed memory
+Running the loop to completion
+Calculating the sequence
+
+
+Printing our result
+
+Doing things the hard way
+
+
+Conclusion
+
+From here to there
+
+
+
+Intro
+Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland. I thought I&rsquo;d write a simple ASM application to compute Fibonacci to a given number of iterations.">
+<script type="application/ld+json">
 {
     "@context": "http://schema.org",
     "@type": "WebSite",
@@ -55,10 +114,10 @@
   "@context": "http://schema.org",
   "@type": "Article",
   "author": {
-    "name" : "Willem van Ketwich"
+    "name" : ""
   },
   "headline": "Creating a Fibonacci Generator in Assembly",
-  "description" : "Contents Intro Following along at home A beginning Some starting knowledge Overview of the implementation Beginning the implementation Building binary files from assembly files The structure of a GAS assembly file Sections Comments Instructions and opcodes The application entry-point and labels Compiling our code Reading from the process arguments and converting to a numeric value Debugging with GDB Getting the length of our argument on the command line Making things easier to understand using function calls Converting a string to a number Some new functions Zeroing registers Register sizes and layout Processing the string The actual Fibonacci algorithm Creating the stack space for our array The Fibonacci logic in assembly Setting up our variables Array memory allocation Variable initialisation Indexed memory Running the loop to completion Calculating the sequence Printing our result Doing things the hard way Conclusion From here to there Intro Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland.",
+  "description" : "Contents Intro Following along at home A beginning Some starting knowledge Overview of the implementation Beginning the implementation Building binary files from assembly files The structure of a GAS assembly file Sections Comments Instructions and opcodes The application entry-point and labels Compiling our code Reading from the process arguments and converting to a numeric value Debugging with GDB Getting the length of our argument on the command line Making things easier to understand using function calls Converting a string to a number Some new functions Zeroing registers Register sizes and layout Processing the string The actual Fibonacci algorithm Creating the stack space for our array The Fibonacci logic in assembly Setting up our variables Array memory allocation Variable initialisation Indexed memory Running the loop to completion Calculating the sequence Printing our result Doing things the hard way Conclusion From here to there Intro Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland. I thought I\u0026rsquo;d write a simple ASM application to compute Fibonacci to a given number of iterations.\n",
   "inLanguage" : "en",
   "wordCount":  10286 ,
   "datePublished" : "2018-08-30T21:12:38",
@@ -80,7 +139,67 @@
 </script>
 
 <meta property="og:title" content="Creating a Fibonacci Generator in Assembly" />
-<meta property="og:description" content="Contents Intro Following along at home A beginning Some starting knowledge Overview of the implementation Beginning the implementation Building binary files from assembly files The structure of a GAS assembly file Sections Comments Instructions and opcodes The application entry-point and labels Compiling our code Reading from the process arguments and converting to a numeric value Debugging with GDB Getting the length of our argument on the command line Making things easier to understand using function calls Converting a string to a number Some new functions Zeroing registers Register sizes and layout Processing the string The actual Fibonacci algorithm Creating the stack space for our array The Fibonacci logic in assembly Setting up our variables Array memory allocation Variable initialisation Indexed memory Running the loop to completion Calculating the sequence Printing our result Doing things the hard way Conclusion From here to there Intro Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland.">
+<meta property="og:description" content="Contents
+
+Intro
+
+Following along at home
+A beginning
+Some starting knowledge
+Overview of the implementation
+
+
+Beginning the implementation
+
+Building binary files from assembly files
+The structure of a GAS assembly file
+Sections
+Comments
+Instructions and opcodes
+The application entry-point and labels
+Compiling our code
+Reading from the process arguments and converting to a numeric value
+Debugging with GDB
+
+
+Getting the length of our argument on the command line
+
+Making things easier to understand using function calls
+
+
+Converting a string to a number
+
+Some new functions
+Zeroing registers
+Register sizes and layout
+Processing the string
+
+
+The actual Fibonacci algorithm
+
+Creating the stack space for our array
+The Fibonacci logic in assembly
+Setting up our variables
+Array memory allocation
+Variable initialisation
+Indexed memory
+Running the loop to completion
+Calculating the sequence
+
+
+Printing our result
+
+Doing things the hard way
+
+
+Conclusion
+
+From here to there
+
+
+
+Intro
+Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland. I thought I&rsquo;d write a simple ASM application to compute Fibonacci to a given number of iterations.">
 <meta property="og:url" content="http://me.wvk.au/posts/creating-a-fibonacci-generator-in-assembly/" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Will&#39;s Blog" />
@@ -89,7 +208,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="http://me.wvk.au/favicon/favicon-16x16.png">
 
 
-<meta name="generator" content="Hugo 0.124.1">
+<meta name="generator" content="Hugo 0.144.1">
 <link rel="alternate" href="http://me.wvk.au/index.xml" type="application/rss+xml" title="Will&#39;s Blog">
 <script src="http://me.wvk.au/js/dark-mode.js"></script><link rel="stylesheet" href="http://me.wvk.au/style.min.css">
 
@@ -97,18 +216,6 @@
 
 
 
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-122351489-2', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
 
 
   </head>
@@ -401,45 +508,45 @@ if (!doNotTrack) {
 <p>I will use the terms instruction and opcode interchangeably, but they are essentially a mnemonic in assembly language that tells the CPU what to do. Opcodes/instructions can also have one or many operands depending on what the opcode does. Operands are the values that the opcode act upon and specify what the opcode does.</p>
 <p>For some context from the example above, we can see the following delineation:</p>
 <table>
-<thead>
-<tr>
-<th>Line</th>
-<th>Opcode</th>
-<th>Operand 1</th>
-<th>Operand 2</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>nop</td>
-<td>nop</td>
-<td>-</td>
-<td>-</td>
-<td>no-operation</td>
-</tr>
-<tr>
-<td>movl $1, %eax</td>
-<td>movl</td>
-<td>$1</td>
-<td>%eax</td>
-<td>copy 1 into register eax</td>
-</tr>
-<tr>
-<td>movl $0, %ebx</td>
-<td>movl</td>
-<td>$0</td>
-<td>%ebx</td>
-<td>copy 0 into register ebx</td>
-</tr>
-<tr>
-<td>int $0x80</td>
-<td>int</td>
-<td>$0x80</td>
-<td>-</td>
-<td>call interrupt number 0x80</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Line</th>
+          <th>Opcode</th>
+          <th>Operand 1</th>
+          <th>Operand 2</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>nop</td>
+          <td>nop</td>
+          <td>-</td>
+          <td>-</td>
+          <td>no-operation</td>
+      </tr>
+      <tr>
+          <td>movl $1, %eax</td>
+          <td>movl</td>
+          <td>$1</td>
+          <td>%eax</td>
+          <td>copy 1 into register eax</td>
+      </tr>
+      <tr>
+          <td>movl $0, %ebx</td>
+          <td>movl</td>
+          <td>$0</td>
+          <td>%ebx</td>
+          <td>copy 0 into register ebx</td>
+      </tr>
+      <tr>
+          <td>int $0x80</td>
+          <td>int</td>
+          <td>$0x80</td>
+          <td>-</td>
+          <td>call interrupt number 0x80</td>
+      </tr>
+  </tbody>
 </table>
 <p>The first <code>movl</code> instruction copies a long (4-byte) value of 1 into the register <code>eax</code>. The second does the same with 0 and the register <code>ebx</code> respectively. There are a few different variations of the <code>mov</code> command for copying values to and from registers.</p>
 <p>These are namely:</p>
@@ -503,58 +610,58 @@ We then link the resultant object file to convert our object file into a binary 
 <p>The stack is upside down in memory (with the last addition to the stack at the lower memory address), and so we traverse up the stack to find the first argument.</p>
 <p>The stack is composed as follows:</p>
 <table>
-<thead>
-<tr>
-<th>Stack</th>
-<th>Data</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>&hellip;</td>
-<td></td>
-</tr>
-<tr>
-<td>ESP + n+8</td>
-<td>&lt; pointer to second environment variable &gt;</td>
-</tr>
-<tr>
-<td>ESP + n+4</td>
-<td>&lt; pointer to first environment variable &gt;</td>
-</tr>
-<tr>
-<td>ESP + n</td>
-<td>&lt; 0x00 value (NULL) indicating end of command line arguments &gt;</td>
-</tr>
-<tr>
-<td>ESP + n-4</td>
-<td>&lt; pointer to last string argument &gt;</td>
-</tr>
-<tr>
-<td>&hellip;</td>
-<td></td>
-</tr>
-<tr>
-<td>ESP + 12</td>
-<td>&lt; pointer to second string argument &gt;</td>
-</tr>
-<tr>
-<td>ESP + 8</td>
-<td>&lt; pointer to a string that contains the first argument &gt;</td>
-</tr>
-<tr>
-<td>ESP + 4</td>
-<td>&lt; pointer to a string containing the name of the application &gt;</td>
-</tr>
-<tr>
-<td>ESP + 0</td>
-<td>&lt; number of arguments on command line &gt;</td>
-</tr>
-<tr>
-<td>&hellip;</td>
-<td></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Stack</th>
+          <th>Data</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>&hellip;</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>ESP + n+8</td>
+          <td>&lt; pointer to second environment variable &gt;</td>
+      </tr>
+      <tr>
+          <td>ESP + n+4</td>
+          <td>&lt; pointer to first environment variable &gt;</td>
+      </tr>
+      <tr>
+          <td>ESP + n</td>
+          <td>&lt; 0x00 value (NULL) indicating end of command line arguments &gt;</td>
+      </tr>
+      <tr>
+          <td>ESP + n-4</td>
+          <td>&lt; pointer to last string argument &gt;</td>
+      </tr>
+      <tr>
+          <td>&hellip;</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>ESP + 12</td>
+          <td>&lt; pointer to second string argument &gt;</td>
+      </tr>
+      <tr>
+          <td>ESP + 8</td>
+          <td>&lt; pointer to a string that contains the first argument &gt;</td>
+      </tr>
+      <tr>
+          <td>ESP + 4</td>
+          <td>&lt; pointer to a string containing the name of the application &gt;</td>
+      </tr>
+      <tr>
+          <td>ESP + 0</td>
+          <td>&lt; number of arguments on command line &gt;</td>
+      </tr>
+      <tr>
+          <td>&hellip;</td>
+          <td></td>
+      </tr>
+  </tbody>
 </table>
 <p>We know that we are just after the first string argument so we can predict that the pointer to the first string argument will be 2 places up the stack from the current value of ESP. We are using 32 bit locations here, where every pointer is 4 bytes ( 4 x 8 bytes = 32 bits ).</p>
 <p>This means that our first command line argument is at the location ESP + 8. This is because the Stack Pointer ESP can directly reference every byte in memory, and we are looking for the location 2 up from it&rsquo;s current location, effectively 2 x 4 bytes.</p>
@@ -723,30 +830,30 @@ test[Inferior 1 (process 24) exited normally]
 The instructions <code>repne scasb</code> work on strings specifically to determine their length. It iterates through memory starting at the address pointed to by <code>edi</code> and compares each byte to the byte stored in the lower byte of <code>eax</code>.</p>
 <p>The following is a table of what registers need to be set and what they do:</p>
 <table>
-<thead>
-<tr>
-<th>Register</th>
-<th>Usage</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>ecx</code></td>
-<td>A value to count down from for the length of the string. We set this to 50 to assert that we are only taking strings of up to 50 bytes</td>
-</tr>
-<tr>
-<td><code>eax</code></td>
-<td>The byte value to search for placed in the lower byte of the register, <code>al</code> (in this case we are searching for a null byte (<code>0x00</code>)</td>
-</tr>
-<tr>
-<td><code>ebx</code></td>
-<td>A copy of our counter <code>ecx</code>. This is used later to determine the actual length of the string</td>
-</tr>
-<tr>
-<td><code>edi</code></td>
-<td>A pointer to the start of our sting array</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Register</th>
+          <th>Usage</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ecx</code></td>
+          <td>A value to count down from for the length of the string. We set this to 50 to assert that we are only taking strings of up to 50 bytes</td>
+      </tr>
+      <tr>
+          <td><code>eax</code></td>
+          <td>The byte value to search for placed in the lower byte of the register, <code>al</code> (in this case we are searching for a null byte (<code>0x00</code>)</td>
+      </tr>
+      <tr>
+          <td><code>ebx</code></td>
+          <td>A copy of our counter <code>ecx</code>. This is used later to determine the actual length of the string</td>
+      </tr>
+      <tr>
+          <td><code>edi</code></td>
+          <td>A pointer to the start of our sting array</td>
+      </tr>
+  </tbody>
 </table>
 <p>The register <code>ecx</code> is considered the defacto count register on the x86 architecture and <code>repne scasb</code> implicitly uses this register to iterate, starting from the address in the <code>edi</code> register until either:</p>
 <ul>
@@ -1206,7 +1313,7 @@ count of digits to print and can place it in the <code>edx</code> register for t
               <p class="card-text fs-5 m-0">
 
                 
-                Willem van Ketwich
+                
                 
 
               </p>
@@ -1268,27 +1375,6 @@ count of digits to print and can place it in the <code>edx</code> register for t
           class="list-inline list-group list-group-horizontal text-center footer-links d-flex justify-content-center flex-row">
 
           
-          <li>
-            <a href="https://github.com/wilvk" title="GitHub" target="_blank">
-              <span class="mx-2">
-                <i class="bi bi-github"></i>
-              </span>
-            </a>
-          </li>
-          <li>
-            <a href="https://twitter.com/wilvk" title="Twitter" target="_blank">
-              <span class="mx-2">
-                <i class="bi bi-twitter"></i>
-              </span>
-            </a>
-          </li>
-          <li>
-            <a href="https://linkedin.com/in/willvk" title="LinkedIn" target="_blank">
-              <span class="mx-2">
-                <i class="bi bi-linkedin"></i>
-              </span>
-            </a>
-          </li>
           
         </ul>
       </div>
@@ -1297,10 +1383,6 @@ count of digits to print and can place it in the <code>edx</code> register for t
     <div class="row">
       <div class="col-md-12">
         <p class="credits copyright text-muted">
-          
-          
-          Willem van Ketwich
-          
           
 
           &nbsp;&bull;&nbsp;&copy;

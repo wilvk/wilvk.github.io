@@ -4,7 +4,7 @@
     <title>Posts on Will&#39;s Blog</title>
     <link>http://me.wvk.au/posts/</link>
     <description>Recent content in Posts on Will&#39;s Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-US</language>
     <copyright>Copyright &amp;copy; 2018 - Willem van Ketwich</copyright>
     <lastBuildDate>Wed, 03 Jun 2020 22:36:37 +1000</lastBuildDate>
@@ -14,84 +14,84 @@
       <link>http://me.wvk.au/posts/vim-plugin-development-workflows/</link>
       <pubDate>Wed, 03 Jun 2020 22:36:37 +1000</pubDate>
       <guid>http://me.wvk.au/posts/vim-plugin-development-workflows/</guid>
-      <description>I use a Vim Plugin Manager called Vundle to install and update all my Vim plugins.&#xA;When developing a new plugin with Vim, it is useful to be able to develop locally, test the changes in Vim and be able to push the changes to a Git repository.</description>
+      <description>&lt;p&gt;I use a Vim Plugin Manager called &lt;a href=&#34;https://github.com/VundleVim/Vundle.vim&#34;&gt;Vundle&lt;/a&gt; to install and update all my Vim plugins.&lt;/p&gt;&#xA;&lt;p&gt;When developing a new plugin with Vim, it is useful to be able to develop locally, test the changes in Vim and be able to push the changes to a Git repository.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Building Dotnet Diagnostics</title>
       <link>http://me.wvk.au/posts/building-dotnet-diagnostics/</link>
       <pubDate>Sun, 31 May 2020 14:18:15 +1000</pubDate>
       <guid>http://me.wvk.au/posts/building-dotnet-diagnostics/</guid>
-      <description>I&amp;rsquo;m getting an error trying to build dotnet/diagnostics:&#xA;root@85bd9fba8925:/app/diagnostics# dotnet build A compatible installed .NET Core SDK for global.json version [3.</description>
+      <description>&lt;p&gt;I&amp;rsquo;m getting an error trying to build &lt;code&gt;dotnet/diagnostics&lt;/code&gt;:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;root@85bd9fba8925:/app/diagnostics# dotnet build&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;A compatible installed .NET Core SDK &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; global.json version &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;3.0.100&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; from &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;/app/diagnostics/global.json&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; was not found&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Install the &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;3.0.100&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; .NET Core SDK or update &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;/app/diagnostics/global.json&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; with an installed .NET Core SDK:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  3.1.200-preview-014999 &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;/app/sdk/.dotnet/sdk&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Hmmm. ok, let&amp;rsquo;s look at that global.json:&lt;/p&gt;</description>
     </item>
     <item>
       <title>Understanding Dotnet Core Pdb Files</title>
       <link>http://me.wvk.au/posts/understanding-dotnet-core-pdb-files/</link>
       <pubDate>Sun, 10 May 2020 20:08:21 +1000</pubDate>
       <guid>http://me.wvk.au/posts/understanding-dotnet-core-pdb-files/</guid>
-      <description>The following documents how to inspect pdb symbols and metadata with the dotnet core metadata visualizer, which is part of the metadata-tools.</description>
+      <description>&lt;p&gt;The following documents how to inspect pdb symbols and metadata with the dotnet core metadata visualizer, which is part of the &lt;a href=&#34;https://github.com/dotnet/metadata-tools&#34;&gt;metadata-tools&lt;/a&gt;. I&amp;rsquo;m running this for a sample app I wrote for debugging in SOS, called &lt;code&gt;test_debug&lt;/code&gt;. The source for it is available in my &lt;a href=&#34;https://github.com/wilvk/dotnet-sos/tree/master/source/own/test_debug&#34;&gt;dotnet-sos testing repo&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Simple Sos Debugging</title>
       <link>http://me.wvk.au/posts/simple-sos-debugging/</link>
       <pubDate>Sat, 25 Apr 2020 21:18:10 +1000</pubDate>
       <guid>http://me.wvk.au/posts/simple-sos-debugging/</guid>
-      <description>Follow along at home: The following is based on the docker images and dotnet core application located at the repository here</description>
+      <description>&lt;h2 id=&#34;follow-along-at-home&#34;&gt;Follow along at home:&lt;/h2&gt;&#xA;&lt;p&gt;The following is based on the docker images and dotnet core application located at the repository &lt;a href=&#34;https://github.com/wilvk/dotnet-sos&#34;&gt;here&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     <item>
       <title>Troubleshooting a Vim dotnet Plugin</title>
       <link>http://me.wvk.au/posts/troubleshooting-a-dotnet-vim-plugin/</link>
       <pubDate>Sun, 16 Feb 2020 17:34:02 +1100</pubDate>
       <guid>http://me.wvk.au/posts/troubleshooting-a-dotnet-vim-plugin/</guid>
-      <description>problem I had a problem on a new MacBook.&#xA;I was trying to get C# working in Vim. I found a package online called omnisharp-vim and decided to give it a go.</description>
+      <description>&lt;h2 id=&#34;problem&#34;&gt;problem&lt;/h2&gt;&#xA;&lt;p&gt;I had a problem on a new MacBook.&lt;/p&gt;&#xA;&lt;p&gt;I was trying to get C# working in Vim. I found a package online called &lt;a href=&#34;https://github.com/OmniSharp/omnisharp-vim&#34;&gt;omnisharp-vim&lt;/a&gt; and decided to give it a go.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Using Volumes With Docker in Docker</title>
       <link>http://me.wvk.au/posts/using-volumes-with-docker-in-docker/</link>
       <pubDate>Fri, 27 Dec 2019 20:26:22 +1100</pubDate>
       <guid>http://me.wvk.au/posts/using-volumes-with-docker-in-docker/</guid>
-      <description>Docker in Docker (DIND) is a way of accessing a docker container within another docker container. It is commonly used in CI/CD pipelines as it allows the build server to be run in a docker container and allows the build pipeline that is run on the build server to also be run in a docker container.</description>
+      <description>&lt;p&gt;Docker in Docker (DIND) is a way of accessing a docker container within another docker container. It is commonly used in CI/CD pipelines as it allows the build server to be run in a docker container and allows the build pipeline that is run on the build server to also be run in a docker container.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Using Python for hex, strings, bytes and integers</title>
       <link>http://me.wvk.au/posts/python-hex-strings/</link>
       <pubDate>Thu, 10 Oct 2019 21:27:52 +1100</pubDate>
       <guid>http://me.wvk.au/posts/python-hex-strings/</guid>
-      <description>I&amp;rsquo;ve taken an interest recently in cryptography, strings, signing strings and using prime numbers for cryptography. I had to keep searching online for the best way to do a transform of my data for:</description>
+      <description>&lt;p&gt;I&amp;rsquo;ve taken an interest recently in cryptography, strings, signing strings and using prime numbers for cryptography. I had to keep searching online for the best way to do a transform of my data for:&lt;/p&gt;</description>
     </item>
     <item>
       <title>Common IDE Keyboard Shortcuts</title>
       <link>http://me.wvk.au/posts/common-ide-keyboard-shortcuts/</link>
       <pubDate>Sat, 29 Jun 2019 22:56:30 +1000</pubDate>
       <guid>http://me.wvk.au/posts/common-ide-keyboard-shortcuts/</guid>
-      <description>I’m working on an IDE framework called Tide for Vim and other editors, and thought that it would be useful to survey the ‘lay of the land’ in the space of keyboard shorcuts in existing IDEs.</description>
+      <description>&lt;p&gt;I’m working on an IDE framework called &lt;a href=&#34;https://github.com/wilvk/tide&#34;&gt;Tide&lt;/a&gt; for Vim and other editors, and thought that it would be useful to survey the ‘lay of the land’ in the space of keyboard shorcuts in existing IDEs. Below are the results of a 20 minute survey on the subject.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Gdb on MacOS</title>
       <link>http://me.wvk.au/posts/gdb-on-macos/</link>
       <pubDate>Sat, 29 Jun 2019 17:22:07 +1000</pubDate>
       <guid>http://me.wvk.au/posts/gdb-on-macos/</guid>
-      <description>GDB, or the GNU Debugger has been around for years. It was first written by Richard Stallman in 1986 and has a long heritage on Unix, Linux and other Operating Systems.</description>
+      <description>&lt;p&gt;GDB, or the GNU Debugger has been around for years. It was first written by Richard Stallman in 1986 and has a long heritage on Unix, Linux and other Operating Systems. I’ve started using it recently for debugging applications in assembly from my MacBook Pro.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Hugo for Beginners</title>
       <link>http://me.wvk.au/posts/hugo-for-beginners/</link>
       <pubDate>Fri, 31 Aug 2018 19:04:23 +1000</pubDate>
       <guid>http://me.wvk.au/posts/hugo-for-beginners/</guid>
-      <description>I wanted to put together some notes on how to set up a Github Pages blog using the Hugo static pages publishing application as when I went through this process myself, I found it less than intuitive.</description>
+      <description>&lt;p&gt;I wanted to put together some notes on how to set up a &lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Pages&lt;/a&gt; blog using the &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; static pages publishing application as when I went through this process myself, I found it less than intuitive.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Creating a Fibonacci Generator in Assembly</title>
       <link>http://me.wvk.au/posts/creating-a-fibonacci-generator-in-assembly/</link>
       <pubDate>Thu, 30 Aug 2018 21:12:38 +1000</pubDate>
       <guid>http://me.wvk.au/posts/creating-a-fibonacci-generator-in-assembly/</guid>
-      <description>Contents Intro Following along at home A beginning Some starting knowledge Overview of the implementation Beginning the implementation Building binary files from assembly files The structure of a GAS assembly file Sections Comments Instructions and opcodes The application entry-point and labels Compiling our code Reading from the process arguments and converting to a numeric value Debugging with GDB Getting the length of our argument on the command line Making things easier to understand using function calls Converting a string to a number Some new functions Zeroing registers Register sizes and layout Processing the string The actual Fibonacci algorithm Creating the stack space for our array The Fibonacci logic in assembly Setting up our variables Array memory allocation Variable initialisation Indexed memory Running the loop to completion Calculating the sequence Printing our result Doing things the hard way Conclusion From here to there Intro Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland.</description>
+      <description>&lt;h1 id=&#34;contents&#34;&gt;Contents&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#intro&#34;&gt;Intro&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#following-along-at-home&#34;&gt;Following along at home&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#a-beginning&#34;&gt;A beginning&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#some-starting-knowledge&#34;&gt;Some starting knowledge&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#overview-of-the-implementation&#34;&gt;Overview of the implementation&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#beginning-the-implementation&#34;&gt;Beginning the implementation&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#building-binary-files-from-assembly-files&#34;&gt;Building binary files from assembly files&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#the-structure-of-a-gas-assembly-file&#34;&gt;The structure of a GAS assembly file&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#sections&#34;&gt;Sections&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#comments&#34;&gt;Comments&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#instructions-and-opcodes&#34;&gt;Instructions and opcodes&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#the-application-entry--point-and-labels&#34;&gt;The application entry-point and labels&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#compiling-our-code&#34;&gt;Compiling our code&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#reading-from-the-process-arguments-and-converting-to-a-numeric-value&#34;&gt;Reading from the process arguments and converting to a numeric value&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#debugging-with-gdb&#34;&gt;Debugging with GDB&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#getting-the-length-of-our-argument-on-the-command-line&#34;&gt;Getting the length of our argument on the command line&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#making-things-easier-to-understand-using-function-calls&#34;&gt;Making things easier to understand using function calls&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#converting-a-string-to-a-number&#34;&gt;Converting a string to a number&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#some-new-functions&#34;&gt;Some new functions&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#zeroing-registers&#34;&gt;Zeroing registers&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#register-sizes-and-layout&#34;&gt;Register sizes and layout&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#processing-the-string&#34;&gt;Processing the string&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#the-actual-fibonacci-algorithm&#34;&gt;The actual Fibonacci algorithm&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#creating-the-stack-space-for-our-array&#34;&gt;Creating the stack space for our array&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#the-fibonacci-logic-in-assembly&#34;&gt;The Fibonacci logic in assembly&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#setting-up-our-variables&#34;&gt;Setting up our variables&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#array-memory-allocation&#34;&gt;Array memory allocation&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#variable-initialisation&#34;&gt;Variable initialisation&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#indexed-memory&#34;&gt;Indexed memory&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#running-the-loop-to-completion&#34;&gt;Running the loop to completion&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#calculating-the-sequence&#34;&gt;Calculating the sequence&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#printing-our-result&#34;&gt;Printing our result&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#doing-things-the-hard-way&#34;&gt;Doing things the hard way&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#conclusion&#34;&gt;Conclusion&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#from-here-to-there&#34;&gt;From here to there&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;intro&#34;&gt;Intro&lt;/h1&gt;&#xA;&lt;p&gt;Stemming from my interest in Assembly Language, I was in search of a practical example to start exploring this subterranean wilderland. I thought I&amp;rsquo;d write a simple ASM application to compute Fibonacci to a given number of iterations.&lt;/p&gt;</description>
     </item>
     <item>
       <title>First Post</title>
       <link>http://me.wvk.au/posts/first-post/</link>
       <pubDate>Fri, 15 Jun 2018 21:49:30 +1000</pubDate>
       <guid>http://me.wvk.au/posts/first-post/</guid>
-      <description>Welcome to my new blog site. This is just a placeholder until I have some content to post here. It won&amp;rsquo;t be long&amp;hellip; :tick-tock:</description>
+      <description>&lt;h1 id=&#34;welcome-to-my-new-blog-site&#34;&gt;Welcome to my new blog site.&lt;/h1&gt;&#xA;&lt;p&gt;This is just a placeholder until I have some content to post here. It won&amp;rsquo;t be long&amp;hellip; :tick-tock:&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
